@@ -6,22 +6,28 @@ Github repository URL
 https://github.com/sandy240/aaacpl-ui.git
 
 
-:::::::::::::::::::::::::::::::::::::::::::::::
-FOR WEBSITE THE BELOW FOLDERS TO BE USED
 
-bootstrap
-dist
-plugins
+FOR WEBSITE USAGE 
+--------------------------------------------------------------
 
-:::::::::::::::::::::::::::::::::::::::::::::::
+The below folders are the only dependencies for the website
+
+-bootstrap
+
+-dist
+
+-plugins
 
 
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 FOR DEVELOPMENT 
+--------------------------------------------------------------
 
 Requirements:
-Node.js
-GIT
+
+-Node.js
+
+-GIT
 
 In the repository code directory:
 
@@ -29,4 +35,3 @@ In the repository code directory:
 2. run "npm install"
 3. run "bower install"
 4. run "grunt" for build or watch
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
