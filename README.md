@@ -12,11 +12,11 @@ FOR WEBSITE USAGE
 
 The below folders are the only dependencies for the website
 
--bootstrap
+bootstrap
 
--dist
+dist
 
--plugins
+plugins
 
 
 
@@ -25,9 +25,11 @@ FOR DEVELOPMENT
 
 Requirements:
 
--Node.js
+Node.js
 
--GIT
+GIT
+
+
 
 In the repository code directory:
 
