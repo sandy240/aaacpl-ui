@@ -32,14 +32,44 @@
         <a href="index2.html"><img src='dist/img/logo.png'></a>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
+	  <!--forgot password section-->
+	  <div id="forgotPassword-success">
+			<div class="alert alert-success">
+			<strong>Password reset successfully !</strong>
+			</div>
+			<p><a href="#">Mail </a>has been sent</p>
+	  </div>
+	  <div id="forgotPassword-details">
+	    <p class="login-box-msg">FORGOT PASSOWORD?</p>
+		<div class="alert alert-danger" id="forgot-failure">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>
+		  <strong><span class='message-text'>Invalid username</span></strong>
+		</div>
+		   <form action="" method="post" id="forgotPassword">
+		   <div class="form-group has-feedback">
+				<input type="email" class="form-control" placeholder="Enter email address" required>
+		   </div>
+				<div class="row">
+					<div class="col-xs-6">
+					 <button type="submit" class="btn btn-primary btn-block bg-orange btn-flat">Reset Password</button>
+					 </div>
+				 </div>
+		   </form>
+	  </div>
+	  <!--login section-->
+	  <div id="login-details">
         <p class="login-box-msg">LOGIN TO GET STARTED</p>
-        <form action="index2.html" method="post">
+		<div class="alert alert-danger" id="login-failure">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>
+		  <strong><span class='message-text'>Invalid username or password </span></strong>
+		</div>
+        <form action="" method="post" id="login">
           <div class="form-group has-feedback">
-            <input type="email" class="form-control" placeholder="Email">
+            <input type="email" class="form-control" placeholder="Email" required>
             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
-            <input type="password" class="form-control" placeholder="Password">
+            <input type="password" class="form-control" placeholder="Password" required>
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
           <div class="row">
@@ -57,11 +87,16 @@
         </form>
 
 
-        <a href="#">I forgot my password</a><br>
+        <span id="forgotPasswordLink" style="color: #72AFD2; cursor: pointer">Forgot password</span><br>
 		<br>
 		New Member? <a href="register.html" class="text-center">Register with us</a>
+		</div>
+	 
 
       </div><!-- /.login-box-body -->
+	  
+	  
+	  
     </div><!-- /.login-box -->
 	
 	<!-- COMMON scripts for pages -->
@@ -73,12 +108,76 @@
     <!-- iCheck -->
     <script src="plugins/iCheck/icheck.min.js"></script>
 	<script>
-      $(function () {
+      $(document).ready(function () {
+	  // be default hiding the error alert messages
+	  $('#login-failure').hide();
+	  $('#forgot-failure').hide();
+	  $('#forgotPassword-details').hide();
+	  $('#forgotPassword-success').hide();
+
+	  
         $('input').iCheck({
           checkboxClass: 'icheckbox_square-orange',
           radioClass: 'iradio_square-orange',
           increaseArea: '20%' // optional
         });
+		
+		// show the forgot password panel on 
+		$("#forgotPasswordLink").click(function(){
+			$("#login-details").hide();
+			$("#forgotPassword-details").show();
+		});
+		
+		// ajax call only when client side validation is completed
+		function loginFormAjaxCall(){
+			 $.ajax({
+			 type: 'POST',
+			 url: loginForm.attr("action"), //OR JSP URL
+			 data: loginForm.serialize(),  
+			 success: function(response) {
+			 //REDIRECT TO DASHBORAD
+			},
+			 error: function() {
+			 $('#login-failure').show();
+			 $('#login-failure .message-text').html('Invalid username or password');
+			}
+		});
+		}
+		
+		// on submit function of login form is called to perform client side validation
+		var loginForm = $('#login');
+		loginForm.submit(function(event){
+		event.preventDefault(); // Prevent the form from submitting via the browser
+		loginFormAjaxCall(loginForm);
+		});
+		
+		
+		// ajax call only when client side validation is completed
+		function forgotPasswordFormFormAjaxCall(){
+			 $.ajax({
+			 type: 'POST',
+			 url: loginForm.attr("action"), //OR JSP URL
+			 data: loginForm.serialize(),  
+			 success: function(response) {
+	 			 $('#forgotPassword-success').show();
+				 $('#forgotPassword-details').hide();
+			},
+			 error: function() {
+				 $('#forgot-failure').show();
+				 $('#forgot-failure .message-text').html('Invalid username');
+			}
+		});
+		}
+		
+		
+		
+		// on submit function of forgot password form is called to perform client side validation
+		var forgotPasswordForm = $('#forgotPassword');
+		forgotPasswordForm.submit(function(event){
+		event.preventDefault(); // Prevent the form from submitting via the browser
+		forgotPasswordFormFormAjaxCall(forgotPasswordForm);
+		});
+		
       });
     </script>
   </body>
