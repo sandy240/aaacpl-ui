@@ -13,7 +13,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     watch: {
       // If any .less file changes in directory "build/less/" run the "less"-task.
-      files: ["build/less/*.less", "build/less/skins/*.less", "dist/js/app.js"],
+      files: ["build/less/*.less", "build/less/skins/*.less", "dist/js/app.js", "build/js/*.js"],
       tasks: ["less", "uglify"]
     },
     // "less"-task configuration
@@ -78,7 +78,8 @@ module.exports = function (grunt) {
       },
       my_target: {
         files: {
-          'dist/js/app.min.js': ['dist/js/app.js']
+          'dist/js/app.min.js': ['dist/js/app.js'],
+		  'dist/js/main.min.js': ['build/js/core.js', 'build/js/*.js'],
         }
       }
     },
@@ -114,13 +115,8 @@ module.exports = function (grunt) {
         jshintrc: '.jshintrc'
       },
       core: {
-        src: 'dist/js/app.js'
-      },
-      demo: {
-        src: 'dist/js/demo.js'
-      },
-      pages: {
-        src: 'dist/js/pages/*.js'
+        src: 'dist/js/app.js',
+		src: 'dist/js/core.js'
       }
     },
 
