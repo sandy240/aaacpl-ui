@@ -157,5 +157,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-csslint');
 
   // The default task (running "grunt" in console) is "watch"
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['uglify','watch']);
 };
