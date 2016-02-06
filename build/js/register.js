@@ -100,6 +100,8 @@ $.aaacplApp.registerPage.executeScript = function(){
 	// be default hiding the success and error alert messages
 		$('#register-success').hide();
 		$('#register-failure').hide();
+		var registerForm = $('#submit');
+		registerForm[0].reset();
 		
         $('input').iCheck({
           checkboxClass: 'icheckbox_square-orange',
@@ -125,7 +127,7 @@ $.aaacplApp.registerPage.executeScript = function(){
 		}
 		
 		// on submit function of form is called to perform client side validation
-		var registerForm = $('#submit');
+		
 		registerForm.submit(function(event){
 			event.preventDefault(); // Prevent the form from submitting via the browser
 			registerFormAjaxCall(registerForm);

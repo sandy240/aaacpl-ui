@@ -44,6 +44,7 @@ $.aaacplApp.loginPage.executeScript = function(){
 	// be default hiding the error alert messages
 	  $('#login-failure').hide();
 	  var loginForm = $('#login');
+	  loginForm[0].reset();
 	  
         $('input').iCheck({
           checkboxClass: 'icheckbox_square-orange',

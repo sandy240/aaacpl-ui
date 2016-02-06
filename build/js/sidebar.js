@@ -16,7 +16,16 @@ $.aaacplApp.pageSidebar.getLayout = function (userInfo){
             '</div>' +
           '</div>' +
 		'<!-- Sidebar Menu -->' +
-          '<ul class="sidebar-menu">' +
+		//Call as per the user type
+		$.aaacplApp.pageSidebar.getPrctMenuItems() +
+        '<!-- /.sidebar-menu -->' +
+        '</section>' +
+        '<!-- /.sidebar -->' +
+      '</aside>';
+	return tmpl;
+};
+$.aaacplApp.pageSidebar.getPrctMenuItems = function (){
+	var tml = '<ul class="sidebar-menu">' +
 			'<li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-exchange"></i> <span>MY HISTORY</span></a></li>' +
@@ -24,9 +33,30 @@ $.aaacplApp.pageSidebar.getLayout = function (userInfo){
             '<!-- Optionally, you can add icons to the links -->' +
             '<li><a href="#"><i class="fa fa-circle"></i> <span>Live Auctions</span></a></li>' +
            ' <li><a href="#"><i class="fa fa-circle-o"></i> <span>Upcoming Auctions</span></a></li>' +
-          '</ul><!-- /.sidebar-menu -->' +
-        '</section>' +
-        '<!-- /.sidebar -->' +
-      '</aside>';
-	return tmpl;
+          '</ul>';
+		  return tml;
+};
+$.aaacplApp.pageSidebar.getClientMenuItems = function (){
+	var tml =  '<ul class="sidebar-menu">' +
+			'<li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-exchange"></i> <span>HISTORY</span></a></li>' +
+            '<li class="header"><i class="fa fa-ticket"></i> <span>AUCTIONS</span></li>' +
+            '<!-- Optionally, you can add icons to the links -->' +
+            '<li><a href="#"><i class="fa fa-circle"></i> <span>Observation</span></a></li>' +
+          '</ul>';
+		  return tml;
+};
+$.aaacplApp.pageSidebar.getAdminMenuItems = function (){
+	var tml =  '<ul class="sidebar-menu">' +
+			'<li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-circle"></i> <span>OBSERVATION</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-circle"></i> <span>REPORTS</span></a></li>' +
+			'<li class="header"><i class="fa fa-ticket"></i> <span>MANAGE</span></li>' +
+            '<!-- Optionally, you can add icons to the links -->' +
+            '<li><a href="#"><i class="fa fa-circle"></i> <span>DEPARTMENTS</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-circle"></i> <span>AUCTIONS</span></a></li>' +
+          '</ul>';
+		  return tml;
 };

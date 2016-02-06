@@ -38,6 +38,7 @@ $.aaacplApp.forgotPage.executeScript = function(){
 	  $('#forgot-failure').hide();
 	  $('#forgotPassword-success').hide();
 	  var forgotPasswordForm = $('#forgotPassword');
+	  forgotPasswordForm[0].reset();
         $('input').iCheck({
           checkboxClass: 'icheckbox_square-orange',
           radioClass: 'iradio_square-orange',
