@@ -64,7 +64,7 @@ $.aaacplApp.loginPage.executeScript = function(){
 				 //cookie creation
 				 var userName = 'Neville Dsouza';  // value will be retrieved from REST API i.e response.userName
 				 var expireTime = 3; // value will be retrieved from REST API i.e response.expireTime
-                 writeCookie(userName,expire);
+                 writeCookie(userName,expireTime);
 				},
 				 error: function() {
 				 $('#login-failure').show();
