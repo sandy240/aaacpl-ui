@@ -63,9 +63,35 @@ $.aaacplApp = {
 		// Listen on page load:
 		window.addEventListener('load', _this.router);
 
-		//TODO:
-		//Redirection to login if authentication fails
-		//OR get logged in user info
+        // Setting a cookie for which the dashboard will be displayed instead of login page
+
+        //document.cookie="userName=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; note : uncomment line for direct login
+
+		function readCookie(userName) {
+            var cookieValue, cookieList, name = userName + "=";
+            cookieList = document.cookie.split(';');
+            for(var i=0;i < cookieList.length;i++) {
+                cookieValue = cookieList[i];
+                while (cookieValue.charAt(0)==' ') {
+                    cookieValue = cookieValue.substring(1,cookieValue.length);
+                }
+                if (cookieValue.indexOf(name) == 0) {
+                    return cookieValue.substring(name.length,cookieValue.length);
+                }
+            }
+            return '';
+        }
+
+		var sId = readCookie('userName');
+		//Redirection to login if authentication fails i.e session does not exists
+        if(sId.length == 0){
+                var href = location.href;
+                var hash = href.indexOf("#");
+                var route = '/login';
+                location.href = hash < 0 ? href+'#'+route : href ;
+            }
+        //OR get logged in user info when session exists. Here we can either get info from cookie or REST API
+
 	},
 	addRoutes : function(){
 		var _this = this;
