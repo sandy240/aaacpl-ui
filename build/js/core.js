@@ -3,6 +3,17 @@ if (typeof jQuery === "undefined") {
   throw new Error("jQuery not loaded");
 }
 
+// making an API call
+var apiKey = "FtHwuH8w1RDjQpOr0y0gF3AWm8sRsRzncK3hHh9";
+
+var xhr = new XMLHttpRequest(); // creating a HTTP request
+
+xhr.open("GET", "https://www.codecademy.com/", false); // making a request to code academy
+
+xhr.send(); // sending the request
+
+
+
 //AAACPL auction app
 $.aaacplApp = {
 	// A hash to store our routes:

@@ -58,7 +58,7 @@ $.aaacplApp.loginPage.executeScript = function(){
 			 $.ajax({
 				 type: 'POST',
 				 url: loginForm.attr("action"), //OR JSP URL
-				 data: loginForm.serialize(),  
+				 data: loginForm.serialize(),
 				 success: function(response) {
 				 //REDIRECT TO DASHBORAD
 				 //cookie creation
