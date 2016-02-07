@@ -4,20 +4,33 @@ if (typeof jQuery === "undefined") {
 }
 
 // making an API call
-var apiKey = "FtHwuH8w1RDjQpOr0y0gF3AWm8sRsRzncK3hHh9";
+var apiKey = "FtHwuH8w1RDjQpOr0y0gF3AWm8sRsRzncK3hHh9"; // an API key to authenticate client
 
 var xhr = new XMLHttpRequest(); // creating a HTTP request
 
 xhr.open("GET", "https://www.codecademy.com/", false); // making a request to code academy
 
-xhr.send(); // sending the request
+xhr.setRequestHeader('Content-Type', 'application/json'); // json data
 
+xhr.send(); // sending the request
 
 
 //AAACPL auction app
 $.aaacplApp = {
 	// A hash to store our routes:
 	routes : {},
+
+	// a map to store all the template and their relative path
+	 template : {
+	 "home": '',
+	 "login": '#/login',
+	 "forgot": '#/forgot',
+	 "register": '#/register',
+	 "profile": '#/profile',
+	 "history": '#/history',
+	 "auction": '#/auction'
+	 },
+
 	//Viewport element where content will be displayed
 	wrapperElem : null,
 	//Body CSS classes for different page layouts
@@ -149,6 +162,12 @@ $.aaacplApp = {
 		var pageCommonHeader = _this.pageHeader.getLayout();
 		var pageCommonSidebar = _this.pageSidebar.getLayout();
 		return pageCommonHeader + pageCommonSidebar;
+	},
+
+	redirectTo : function(sectionFrom, sectionTo) {
+	var href, _this = this;
+	href = location.href.replace(_this.template[sectionFrom],_this.template[sectionTo]);
+	location.href = href;
 	}
 };
 $.aaacplApp.pageHeader = {};
