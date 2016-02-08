@@ -64,7 +64,7 @@ $.aaacplApp.loginPage.executeScript = function(){
 				 //cookie creation
 				 var userName = 'Neville Dsouza';  // value will be retrieved from REST API i.e response.userName
 				 var expireTime = 3; // value will be retrieved from REST API i.e response.expireTime
-                 writeCookie(userName,expireTime);
+                 $.aaacplApp.writeCookie('uAuthIDAAACPL',userName,expireTime);
 				},
 				 error: function() {
 				 $('#login-failure').show();
@@ -80,14 +80,6 @@ $.aaacplApp.loginPage.executeScript = function(){
 			loginFormAjaxCall(loginForm);
 		});
 
-		function writeCookie(name,expire) {
-            var expires = "";
-            if (expire && !isNaN(expire)) {
-                var today  = new Date();
-                today.setHours(today.getHours()+ expire);
-                expires =  today.toUTCString();
-                    }
-            document.cookie = "userName="+name+";expires=+"+expires+";path=/";
-        }
+		
 		
 };

@@ -3,20 +3,12 @@ if (typeof jQuery === "undefined") {
   throw new Error("jQuery not loaded");
 }
 
-// making an API call
-var apiKey = "FtHwuH8w1RDjQpOr0y0gF3AWm8sRsRzncK3hHh9"; // an API key to authenticate client
-
-var xhr = new XMLHttpRequest(); // creating a HTTP request
-
-xhr.open("GET", "https://www.codecademy.com/", false); // making a request to code academy
-
-xhr.setRequestHeader('Content-Type', 'application/json'); // json data
-
-xhr.send(); // sending the request
-
-
 //AAACPL auction app
 $.aaacplApp = {
+	
+	//API Root path
+	apiSrvPath : "http://aaacpl-theuniquemedia.rhcloud.com/auctions-1.0/",
+	
 	// A hash to store our routes:
 	routes : {},
 
@@ -89,31 +81,13 @@ $.aaacplApp = {
 
         // Setting a cookie for which the dashboard will be displayed instead of login page
 
-        //document.cookie="userName=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; note : uncomment line for direct login
+        //document.cookie="uAuthIDAAACPL=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; note : uncomment line for direct login
 
-		function readCookie(userName) {
-            var cookieValue, cookieList, name = userName + "=";
-            cookieList = document.cookie.split(';');
-            for(var i=0;i < cookieList.length;i++) {
-                cookieValue = cookieList[i];
-                while (cookieValue.charAt(0)==' ') {
-                    cookieValue = cookieValue.substring(1,cookieValue.length);
-                }
-                if (cookieValue.indexOf(name) == 0) {
-                    return cookieValue.substring(name.length,cookieValue.length);
-                }
-            }
-            return '';
-        }
-
-		var sId = readCookie('userName');
+		var sId = _this.readCookie('uAuthIDAAACPL');
 		//Redirection to login if authentication fails i.e session does not exists
         if(sId.length == 0){
-                var href = location.href;
-                var hash = href.indexOf("#");
-                var route = '/login';
-                location.href = hash < 0 ? href+'#'+route : href ;
-            }
+			_this.redirectTo("login");
+		}
         //OR get logged in user info when session exists. Here we can either get info from cookie or REST API
 
 	},
@@ -164,10 +138,32 @@ $.aaacplApp = {
 		return pageCommonHeader + pageCommonSidebar;
 	},
 
-	redirectTo : function(sectionFrom, sectionTo) {
-	var href, _this = this;
-	href = location.href.replace(_this.template[sectionFrom],_this.template[sectionTo]);
-	location.href = href;
+	redirectTo : function(sectionTo) {
+		var href, _this = this;
+		window.location.href = _this.template[sectionTo];
+	},
+	readCookie : function(cookieName){
+		var cookieValue, cookieList, name = cookieName + "=";
+		cookieList = document.cookie.split(';');
+		for(var i=0;i < cookieList.length;i++) {
+			cookieValue = cookieList[i];
+			while (cookieValue.charAt(0)==' ') {
+				cookieValue = cookieValue.substring(1,cookieValue.length);
+			}
+			if (cookieValue.indexOf(name) == 0) {
+				return cookieValue.substring(name.length,cookieValue.length);
+			}
+		}
+		return '';
+	},
+	writeCookie : function (name,value, expire) {
+		var expires = "";
+		if (expire && !isNaN(expire)) {
+			var today  = new Date();
+			today.setHours(today.getHours()+ expire);
+			expires =  today.toUTCString();
+		}
+		document.cookie = name +"="+value+";expires=+"+expires+";path=/";
 	}
 };
 $.aaacplApp.pageHeader = {};
