@@ -14,15 +14,11 @@ $.aaacplApp.registerPage.getLayout = function (){
         '<p class="login-box-msg">GET REGISTERED FOR THE MEMBERSHIP</p>'+
 		'<div class="alert alert-danger" id="register-failure">'+
 		'<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>'+
-		'  <strong>Error !</strong> <span class="message-text">Unable to register. Kindly provide correct details</span>'+
+		'  <strong>Error !</strong> <span class="message-text"></span>'+
 		'</div>'+
         '<form method="post" action="" id="submit">'+
         '  <div id="account-type" class="form-group has-feedback">'+
-		'	  <select class="form-control" required>'+
-		'	  <option value="">Select Account Type</option>'+
-		'		<option value="individual">Participator - Individual</option>'+
-		'		<option value="company">Participator - Company</option>'+
-		'		<option value="client">Observer - Client</option>'+
+		'	  <select id="select" class="form-control" required>'+
 		'	  </select>'+
         '  </div>'+
 		 ' <div class="form-group has-feedback">'+
@@ -97,6 +93,32 @@ $.aaacplApp.registerPage.getLayout = function (){
 
 
 $.aaacplApp.registerPage.executeScript = function(){
+
+    // ajax call on page load which will return the user types which will be shown in the drop down list.
+         $(function(){
+             $.ajax({
+               type: "GET",
+               data: {
+                     format: 'json'
+                  },
+               dataType: "jsonp",
+               url: 'http://aaacpl-theuniquemedia.rhcloud.com/auctions-1.0/rest/user/userTypes',
+               success: function(data){
+               // appending option to select element
+                $.each(data, function (key, item) {
+                    $('#select').append($('<option>', {
+                        value: item.type,
+                        text : item.label
+                    }));
+                });
+               },
+                error: function() {
+                $('#register-failure').show();
+                $('#register-failure .message-text').html('Something went wrong. Kindly try later');
+               }
+            });
+         });
+
 	// be default hiding the success and error alert messages
 		$('#register-success').hide();
 		$('#register-failure').hide();
@@ -108,7 +130,7 @@ $.aaacplApp.registerPage.executeScript = function(){
           radioClass: 'iradio_square-orange',
           increaseArea: '20%' // optional
         });
-		
+
 		// ajax call only when client side validation is completed
 		function registerFormAjaxCall(){
 			 $.ajax({
