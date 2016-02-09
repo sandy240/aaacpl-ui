@@ -175,7 +175,7 @@ $.aaacplApp = {
 		}
 		return '';
 	},
-	writeCookie : function (name,value, expire) {
+	writeCookie : function (name,value,expire) {
 		var expires = "";
 		if (expire && !isNaN(expire)) {
 			var today  = new Date();

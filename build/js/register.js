@@ -19,6 +19,7 @@ $.aaacplApp.registerPage.getLayout = function (){
         '<form method="post" action="" id="submit">'+
         '  <div id="account-type" class="form-group has-feedback">'+
 		'	  <select id="select" class="form-control" required>'+
+		'       <option value="">Select Account Type</option>'+
 		'	  </select>'+
         '  </div>'+
 		 ' <div class="form-group has-feedback">'+
@@ -132,11 +133,13 @@ $.aaacplApp.registerPage.executeScript = function(){
         });
 
 		// ajax call only when client side validation is completed
-		function registerFormAjaxCall(){
+		function registerFormAjaxCall(registerForm){
+		var formData = JSON.stringify(registerForm.serializeArray()); // JSON data of values entered in form
 			 $.ajax({
-			 type: 'POST',
-			 url: registerForm.attr("action"), //OR JSP URL
-			 data: registerForm.serialize(),  
+			 type: "POST",
+			 url: $.aaacplApp.apiSrvPath + 'user/register', //REST API call
+			 data: formData,
+			 dataType: "jsonp",
 			 success: function(response) {
 				$('#register-success').show();
 				$('#register-form').hide();

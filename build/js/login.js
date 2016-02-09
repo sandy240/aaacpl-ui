@@ -54,21 +54,26 @@ $.aaacplApp.loginPage.executeScript = function(){
 		
 		
 		// ajax call only when client side validation is completed
-		function loginFormAjaxCall(){
+		function loginFormAjaxCall(loginForm){
+		     var formData = JSON.stringify(loginForm.serializeArray()); // JSON data of values entered in form
 			 $.ajax({
-				 type: 'POST',
-				 url: loginForm.attr("action"), //OR JSP URL
-				 data: loginForm.serialize(),
-				 success: function(response) {
-				 //REDIRECT TO DASHBORAD
-				 //cookie creation
-				 var userName = 'Neville Dsouza';  // value will be retrieved from REST API i.e response.userName
-				 var expireTime = 3; // value will be retrieved from REST API i.e response.expireTime
-                 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,userName,expireTime);
+				 type: "POST",
+                 url: $.aaacplApp.apiSrvPath + 'user/login', //REST API call
+                 data: formData,
+                 dataType: "jsonp",
+                 success: function(response) {
+                 /**
+                 * param1 - the auth key
+                 * param2 - the success message from which is the authSessionId $.aaacplApp.userAuthKey
+                 * param3 - cookie expire time in hours
+                 */
+                 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response,3); //cookie creation
+
+                 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
 				},
-				 error: function() {
+				 error: function(error) {
 				 $('#login-failure').show();
-				 $('#login-failure .message-text').html('Invalid username or password');
+				 $('#login-failure .message-text').html(error);
 				}
 			});
 		}
