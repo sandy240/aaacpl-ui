@@ -102,7 +102,7 @@ $.aaacplApp.registerPage.executeScript = function(){
                      format: 'json'
                   },
                dataType: "jsonp",
-               url: 'http://aaacpl-theuniquemedia.rhcloud.com/auctions-1.0/rest/user/userTypes',
+               url: $.aaacplApp.apiSrvPath + 'user/userTypes',
                success: function(data){
                // appending option to select element
                 $.each(data, function (key, item) {

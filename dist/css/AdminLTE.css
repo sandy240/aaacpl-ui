@@ -186,6 +186,11 @@ a:focus {
   display: block;
   margin-top: 5px;
 }
+/*** CUSTOM CHANGES FOR AAACPL ****/
+.box.dept-row .box-header .fa-plus::before,
+.box.dept-row .box-header .fa-minus::before {
+  content: "\f044";
+}
 /*
  * Component: Main Header
  * ----------------------
