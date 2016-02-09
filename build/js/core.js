@@ -7,21 +7,24 @@ if (typeof jQuery === "undefined") {
 $.aaacplApp = {
 	
 	//API Root path
-	apiSrvPath : "http://aaacpl-theuniquemedia.rhcloud.com/auctions-1.0/",
+	apiSrvPath : "http://aaacplapi-theuniquemedia.rhcloud.com/auctions-1.0/rest/",
+	
+	userAuthKey : "uAuthIDAAACPL",
 	
 	// A hash to store our routes:
 	routes : {},
 
 	// a map to store all the template and their relative path
-	 template : {
-	 "home": '',
-	 "login": '#/login',
-	 "forgot": '#/forgot',
-	 "register": '#/register',
-	 "profile": '#/profile',
-	 "history": '#/history',
-	 "auction": '#/auction'
-	 },
+	template : {
+		"home": '',
+		"login": '#/login',
+		"forgot": '#/forgot',
+		"register": '#/register',
+		"profile": '#/profile',
+		"history": '#/history',
+		"auction": '#/auction',
+		"manage": '#/manage'
+	},
 
 	//Viewport element where content will be displayed
 	wrapperElem : null,
@@ -80,13 +83,12 @@ $.aaacplApp = {
 		window.addEventListener('load', _this.router);
 
         // Setting a cookie for which the dashboard will be displayed instead of login page
+        //document.cookie="uAuthIDAAACPL=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; //note : uncomment line for direct login
 
-        //document.cookie="uAuthIDAAACPL=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; note : uncomment line for direct login
-
-		var sId = _this.readCookie('uAuthIDAAACPL');
+		var sId = _this.readCookie(_this.userAuthKey);
 		//Redirection to login if authentication fails i.e session does not exists
-        if(sId.length == 0){
-			_this.redirectTo("login");
+        if(sId.length == 0 && window.location.href.indexOf(_this.template['register'])<0){
+			//_this.redirectTo("login");
 		}
         //OR get logged in user info when session exists. Here we can either get info from cookie or REST API
 
@@ -94,12 +96,21 @@ $.aaacplApp = {
 	addRoutes : function(){
 		var _this = this;
 		//ROUTER URLs binding
+		
+		//HOME - DASHBOARD
 		_this.route('/', 'home', function () {
-			_this.changeBodyLayoutType('sidebar-mini');
-			_this.wrapperElem[0].className = 'wrapper';
-			return _this.getCommonLayout() + _this.pageContent.getLayout() + _this.pageFooter.getLayout();
+			//TODO - Dashbaord content will be passed to pageContent
+			var dashboard = "";
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("DASHBOARD", dashboard , "Welcome"));
+		});
+		
+		//MANAGE - DEPARTMENTS
+		_this.route('/manage', 'manage_dept', function () {	
+			var managecontents = _this.managePage.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", managecontents , "Departments <i class='fa fa-link'></i> Auctions <i class='fa fa-link'></i> Lots"));
 		});
 
+		//LOGIN PAGE
 		_this.route('/login', 'login', function () {						
 			_this.changeBodyLayoutType('login-page');
 			_this.wrapperElem[0].className = 'login-box';
@@ -107,7 +118,9 @@ $.aaacplApp = {
 		}, function(){
 			_this.loginPage.executeScript();
 		});
-		_this.route('/forgot', 'forgotPassword', function () {
+		
+		//FORGOT PAGE
+		_this.route('/forgot', 'forgot', function () {
 			_this.changeBodyLayoutType('login-page');
 			_this.wrapperElem[0].className = 'login-box';
 			return _this.forgotPage.getLayout();
@@ -115,6 +128,7 @@ $.aaacplApp = {
 			_this.forgotPage.executeScript();
 		});
 		
+		//REGISTER PAGE
 		_this.route('/register', 'register', function () {			
 			_this.changeBodyLayoutType('register-page');
 			_this.wrapperElem[0].className = 'register-box';
@@ -131,11 +145,16 @@ $.aaacplApp = {
 		}
 		$('body').addClass(pageClass);
 	},
-	getCommonLayout : function (){
+	wrapInCommonLayout : function (actualContents){
 		var _this = this;
 		var pageCommonHeader = _this.pageHeader.getLayout();
 		var pageCommonSidebar = _this.pageSidebar.getLayout();
-		return pageCommonHeader + pageCommonSidebar;
+		var pageCommonFooter = _this.pageFooter.getLayout();
+		
+		_this.changeBodyLayoutType('sidebar-mini');
+		_this.wrapperElem[0].className = 'wrapper';
+		
+		return pageCommonHeader + pageCommonSidebar + actualContents + pageCommonFooter;
 	},
 
 	redirectTo : function(sectionTo) {
@@ -169,6 +188,8 @@ $.aaacplApp = {
 $.aaacplApp.pageHeader = {};
 $.aaacplApp.pageSidebar = {};
 $.aaacplApp.pageContent = {};
+$.aaacplApp.dashboardPage = {};
+$.aaacplApp.managePage = {};
 $.aaacplApp.pageFooter = {};
 $.aaacplApp.loginPage = {};
 $.aaacplApp.forgotPage = {};

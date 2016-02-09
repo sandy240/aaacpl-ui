@@ -26,11 +26,9 @@ $.aaacplApp.pageSidebar.getLayout = function (userInfo){
 };
 $.aaacplApp.pageSidebar.getPrctMenuItems = function (){
 	var tml = '<ul class="sidebar-menu">' +
-			'<li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-exchange"></i> <span>MY HISTORY</span></a></li>' +
-            '<li class="header"><i class="fa fa-ticket"></i> <span> AUCTIONS</span></li>' +
-            '<!-- Optionally, you can add icons to the links -->' +
             '<li><a href="#"><i class="fa fa-circle"></i> <span>Live Auctions</span></a></li>' +
            ' <li><a href="#"><i class="fa fa-circle-o"></i> <span>Upcoming Auctions</span></a></li>' +
           '</ul>';
@@ -38,25 +36,20 @@ $.aaacplApp.pageSidebar.getPrctMenuItems = function (){
 };
 $.aaacplApp.pageSidebar.getClientMenuItems = function (){
 	var tml =  '<ul class="sidebar-menu">' +
-			'<li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>' +
-			'<li><a href="#"><i class="fa fa-exchange"></i> <span>HISTORY</span></a></li>' +
-            '<li class="header"><i class="fa fa-ticket"></i> <span>AUCTIONS</span></li>' +
-            '<!-- Optionally, you can add icons to the links -->' +
-            '<li><a href="#"><i class="fa fa-circle"></i> <span>Observation</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-exchange"></i><span>HISTORY</span></a></li>' +
+            '<li><a href="#"><i class="fa fa-circle"></i> <span>OBSERVATION</span></a></li>' +
           '</ul>';
 		  return tml;
 };
 $.aaacplApp.pageSidebar.getAdminMenuItems = function (){
 	var tml =  '<ul class="sidebar-menu">' +
-			'<li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>' +
-			'<li><a href="#"><i class="fa fa-circle"></i> <span>OBSERVATION</span></a></li>' +
-			'<li><a href="#"><i class="fa fa-circle"></i> <span>REPORTS</span></a></li>' +
-			'<li class="header"><i class="fa fa-ticket"></i> <span>MANAGE</span></li>' +
-            '<!-- Optionally, you can add icons to the links -->' +
-            '<li><a href="#"><i class="fa fa-circle"></i> <span>DEPARTMENTS</span></a></li>' +
-			'<li><a href="#"><i class="fa fa-circle"></i> <span>AUCTIONS</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-television "></i> <span>OBSERVATION</span></a></li>' +
+            '<li><a href="#"><i class="fa fa-cog"></i> <span>MANAGE</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-pie-chart"></i> <span>REPORTS</span></a></li>' +
           '</ul>';
 		  return tml;
 };
