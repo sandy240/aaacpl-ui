@@ -99,13 +99,12 @@ $.aaacplApp.registerPage.executeScript = function(){
          $(function(){
              $.ajax({
                type: "GET",
-               data: {
-                     format: 'json'
-                  },
-               dataType: "jsonp",
+               dataType: "json",
+			   crossDomain : true,
                url: $.aaacplApp.apiSrvPath + 'user/userTypes',
                success: function(data){
                // appending option to select element
+			   data = data.getTypesResponseList;
                 $.each(data, function (key, item) {
                     $('#select').append($('<option>', {
                         value: item.type,
