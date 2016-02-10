@@ -1,33 +1,107 @@
-$.aaacplApp.managePage.getLayout = function (pageheader, pagecontents , pagesubheader){
-	pageheader = (typeof pageheader == 'undefined' ? "" : pageheader);
-	pagesubheader = (typeof pagesubheader == 'undefined' ? "" : pagesubheader);
-	pagecontents = (typeof pagecontents == 'undefined' ? "" : pagecontents);
-	//This code will be dynamic - for now it is static
-	var tmpl = '<div class="box box-solid">'+
+$.aaacplApp.managePage.getLayout = function (){
+	
+	var tmpl = '<div id="departments" class="box box-solid">'+
              '<div class="box-header">'+
                '<h3 class="box-title">Departments</h3>'+
 			   '<div class="box-tools pull-right">'+
-			   '<button class="btn bg-orange">Add Departments</button>'+
+			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-dept-form">New Department</button>'+
 			   '</div>'+
             '</div>'+
             '<div class="box-body">'+
-		'<div class="box box-default collapsed-box dept-row">'+
-        ' <div class="box-header with-border">'+
-        '  <h3 class="box-title">Department 1</h3>'+
-         ' <div class="box-tools pull-right">'+
-          '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>'+
-          '</div>'+
-        '</div>'+
-        '<div class="box-body">'+
-        '</div>'+
-        '</div>'+
+			
+			//Department 1
+		'<div class="box box-warning collapsed-box dept-row">'+
+			' <div class="box-header with-border">'+
+			'  <h3 class="box-title">Department 1</h3>'+
+			 ' <div class="box-tools pull-right">'+
+			  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>'+
+			  '  <button type="button" class="btn btn-box-tool">MANAGE AUCTIONS</button>'+
+			  '</div>'+
+			'</div>'+
+			'<div class="box-body">'+
+			'<div class="form" role="form">'+
+			 '<div class="form-group">'+
+			  ' <label for="deptInputName">Department Name</label>'+
+			   ' <input type="text" class="form-control" id="deptInputName">'+
+			 '</div>'+
+			 '<div class="form-group">'+
+			 ' <label for="deptInputLogoFile">Department Logo</label>'+
+			   ' <input type="file" class="form-control" id="deptInputLogoFile">'+
+			 '</div>'+
+			'</div>'+
+			'</div>'+
+			'<div class="box-footer">'+
+				'  <button type="button" class="btn bg-orange">UPDATE</button>'+
+			'</div>'+
+		'</div>'+
+		
+		//Department 2
+		
+		'<div class="box box-warning collapsed-box dept-row">'+
+			' <div class="box-header with-border">'+
+			'  <h3 class="box-title">Department 2</h3>'+
+			 ' <div class="box-tools pull-right">'+
+			  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>'+
+			  '  <button type="button" class="btn btn-box-tool">MANAGE AUCTIONS</button>'+
+			  '</div>'+
+			'</div>'+
+			'<div class="box-body">'+
+			'<div class="form" role="form">'+
+			 '<div class="form-group">'+
+			  ' <label for="deptInputName">Department Name</label>'+
+			   ' <input type="text" class="form-control" id="deptInputName">'+
+			 '</div>'+
+			 '<div class="form-group">'+
+			 ' <label for="deptInputLogoFile">Department Logo</label>'+
+			   ' <input type="file" class="form-control" id="deptInputLogoFile">'+
+			 '</div>'+
+			'</div>'+
+			'</div>'+
+			'<div class="box-footer">'+
+				'  <button type="button" class="btn bg-orange">UPDATE</button>'+
+			'</div>'+
+		'</div>'+
+		
 			'</div><!-- /.box-body -->'+
-         ' </div>';
+         ' </div>'+
+		 
+		 //Modal for new departments
+		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-dept-form" aria-labelledby="model-heading">'+
+          '<div class="modal-dialog" role="document">'+
+           ' <div class="modal-content">'+
+              '<div class="modal-header">'+
+               ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+               '   <span aria-hidden="true">×</span></button>'+
+               ' <h4 class="modal-title" id="model-heading">New Department</h4>'+
+              '</div>'+
+              '<div class="modal-body">'+
+              '<div class="form" role="form">'+
+			 '<div class="form-group">'+
+			  ' <label for="deptInputName">Department Name</label>'+
+			   ' <input type="text" class="form-control" id="deptInputName">'+
+			 '</div>'+
+			 '<div class="form-group">'+
+			 ' <label for="deptInputLogoFile">Department Logo</label>'+
+			   ' <input type="file" class="form-control" id="deptInputLogoFile">'+
+			 '</div>'+
+			'</div>'+
+              '</div>'+
+              '<div class="modal-footer">'+
+              '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
+              '  <button type="button" class="btn btn-primary">Save changes</button>'+
+              '</div>'+
+            '</div>'+
+            '<!-- /.modal-content -->'+
+          '</div>'+
+          '<!-- /.modal-dialog -->'+
+        '</div>';
 	return tmpl;
 };
 
 $.aaacplApp.managePage.executeScript = function(){
-	
+	$("#btn-add-dept").on('click',function(){
+		$("#add-dept-form").fadeIn();
+	});
 };
 
      

@@ -7,7 +7,7 @@ if (typeof jQuery === "undefined") {
 $.aaacplApp = {
 	
 	//API Root path
-	apiSrvPath : "http://aaacplapi-theuniquemedia.rhcloud.com/rest/",
+	apiSrvPath : "http://api.aaacpl.com/rest/",
 	
 	userAuthKey : "uAuthIDAAACPL",
 	

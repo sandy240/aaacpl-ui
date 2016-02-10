@@ -171,10 +171,23 @@ a:focus {
 }
 
 
-/*** CUSTOM CHANGES FOR AAACPL ****/
+/*** CUSTOM STYLES FOR AAACPL ****/
 
-.box.dept-row .box-header {
-	.fa-plus::before, .fa-minus::before{
-		content : "\f044";
+#departments{
+	> .box-header > .box-title{
+		font-size:22px;
+	}
+	> .box-body{
+		padding-top: 30px;
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+	.box.dept-row {
+		margin-bottom: 30px;
+		.box-header {
+			.fa-plus::before, .fa-minus::before{
+				content : "\f044";
+			}
+		}
 	}
 }

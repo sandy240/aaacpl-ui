@@ -186,9 +186,20 @@ a:focus {
   display: block;
   margin-top: 5px;
 }
-/*** CUSTOM CHANGES FOR AAACPL ****/
-.box.dept-row .box-header .fa-plus::before,
-.box.dept-row .box-header .fa-minus::before {
+/*** CUSTOM STYLES FOR AAACPL ****/
+#departments > .box-header > .box-title {
+  font-size: 22px;
+}
+#departments > .box-body {
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+#departments .box.dept-row {
+  margin-bottom: 30px;
+}
+#departments .box.dept-row .box-header .fa-plus::before,
+#departments .box.dept-row .box-header .fa-minus::before {
   content: "\f044";
 }
 /*

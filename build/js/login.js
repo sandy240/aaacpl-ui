@@ -13,11 +13,11 @@ $.aaacplApp.loginPage.getLayout = function (){
 		'</div>'+
         '<form action="" method="post" id="login">'+
         '  <div class="form-group has-feedback">'+
-        '    <input type="email" class="form-control" placeholder="Email" required>'+
+        '    <input name="name" type="email" class="form-control" placeholder="Email" required>'+
          '   <span class="glyphicon glyphicon-envelope form-control-feedback"></span>'+
          ' </div>'+
          ' <div class="form-group has-feedback">'+
-          '  <input type="password" class="form-control" placeholder="Password" required>'+
+          '  <input name="password" type="password" class="form-control" placeholder="Password" required>'+
            ' <span class="glyphicon glyphicon-lock form-control-feedback"></span>'+
          ' </div>'+
           '<div class="row">'+
@@ -55,11 +55,15 @@ $.aaacplApp.loginPage.executeScript = function(){
 		
 		// ajax call only when client side validation is completed
 		function loginFormAjaxCall(loginForm){
-		     var formData = JSON.stringify(loginForm.serializeArray()); // JSON data of values entered in form
+		     var formData = loginForm.serializeArray(); // JSON data of values entered in form
+			 var loginPost = {};
+			 $.each(formData, function (key, item) {
+				 loginPost[item.name] = item.value;
+			 });
 			 $.ajax({
 				 type: "POST",
                  url: $.aaacplApp.apiSrvPath + 'user/login', //REST API call
-                 data: formData,
+                 data: loginPost,
                  dataType: "jsonp",
                  success: function(response) {
                  /**
