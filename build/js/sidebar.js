@@ -28,7 +28,7 @@ $.aaacplApp.pageSidebar.getPrctMenuItems = function (){
 	var tml = '<ul class="sidebar-menu">' +
 			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>' +
-			'<li><a href="#"><i class="fa fa-exchange"></i> <span>MY HISTORY</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-history"></i> <span>HISTORY</span></a></li>' +
             '<li><a href="#"><i class="fa fa-circle"></i> <span>Live Auctions</span></a></li>' +
            ' <li><a href="#"><i class="fa fa-circle-o"></i> <span>Upcoming Auctions</span></a></li>' +
           '</ul>';
@@ -38,7 +38,7 @@ $.aaacplApp.pageSidebar.getClientMenuItems = function (){
 	var tml =  '<ul class="sidebar-menu">' +
 			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>' +
-			'<li><a href="#"><i class="fa fa-exchange"></i><span>HISTORY</span></a></li>' +
+			'<li><a href="#"><i class="fa fa-history"></i><span>HISTORY</span></a></li>' +
             '<li><a href="#"><i class="fa fa-circle"></i> <span>OBSERVATION</span></a></li>' +
           '</ul>';
 		  return tml;

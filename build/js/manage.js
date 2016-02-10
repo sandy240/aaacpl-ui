@@ -1,5 +1,8 @@
 $.aaacplApp.managePage.getLayout = function (){
 	
+	/***
+	** COMPLETE DEPARTMENT PAGE LAYOUT 
+	**/
 	var tmpl = '<div id="departments" class="box box-solid">'+
              '<div class="box-header">'+
                '<h3 class="box-title">Departments</h3>'+
@@ -12,10 +15,10 @@ $.aaacplApp.managePage.getLayout = function (){
 			//Department 1
 		'<div class="box box-warning collapsed-box dept-row">'+
 			' <div class="box-header with-border">'+
-			'  <h3 class="box-title">Department 1</h3>'+
+			'  <h3 class="box-title"><i class="fa fa-bank"></i> Department 1</h3>'+
 			 ' <div class="box-tools pull-right">'+
-			  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>'+
-			  '  <button type="button" class="btn btn-box-tool">MANAGE AUCTIONS</button>'+
+			  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
+			  '  <button type="button" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE AUCTIONS</button>'+
 			  '</div>'+
 			'</div>'+
 			'<div class="box-body">'+
@@ -39,10 +42,10 @@ $.aaacplApp.managePage.getLayout = function (){
 		
 		'<div class="box box-warning collapsed-box dept-row">'+
 			' <div class="box-header with-border">'+
-			'  <h3 class="box-title">Department 2</h3>'+
+			'  <h3 class="box-title"><i class="fa fa-bank"></i> Department 2</h3>'+
 			 ' <div class="box-tools pull-right">'+
-			  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>'+
-			  '  <button type="button" class="btn btn-box-tool">MANAGE AUCTIONS</button>'+
+			  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
+			  '  <button type="button" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE AUCTIONS</button>'+
 			  '</div>'+
 			'</div>'+
 			'<div class="box-body">'+
@@ -65,7 +68,7 @@ $.aaacplApp.managePage.getLayout = function (){
 			'</div><!-- /.box-body -->'+
          ' </div>'+
 		 
-		 //Modal for new departments
+		 //Modal for adding new department
 		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-dept-form" aria-labelledby="model-heading">'+
           '<div class="modal-dialog" role="document">'+
            ' <div class="modal-content">'+
@@ -99,9 +102,7 @@ $.aaacplApp.managePage.getLayout = function (){
 };
 
 $.aaacplApp.managePage.executeScript = function(){
-	$("#btn-add-dept").on('click',function(){
-		$("#add-dept-form").fadeIn();
-	});
+	
 };
 
      
