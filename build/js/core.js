@@ -13,6 +13,11 @@ $.aaacplApp = {
 	
 	// A hash to store our routes:
 	routes : {},
+	
+	dataStorage : {
+		//DUMMY DATA
+		userInfo : {"typeId":1,"email":"aaacpl@gmail.com","vatNumber":null,"panNumber":null,"material":null,"city":null,"pin":0,"phone":0,"mobile":0,"companyName":null,"status":"active","password":null,"address":null,"name":"AAACPL","id":3,"state":null,"country":null}
+	},
 
 	// a map to store all the template and their relative path
 	template : {
@@ -66,31 +71,39 @@ $.aaacplApp = {
 			var scrpt = document.createElement('script');
 			scrpt.src = "dist/js/app.min.js";
 			document.body.appendChild(scrpt);
+		} else {
+			$.AdminLTE.layout.fix();
 		}
 		
 	},
 	init : function(){
 		var _this = this;
 		
+		var pageURL = window.location.href;
+		
 		//Add all possible routes
 		_this.addRoutes();
 		
 		_this.wrapperElem = $('#main-viewport');
 		
+
+        // Setting a cookie for which the dashboard will be displayed instead of login page
+        //document.cookie="uAuthIDAAACPL=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; //note : uncomment line for direct login
+		
+		if(pageURL.indexOf(_this.template['register'])<0 || pageURL.indexOf(_this.template['login'])<0){
+			var sId = _this.readCookie(_this.userAuthKey);
+			//Redirection to login if authentication fails i.e session does not exists
+			if(sId.length == 0){
+				_this.redirectTo("login");
+			} else if(pageURL.indexOf(_this.template['login'])>=0){
+				_this.redirectTo("home");
+			}
+		}
+		
 		// Listen on hash change:
 		window.addEventListener('hashchange', _this.router);
 		// Listen on page load:
 		window.addEventListener('load', _this.router);
-
-        // Setting a cookie for which the dashboard will be displayed instead of login page
-        //document.cookie="uAuthIDAAACPL=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; //note : uncomment line for direct login
-
-		var sId = _this.readCookie(_this.userAuthKey);
-		//Redirection to login if authentication fails i.e session does not exists
-        if(sId.length == 0 && window.location.href.indexOf(_this.template['register'])<0){
-			//_this.redirectTo("login");
-		}
-        //OR get logged in user info when session exists. Here we can either get info from cookie or REST API
 
 	},
 	addRoutes : function(){
@@ -147,8 +160,9 @@ $.aaacplApp = {
 	},
 	wrapInCommonLayout : function (actualContents){
 		var _this = this;
-		var pageCommonHeader = _this.pageHeader.getLayout();
-		var pageCommonSidebar = _this.pageSidebar.getLayout();
+		var userdata = (typeof _this.dataStorage.userInfo != 'undefined' ? this.dataStorage.userInfo : {} );
+		var pageCommonHeader = _this.pageHeader.getLayout(userdata);
+		var pageCommonSidebar = _this.pageSidebar.getLayout(userdata);
 		var pageCommonFooter = _this.pageFooter.getLayout();
 		
 		_this.changeBodyLayoutType('sidebar-mini');

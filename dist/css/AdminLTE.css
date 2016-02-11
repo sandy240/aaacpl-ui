@@ -202,6 +202,12 @@ a:focus {
 #departments .box.dept-row .box-header .fa-minus::before {
   content: "\f044";
 }
+.navbar button.sidebar-toggle {
+  border: 0;
+}
+.alert a.close {
+  text-decoration: none;
+}
 /*
  * Component: Main Header
  * ----------------------

@@ -63,21 +63,32 @@ $.aaacplApp.loginPage.executeScript = function(){
 			 $.ajax({
 				 type: "POST",
                  url: $.aaacplApp.apiSrvPath + 'user/login', //REST API call
-                 data: loginPost,
-                 dataType: "jsonp",
+                 data: JSON.stringify(loginPost),
+				 dataType : "json",
+				 crossDomain : true,
+				 contentType : "application/json",
                  success: function(response) {
-                 /**
-                 * param1 - the auth key
-                 * param2 - the success message from which is the authSessionId $.aaacplApp.userAuthKey
-                 * param3 - cookie expire time in hours
-                 */
-                 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response,3); //cookie creation
-
-                 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
+					 /**
+					 * param1 - the auth key
+					 * param2 - the success message from which is the authSessionId $.aaacplApp.userAuthKey
+					 * param3 - cookie expire time in hours
+					 */
+					 if(response.successMessage && response.successMessage != ""){
+						 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response.successMessage,3); //cookie creation
+						 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
+					 } else {
+						 $('#login-failure').show();
+						 if(response.failureMessage && response.failureMessage != "") {
+							$('#login-failure .message-text').html(response.failureMessage);
+						 } else if(response.failureMessage == null) {
+							$('#login-failure .message-text').html("Your password seems to be wrong!");
+						 } else {
+							$('#login-failure .message-text').html("Something went wrong! Please try again later.");
+						 }
+					 }
 				},
 				 error: function(error) {
-				 $('#login-failure').show();
-				 $('#login-failure .message-text').html(error);
+				 
 				}
 			});
 		}
