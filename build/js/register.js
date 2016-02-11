@@ -99,19 +99,27 @@ $.aaacplApp.registerPage.executeScript = function(){
          $(function(){
              $.ajax({
                type: "GET",
+               url: $.aaacplApp.apiSrvPath + 'user/userTypes',
                dataType: "json",
 			   crossDomain : true,
-               url: $.aaacplApp.apiSrvPath + 'user/userTypes',
+			   contentType : "application/json",
                success: function(data){
-               // appending option to select element
-			   data = data.getTypesResponseList;
-                $.each(data, function (key, item) {
-                    $('#select').append($('<option>', {
-                        value: item.type,
-                        text : item.label
-                    }));
-                });
-               },
+               var isValidJson = $aaacplApp.tryParseJSON(response);
+                   if(isValidJson){
+                       // appending option to select element
+                       data = data.getTypesResponseList;
+                        $.each(data, function (key, item) {
+                            $('#select').append($('<option>', {
+                                value: item.type,
+                                text : item.label
+                            }));
+                        });
+               }else {
+                     alert("Something went wrong! Please try again later");
+                     $.aaacplApp.redirectTo('login');   //REDIRECT TO login or we can make a page having a
+                       //panel showing messages when REST API behaves inappropriately or sends incorrect data
+                  }
+              },
                 error: function() {
                 $('#register-failure').show();
                 $('#register-failure .message-text').html('Something went wrong. Kindly try later');

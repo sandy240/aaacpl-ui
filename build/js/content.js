@@ -26,6 +26,34 @@ $.aaacplApp.pageContent.getLayout = function (pageheader, pagecontents , pagesub
 };
 
 $.aaacplApp.pageContent.executeScript = function(){
-	
-	
+
+ // ajax call on page load which will return the user Info on passing sessionId and userId
+         $(function(){
+         var userDetails = {};
+         userDetails['sessionId'] = $aaacplApp.sessionId;
+             $.ajax({
+               type: "POST",
+               url: $.aaacplApp.apiSrvPath + 'user/userinfo',
+               data: JSON.stringify(userDetails),
+               dataType : "json",
+               crossDomain : true,
+               contentType : "application/json",
+               success: function(response){
+               var isValidJson = $aaacplApp.tryParseJSON(response);
+               if(isValidJson){
+                $.each(data, function (key, value) {
+                    $aaacplApp.dataStorage.userInfo[key] = value;
+               });
+               }else{
+                    alert("Something went wrong! Please try again later");
+                    $.aaacplApp.redirectTo('login');   //REDIRECT TO login or we can make a page having a
+                    //panel showing messages when REST API behaves inappropriately or sends incorrect data
+                 }
+               },
+                error: function() {
+                 alert("Something went wrong! Please try again later");
+                 $.aaacplApp.redirectTo('login');  //REDIRECT TO login
+               }
+            });
+         });
 };

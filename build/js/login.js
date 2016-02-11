@@ -68,13 +68,16 @@ $.aaacplApp.loginPage.executeScript = function(){
 				 crossDomain : true,
 				 contentType : "application/json",
                  success: function(response) {
+                 var isValidJson = $aaacplApp.tryParseJSON(response);
+                    if(isValidJson){
 					 /**
 					 * param1 - the auth key
 					 * param2 - the success message from which is the authSessionId $.aaacplApp.userAuthKey
 					 * param3 - cookie expire time in hours
 					 */
 					 if(response.successMessage && response.successMessage != ""){
-						 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response.successMessage,3); //cookie creation
+					     $.aaacplApp.sessionId = response.successMessage;
+						 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,$.aaacplApp.sessionId,3); //cookie creation
 						 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
 					 } else {
 						 $('#login-failure').show();
@@ -86,9 +89,12 @@ $.aaacplApp.loginPage.executeScript = function(){
 							$('#login-failure .message-text').html("Something went wrong! Please try again later.");
 						 }
 					 }
+				    } else {
+				       alert("Something went wrong! Please try again later");
+                     }
 				},
 				 error: function(error) {
-				 
+                       alert("Something went wrong! Please try again later");
 				}
 			});
 		}

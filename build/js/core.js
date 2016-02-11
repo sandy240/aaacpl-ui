@@ -10,13 +10,31 @@ $.aaacplApp = {
 	apiSrvPath : "http://api.aaacpl.com/rest/",
 	
 	userAuthKey : "uAuthIDAAACPL",
+
+	sessionId : undefined,
 	
 	// A hash to store our routes:
 	routes : {},
 	
 	dataStorage : {
-		//DUMMY DATA
-		userInfo : {"typeId":1,"email":"aaacpl@gmail.com","vatNumber":null,"panNumber":null,"material":null,"city":null,"pin":0,"phone":0,"mobile":0,"companyName":null,"status":"active","password":null,"address":null,"name":"AAACPL","id":3,"state":null,"country":null}
+		//user Info
+		userInfo : {
+		"typeId":undefined,
+		"email":undefined,
+		"vatNumber":undefined,
+		"panNumber":undefined,
+		"material":undefined,
+		"city":undefined,
+		"pin":undefined,
+		"phone":undefined,
+		"mobile":undefined,
+		"companyName":undefined,
+		"status":"active",
+		"address":undefined,
+		"name":undefined,
+		"state":undefined,
+		"country":undefined
+		}
 	},
 
 	// a map to store all the template and their relative path
@@ -149,6 +167,24 @@ $.aaacplApp = {
 		}, function(){
 			_this.registerPage.executeScript();
 		});
+
+		//SIGNOUT PAGE
+        _this.route('/signout', 'signout', function () {
+            _this.changeBodyLayoutType('signout-page');
+            _this.wrapperElem[0].className = 'signout-box';
+            return _this.signoutPage.getLayout();
+       }, function(){
+       		_this.signoutPage.executeScript();
+       });
+
+       //PROFILE PAGE
+       _this.route('/profile', 'profile', function () {
+           _this.changeBodyLayoutType('profile-page');
+           _this.wrapperElem[0].className = 'profile-box';
+           return _this.profilePage.getLayout();
+      }, function(){
+            _this.profilePage.executeScript();
+      });
 		
 	},
 	changeBodyLayoutType : function(pageClass){
@@ -197,7 +233,22 @@ $.aaacplApp = {
 			expires =  today.toUTCString();
 		}
 		document.cookie = name +"="+value+";expires=+"+expires+";path=/";
-	}
+	},
+
+    tryParseJSON : function (jsonString){
+              try {
+                  var jsonData = JSON.parse(jsonString);
+                  // Handle non-exception-throwing cases:
+                  // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+                  // but... JSON.parse(null) returns 'null', and typeof null === "object",
+                  // so we must check for that, too.
+                  if (jsonData && typeof jsonData === "object" && jsonData !== null) {
+                      return jsonData;
+                  }
+              }
+              catch (e) {}
+              return false;
+    }
 };
 $.aaacplApp.pageHeader = {};
 $.aaacplApp.pageSidebar = {};
