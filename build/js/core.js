@@ -19,22 +19,24 @@ $.aaacplApp = {
 	dataStorage : {
 		//user Info
 		userInfo : {
-		"typeId":undefined,
-		"email":undefined,
-		"vatNumber":undefined,
-		"panNumber":undefined,
-		"material":undefined,
-		"city":undefined,
-		"pin":undefined,
-		"phone":undefined,
-		"mobile":undefined,
-		"companyName":undefined,
-		"status":"active",
-		"address":undefined,
-		"name":undefined,
-		"state":undefined,
-		"country":undefined
+			"typeId": 0,
+			"email": "",
+			"vatNumber": "",
+			"panNumber": "",
+			"material": "",
+			"city": "",
+			"pin": 0,
+			"phone": 0,
+			"mobile": 0,
+			"companyName": "",
+			"userTypeLabel": "",
+			"address": "",
+			"name": "",
+			"id": 0,
+			"state": "",
+			"country": "",
 		}
+		
 	},
 
 	// a map to store all the template and their relative path
@@ -140,6 +142,17 @@ $.aaacplApp = {
 			var managecontents = _this.managePage.getLayout();
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", managecontents , "Departments <i class='fa fa-link'></i> Auctions <i class='fa fa-link'></i> Lots"));
 		});
+		
+		//PROFILE PAGE
+	   _this.route('/profile', 'profile', function () {
+			var userprofilecontents = _this.profilePage.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("PROFILE", userprofilecontents , ""));
+		}, function(){
+			
+		});
+		
+		
+		//Pages which has layout not fitting in common layouts
 
 		//LOGIN PAGE
 		_this.route('/login', 'login', function () {						
@@ -167,24 +180,6 @@ $.aaacplApp = {
 		}, function(){
 			_this.registerPage.executeScript();
 		});
-
-		//SIGNOUT PAGE
-        _this.route('/signout', 'signout', function () {
-            _this.changeBodyLayoutType('signout-page');
-            _this.wrapperElem[0].className = 'signout-box';
-            return _this.signoutPage.getLayout();
-       }, function(){
-       		_this.signoutPage.executeScript();
-       });
-
-       //PROFILE PAGE
-       _this.route('/profile', 'profile', function () {
-           _this.changeBodyLayoutType('profile-page');
-           _this.wrapperElem[0].className = 'profile-box';
-           return _this.profilePage.getLayout();
-      }, function(){
-            _this.profilePage.executeScript();
-      });
 		
 	},
 	changeBodyLayoutType : function(pageClass){
@@ -255,6 +250,7 @@ $.aaacplApp.pageSidebar = {};
 $.aaacplApp.pageContent = {};
 $.aaacplApp.dashboardPage = {};
 $.aaacplApp.managePage = {};
+$.aaacplApp.profilePage = {};
 $.aaacplApp.pageFooter = {};
 $.aaacplApp.loginPage = {};
 $.aaacplApp.forgotPage = {};

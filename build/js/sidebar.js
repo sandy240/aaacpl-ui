@@ -14,9 +14,6 @@ $.aaacplApp.pageSidebar.getLayout = function (userInfo){
 		menuTmpl = $.aaacplApp.pageSidebar.getClientMenuItems();
 		break;
 	}
-	if(userInfo.typeId ){
-		
-	}
 	
 	var tmpl = ' <!-- Left side column. contains the logo and sidebar --> ' +
       '<aside class="main-sidebar">' +
@@ -30,7 +27,7 @@ $.aaacplApp.pageSidebar.getLayout = function (userInfo){
             '<div class="pull-left info">' +
              ' <p>' + userInfo.name +'</p>' +
               '<!-- Status -->' +
-              '<a href="#">Administrator</a>' +
+              '<a href="#">' + userInfo.userTypeLabel +'</a>' +
             '</div>' +
           '</div>' +
 		'<!-- Sidebar Menu -->' +

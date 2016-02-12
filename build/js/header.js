@@ -32,7 +32,7 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
                  ' <li class="user-header">'+
                    ' <img src="dist/img/default-user.png" class="img-circle" alt="User Image">'+
                    ' <p>'+
-                    userInfo.name + ' - Administrator'+
+                    userInfo.name + ' - ' userInfo.userTypeLabel +
                      '<small>Member since Nov. 2012</small>'+
                   '  </p>'+
                  ' </li>'+
