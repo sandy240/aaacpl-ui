@@ -11,7 +11,11 @@ $.aaacplApp = {
 	
 	userAuthKey : "uAuthIDAAACPL",
 
-	sessionId : undefined,
+	sessionInfo : {
+	"sessionId" : "",
+	"userId" : ""
+	},
+
 	
 	// A hash to store our routes:
 	routes : {},
@@ -34,9 +38,8 @@ $.aaacplApp = {
 			"name": "",
 			"id": 0,
 			"state": "",
-			"country": "",
+			"country": ""
 		}
-		
 	},
 
 	// a map to store all the template and their relative path
@@ -147,8 +150,6 @@ $.aaacplApp = {
 	   _this.route('/profile', 'profile', function () {
 			var userprofilecontents = _this.profilePage.getLayout();
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("PROFILE", userprofilecontents , ""));
-		}, function(){
-			
 		});
 		
 		
@@ -192,8 +193,8 @@ $.aaacplApp = {
 	wrapInCommonLayout : function (actualContents){
 		var _this = this;
 		var userdata = (typeof _this.dataStorage.userInfo != 'undefined' ? this.dataStorage.userInfo : {} );
-		var pageCommonHeader = _this.pageHeader.getLayout(userdata);
-		var pageCommonSidebar = _this.pageSidebar.getLayout(userdata);
+		var pageCommonHeader = _this.pageHeader.getLayout();
+		var pageCommonSidebar = _this.pageSidebar.getLayout();
 		var pageCommonFooter = _this.pageFooter.getLayout();
 		
 		_this.changeBodyLayoutType('sidebar-mini');
@@ -204,6 +205,9 @@ $.aaacplApp = {
 
 	redirectTo : function(sectionTo) {
 		var href, _this = this;
+		if(sectionTo == 'home' && _this.sessionInfo !=""){
+		       getSessionUserInfo();
+		}
 		window.location.href = _this.template[sectionTo];
 	},
 	readCookie : function(cookieName){
@@ -243,6 +247,35 @@ $.aaacplApp = {
               }
               catch (e) {}
               return false;
+    },
+
+    getSessionUserInfo : function (){
+    var _this = this;
+     // ajax call on page load which will return the user Info on passing sessionId and userId
+                 $.ajax({
+                   type: "POST",
+                   url: _this.apiSrvPath + 'user/userinfo',
+                   data: JSON.stringify(_this.sessionInfo),
+                   dataType : "json",
+                   crossDomain : true,
+                   contentType : "application/json",
+                   success: function(response){
+                   var isValidJson = _this.tryParseJSON(response);
+                   if(isValidJson){
+                    $.each(data, function (key, value) {
+                        _this.dataStorage.userInfo[key] = value;
+                   });
+                   }else{
+                        alert("Something went wrong! Please try again later");
+                        _this.redirectTo('login');   //REDIRECT TO login or we can make a page having a
+                        //panel showing messages when REST API behaves inappropriately or sends incorrect data
+                     }
+                   },
+                    error: function() {
+                     alert("Something went wrong! Please try again later");
+                     _this.redirectTo('login');  //REDIRECT TO login
+                   }
+                });
     }
 };
 $.aaacplApp.pageHeader = {};
