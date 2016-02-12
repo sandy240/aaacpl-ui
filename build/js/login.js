@@ -76,8 +76,9 @@ $.aaacplApp.loginPage.executeScript = function(){
 					 * param3 - cookie expire time in hours
 					 */
 					 if(response.successMessage && response.successMessage != ""){
-					     $.aaacplApp.sessionId = response.successMessage;
-						 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,$.aaacplApp.sessionId,3); //cookie creation
+					     $.aaacplApp.sessionInfo["sessionId"] = response.successMessage;
+					     $.aaacplApp.sessionInfo["userId"] = response.userId;
+						 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,$.aaacplApp.sessionInfo.sessionId,3); //cookie creation
 						 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
 					 } else {
 						 $('#login-failure').show();
