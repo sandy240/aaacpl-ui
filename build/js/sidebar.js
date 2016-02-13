@@ -1,9 +1,9 @@
-$.aaacplApp.pageSidebar.getLayout = function (userInfo){
+$.aaacplApp.pageSidebar.getLayout = function (){
 	//This code will be dynamic - for now it is static
 	
 	var menuTmpl = "";
 	
-	switch(userInfo.typeId){
+	switch($.aaacplApp.sessionInfo.userId){
 		case 1:
 		menuTmpl = $.aaacplApp.pageSidebar.getAdminMenuItems();
 		break;
@@ -13,6 +13,9 @@ $.aaacplApp.pageSidebar.getLayout = function (userInfo){
 		case 4:
 		menuTmpl = $.aaacplApp.pageSidebar.getClientMenuItems();
 		break;
+		default:
+		alert("Something went wrong");
+		$.aaacplApp.redirectTo("login");
 	}
 	
 	var tmpl = ' <!-- Left side column. contains the logo and sidebar --> ' +
@@ -25,9 +28,9 @@ $.aaacplApp.pageSidebar.getLayout = function (userInfo){
             '  <img src="dist/img/default-user.png" class="img-circle" alt="User Image">' +
             '</div>' +
             '<div class="pull-left info">' +
-             ' <p>' + userInfo.name +'</p>' +
+             ' <p id="sideMenuUserName"></p>' +
               '<!-- Status -->' +
-              '<a href="#">' + userInfo.userTypeLabel +'</a>' +
+              '<a id="sideMenuUserLabel" href="#"></a>' +
             '</div>' +
           '</div>' +
 		'<!-- Sidebar Menu -->' +
@@ -41,7 +44,7 @@ $.aaacplApp.pageSidebar.getLayout = function (userInfo){
 $.aaacplApp.pageSidebar.getPrctMenuItems = function (){
 	var tml = '<ul class="sidebar-menu">' +
 			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
-			'<li><a href="#"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
+			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-history"></i><span>HISTORY</span></a></li>' +
             '<li><a href="#"><i class="fa fa-circle"></i><span>Live Auctions</span></a></li>' +
            ' <li><a href="#"><i class="fa fa-circle-o"></i><span>Upcoming Auctions</span></a></li>' +
@@ -51,7 +54,7 @@ $.aaacplApp.pageSidebar.getPrctMenuItems = function (){
 $.aaacplApp.pageSidebar.getClientMenuItems = function (){
 	var tml =  '<ul class="sidebar-menu">' +
 			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
-			'<li><a href="#"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
+			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-history"></i><span>HISTORY</span></a></li>' +
             '<li><a href="#"><i class="fa fa-circle"></i><span>OBSERVATION</span></a></li>' +
           '</ul>';
@@ -60,9 +63,14 @@ $.aaacplApp.pageSidebar.getClientMenuItems = function (){
 $.aaacplApp.pageSidebar.getAdminMenuItems = function (){
 	var tml =  '<ul class="sidebar-menu">' +
 			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
-			'<li><a href="#"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
+			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
             '<li><a href="#/manage"><i class="fa fa-cog"></i><span>MANAGE</span></a></li>' +
 			'<li><a href="#/"><i class="fa fa-pie-chart"></i><span>REPORTS</span></a></li>' +
           '</ul>';
 		  return tml;
+};
+
+$.aaacplApp.pageSidebar.executeScript = function(userInfo){
+$('#sideMenuUserName').html(userInfo.name);
+$('#sideMenuUserLabel').html(userInfo.userTypeLabel);
 };

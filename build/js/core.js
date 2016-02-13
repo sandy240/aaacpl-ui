@@ -13,7 +13,7 @@ $.aaacplApp = {
 
 	sessionInfo : {
 	"sessionId" : "",
-	"userId" : ""
+	"userId" : 0
 	},
 
 	
@@ -36,7 +36,6 @@ $.aaacplApp = {
 			"userTypeLabel": "",
 			"address": "",
 			"name": "",
-			"id": 0,
 			"state": "",
 			"country": ""
 		}
@@ -142,14 +141,16 @@ $.aaacplApp = {
 		
 		//MANAGE - DEPARTMENTS
 		_this.route('/manage', 'manage_dept', function () {	
-			var managecontents = _this.managePage.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", managecontents , "Departments <i class='fa fa-link'></i> Auctions <i class='fa fa-link'></i> Lots"));
+			var manageContents = _this.managePage.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageContents , "Departments <i class='fa fa-link'></i> Auctions <i class='fa fa-link'></i> Lots"));
 		});
 		
 		//PROFILE PAGE
 	   _this.route('/profile', 'profile', function () {
-			var userprofilecontents = _this.profilePage.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("PROFILE", userprofilecontents , ""));
+			var userProfileContents = _this.profilePage.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("PROFILE", userProfileContents , ""));
+		},function(){
+		    _this.profile.executeScript();
 		});
 		
 		
@@ -192,9 +193,9 @@ $.aaacplApp = {
 	},
 	wrapInCommonLayout : function (actualContents){
 		var _this = this;
-		var userdata = (typeof _this.dataStorage.userInfo != 'undefined' ? this.dataStorage.userInfo : {} );
-		var pageCommonHeader = _this.pageHeader.getLayout();
-		var pageCommonSidebar = _this.pageSidebar.getLayout();
+		var userInfo = _this.dataStorage.userInfo;
+		var pageCommonHeader = _this.pageHeader.getLayout() + $.aaacplApp.pageHeader.executeScript(userInfo);
+		var pageCommonSidebar = _this.pageSidebar.getLayout() + $.aaacplApp.pageSidebar.executeScript(userInfo);
 		var pageCommonFooter = _this.pageFooter.getLayout();
 		
 		_this.changeBodyLayoutType('sidebar-mini');
@@ -204,11 +205,11 @@ $.aaacplApp = {
 	},
 
 	redirectTo : function(sectionTo) {
-		var href, _this = this;
-		if(sectionTo == 'home' && _this.sessionInfo !=""){
-		       getSessionUserInfo();
+		var section = sectionTo , _this = this;
+		if(section == 'home'){
+		   _this.sessionInfo.sessionId != "" ?  _this.getSessionUserInfo(): (section = 'login', alert("Session Expired!"));
 		}
-		window.location.href = _this.template[sectionTo];
+		window.location.href = _this.template[section];
 	},
 	readCookie : function(cookieName){
 		var cookieValue, cookieList, name = cookieName + "=";
@@ -253,16 +254,15 @@ $.aaacplApp = {
     var _this = this;
      // ajax call on page load which will return the user Info on passing sessionId and userId
                  $.ajax({
-                   type: "POST",
-                   url: _this.apiSrvPath + 'user/userinfo',
-                   data: JSON.stringify(_this.sessionInfo),
+                   type: "GET",
+                   url: _this.apiSrvPath +'user/userinfo/'+_this.sessionInfo.userId,
                    dataType : "json",
                    crossDomain : true,
                    contentType : "application/json",
                    success: function(response){
                    var isValidJson = _this.tryParseJSON(response);
                    if(isValidJson){
-                    $.each(data, function (key, value) {
+                    $.each(response, function (key, value) {
                         _this.dataStorage.userInfo[key] = value;
                    });
                    }else{
