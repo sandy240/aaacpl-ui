@@ -68,7 +68,7 @@ $.aaacplApp.loginPage.executeScript = function(){
 				 crossDomain : true,
 				 contentType : "application/json",
                  success: function(response) {
-                 var isValidJson = $aaacplApp.tryParseJSON(response);
+                 var isValidJson = $.aaacplApp.tryParseJSON(response);
                     if(isValidJson){
 					 /**
 					 * param1 - the auth key
