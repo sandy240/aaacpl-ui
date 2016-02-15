@@ -1,4 +1,4 @@
-$.aaacplApp.pageHeader.getLayout = function (){
+$.aaacplApp.pageHeader.getLayout = function (userInfo){
 	//This code will be dynamic - for now it is static
 	var tmpl = ' <!-- Main Header --> '+
       '<header class="main-header">'+
@@ -25,14 +25,15 @@ $.aaacplApp.pageHeader.getLayout = function (){
                '   <!-- The user image in the navbar-->'+
                 '  <img src="dist/img/default-user.png" class="user-image" alt="User Image">'+
                 '  <!-- hidden-xs hides the username on small devices so only the image appears. -->'+
-                 ' <span class="hidden-xs"></span>'+
+                 ' <span class="hidden-xs">' + userInfo.name+ '</span>'+
                ' </a>'+
                 '<ul class="dropdown-menu">'+
                  ' <!-- The user image in the menu -->'+
                  ' <li class="user-header">'+
                    ' <img src="dist/img/default-user.png" class="img-circle" alt="User Image">'+
                    ' <p id="userName">'+
-                     '<small>Member since Nov. 2012</small>'+
+					userInfo.name + ' - ' + userInfo.userTypeLabel +
+                     '<!-- small>Member since Nov. 2012</small -->'+
                   '  </p>'+
                  ' </li>'+
                   '<!-- Menu Footer-->'+
@@ -53,7 +54,6 @@ $.aaacplApp.pageHeader.getLayout = function (){
 	return tmpl;
 };
 
-$.aaacplApp.pageHeader.executeScript = function(userInfo){
-$('span.hidden-xs').html(userInfo.name);
-$('#userName').html(userInfo.name + ' - ' + userInfo.userTypeLabel);
+$.aaacplApp.pageHeader.executeScript = function(){
+
 };

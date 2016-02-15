@@ -1,21 +1,23 @@
-$.aaacplApp.pageSidebar.getLayout = function (){
+$.aaacplApp.pageSidebar.getLayout = function (userInfo){
 	//This code will be dynamic - for now it is static
 	
 	var menuTmpl = "";
+	var _this = this;
 	
-	switch($.aaacplApp.sessionInfo.userId){
+	switch(userInfo.typeId){
 		case 1:
-		menuTmpl = $.aaacplApp.pageSidebar.getAdminMenuItems();
+		menuTmpl = _this.getAdminMenuItems();
 		break;
-		case 2 , 3:
-		menuTmpl = $.aaacplApp.pageSidebar.getPrctMenuItems();
+		case 2:
+		case 3:
+		menuTmpl = _this.getPrctMenuItems();
 		break;
 		case 4:
-		menuTmpl = $.aaacplApp.pageSidebar.getClientMenuItems();
+		menuTmpl = _this.getClientMenuItems();
 		break;
 		default:
-		alert("Something went wrong");
 		$.aaacplApp.redirectTo("login");
+		break;
 	}
 	
 	var tmpl = ' <!-- Left side column. contains the logo and sidebar --> ' +
@@ -28,9 +30,9 @@ $.aaacplApp.pageSidebar.getLayout = function (){
             '  <img src="dist/img/default-user.png" class="img-circle" alt="User Image">' +
             '</div>' +
             '<div class="pull-left info">' +
-             ' <p id="sideMenuUserName"></p>' +
+             ' <p id="sideMenuUserName">'+userInfo.name+'</p>' +
               '<!-- Status -->' +
-              '<a id="sideMenuUserLabel" href="#"></a>' +
+              '<a id="sideMenuUserLabel" href="#">'+userInfo.userTypeLabel+'</a>' +
             '</div>' +
           '</div>' +
 		'<!-- Sidebar Menu -->' +
@@ -70,7 +72,5 @@ $.aaacplApp.pageSidebar.getAdminMenuItems = function (){
 		  return tml;
 };
 
-$.aaacplApp.pageSidebar.executeScript = function(userInfo){
-$('#sideMenuUserName').html(userInfo.name);
-$('#sideMenuUserLabel').html(userInfo.userTypeLabel);
+$.aaacplApp.pageSidebar.executeScript = function(){
 };

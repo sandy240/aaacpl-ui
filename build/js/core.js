@@ -10,12 +10,6 @@ $.aaacplApp = {
 	apiSrvPath : "http://api.aaacpl.com/rest/",
 	
 	userAuthKey : "uAuthIDAAACPL",
-
-	sessionInfo : {
-	"sessionId" : "",
-	"userId" : 0
-	},
-
 	
 	// A hash to store our routes:
 	routes : {},
@@ -34,9 +28,10 @@ $.aaacplApp = {
 			"mobile": 0,
 			"companyName": "",
 			"userTypeLabel": "",
-			"address": "",
 			"name": "",
+			"id": 0,
 			"state": "",
+			"address": "",
 			"country": ""
 		}
 	},
@@ -79,15 +74,29 @@ $.aaacplApp = {
 		
 		// Do we have both a view and a route?
 		if (_this.wrapperElem) {
-			if(routeObj.presenter){
-				// Render route template :
-				_this.wrapperElem.html(routeObj.presenter());	
-			}
-			if(routeObj.controller){
-				$(document).ready(routeObj.controller());
+			
+			//PRE-REQUIREMENT - USER INFO
+			// ajax call on page load which will return the user Info on passing sessionId and userId
+			if(_this.dataStorage.userInfo.typeId == 0) {
+				_this.ajaxCall("GET", 'user/userInfo/'+_this.getLoggedInUserId(), function success(response){
+					_this.dataStorage.userInfo = response;
+					_this.renderPage(routeObj,_this.wrapperElem);
+				}, function error(msg){
+					
+				});
+			} else {
+			  _this.renderPage(routeObj,_this.wrapperElem);
 			}
 		}
-		
+	},
+	renderPage : function(routeobj, container){
+		if(routeobj.presenter){
+			// Render route template :
+			container.html(routeobj.presenter());	
+		}
+		if(routeobj.controller){
+			$(document).ready(routeobj.controller());
+		}
 		//AdminLTE app.js
 		if(typeof $.AdminLTE == 'undefined'){
 			var scrpt = document.createElement('script');
@@ -96,7 +105,6 @@ $.aaacplApp = {
 		} else {
 			$.AdminLTE.layout.fix();
 		}
-		
 	},
 	init : function(){
 		var _this = this;
@@ -112,7 +120,7 @@ $.aaacplApp = {
         // Setting a cookie for which the dashboard will be displayed instead of login page
         //document.cookie="uAuthIDAAACPL=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; //note : uncomment line for direct login
 		
-		if(pageURL.indexOf(_this.template['register'])<0 || pageURL.indexOf(_this.template['login'])<0){
+		if(pageURL.indexOf(_this.template['register'])<0){
 			var sId = _this.readCookie(_this.userAuthKey);
 			//Redirection to login if authentication fails i.e session does not exists
 			if(sId.length == 0){
@@ -126,7 +134,15 @@ $.aaacplApp = {
 		window.addEventListener('hashchange', _this.router);
 		// Listen on page load:
 		window.addEventListener('load', _this.router);
-
+	},
+	getLoggedInUserId : function() {
+		var _this = this;
+		var sId = _this.readCookie(_this.userAuthKey);
+		//Redirection to login if authentication fails i.e session does not exists
+		if(sId.length > 0){
+			return sId.split('::')[1];
+		}
+		return 0;
 	},
 	addRoutes : function(){
 		var _this = this;
@@ -150,7 +166,7 @@ $.aaacplApp = {
 			var userProfileContents = _this.profilePage.getLayout();
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("PROFILE", userProfileContents , ""));
 		},function(){
-		    _this.profile.executeScript();
+		    _this.profilePage.executeScript();
 		});
 		
 		
@@ -194,8 +210,8 @@ $.aaacplApp = {
 	wrapInCommonLayout : function (actualContents){
 		var _this = this;
 		var userInfo = _this.dataStorage.userInfo;
-		var pageCommonHeader = _this.pageHeader.getLayout() + $.aaacplApp.pageHeader.executeScript(userInfo);
-		var pageCommonSidebar = _this.pageSidebar.getLayout() + $.aaacplApp.pageSidebar.executeScript(userInfo);
+		var pageCommonHeader = _this.pageHeader.getLayout(userInfo);
+		var pageCommonSidebar = _this.pageSidebar.getLayout(userInfo);
 		var pageCommonFooter = _this.pageFooter.getLayout();
 		
 		_this.changeBodyLayoutType('sidebar-mini');
@@ -206,9 +222,6 @@ $.aaacplApp = {
 
 	redirectTo : function(sectionTo) {
 		var section = sectionTo , _this = this;
-		if(section == 'home'){
-		   _this.sessionInfo.sessionId != "" ?  _this.getSessionUserInfo(): (section = 'login', alert("Session Expired!"));
-		}
 		window.location.href = _this.template[section];
 	},
 	readCookie : function(cookieName){
@@ -250,33 +263,26 @@ $.aaacplApp = {
               return false;
     },
 
-    getSessionUserInfo : function (){
-    var _this = this;
-     // ajax call on page load which will return the user Info on passing sessionId and userId
-                 $.ajax({
-                   type: "GET",
-                   url: _this.apiSrvPath +'user/userinfo/'+_this.sessionInfo.userId,
-                   dataType : "json",
-                   crossDomain : true,
-                   contentType : "application/json",
-                   success: function(response){
-                   var isValidJson = _this.tryParseJSON(response);
-                   if(isValidJson){
-                    $.each(response, function (key, value) {
-                        _this.dataStorage.userInfo[key] = value;
-                   });
-                   }else{
-                        alert("Something went wrong! Please try again later");
-                        _this.redirectTo('login');   //REDIRECT TO login or we can make a page having a
-                        //panel showing messages when REST API behaves inappropriately or sends incorrect data
-                     }
-                   },
-                    error: function() {
-                     alert("Something went wrong! Please try again later");
-                     _this.redirectTo('login');  //REDIRECT TO login
-                   }
-                });
-    }
+	ajaxCall : function(method, apiUrl, successCallback, errorCallback, payload){
+		var _this = this;
+		$.ajax({
+		   type: method,
+		   url: _this.apiSrvPath + apiUrl,
+		   dataType : "json",
+		   data : typeof payload != 'undefined' ? payload : '',
+		   crossDomain : true,
+		   contentType : "application/json",
+		   beforeSend: function(xhr){xhr.setRequestHeader('X-Temp-Header', 'temp-value');},
+		   success: function(response){
+			   if(typeof successCallback != 'undefined')
+				successCallback(response);
+			},
+			error: function(msg){
+				if(typeof errorCallback != 'undefined')
+				errorCallback(msg);
+			}
+		});
+	}
 };
 $.aaacplApp.pageHeader = {};
 $.aaacplApp.pageSidebar = {};

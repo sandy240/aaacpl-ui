@@ -60,44 +60,28 @@ $.aaacplApp.loginPage.executeScript = function(){
 			 $.each(formData, function (key, item) {
 				 loginPost[item.name] = item.value;
 			 });
-			 $.ajax({
-				 type: "POST",
-                 url: $.aaacplApp.apiSrvPath + 'user/login', //REST API call
-                 data: JSON.stringify(loginPost),
-				 dataType : "json",
-				 crossDomain : true,
-				 contentType : "application/json",
-                 success: function(response) {
-                 var isValidJson = $.aaacplApp.tryParseJSON(response);
-                    if(isValidJson){
+			 $.aaacplApp.ajaxCall("POST", 'user/login', function success(response){
+				if(response.userId > 0){
 					 /**
 					 * param1 - the auth key
 					 * param2 - the success message from which is the authSessionId $.aaacplApp.userAuthKey
 					 * param3 - cookie expire time in hours
 					 */
-					 if(response.successMessage && response.successMessage != ""){
-					     $.aaacplApp.sessionInfo["sessionId"] = response.successMessage;
-					     $.aaacplApp.sessionInfo["userId"] = response.userId;
-						 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,$.aaacplApp.sessionInfo.sessionId,3); //cookie creation
-						 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
+					 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response.successMessage + '::' + response.userId,3); //cookie creation
+					 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
+				 } else {
+					 $('#login-failure').show();
+					 if(response.failureMessage && response.failureMessage != "") {
+						$('#login-failure .message-text').html(response.failureMessage);
 					 } else {
-						 $('#login-failure').show();
-						 if(response.failureMessage && response.failureMessage != "") {
-							$('#login-failure .message-text').html(response.failureMessage);
-						 } else if(response.failureMessage == null) {
-							$('#login-failure .message-text').html("Your password seems to be wrong!");
-						 } else {
-							$('#login-failure .message-text').html("Something went wrong! Please try again later.");
-						 }
+						$('#login-failure .message-text').html("Invalid Login Details!");
 					 }
-				    } else {
-				       alert("Something went wrong! Please try again later");
-                     }
-				},
-				 error: function(error) {
-                       alert("Something went wrong! Please try again later");
-				}
-			});
+				 }
+			 }, 
+			 function error(msg){
+			 }, 
+			 //POST PAYLOAD
+			 JSON.stringify(loginPost));
 		}
 		
 		// on submit function of login form is called to perform client side validation

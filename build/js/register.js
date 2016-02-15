@@ -96,36 +96,18 @@ $.aaacplApp.registerPage.getLayout = function (){
 $.aaacplApp.registerPage.executeScript = function(){
 
     // ajax call on page load which will return the user types which will be shown in the drop down list.
-         $(function(){
-             $.ajax({
-               type: "GET",
-               url: $.aaacplApp.apiSrvPath + 'user/userTypes',
-               dataType: "json",
-			   crossDomain : true,
-			   contentType : "application/json",
-               success: function(data){
-               var isValidJson = $aaacplApp.tryParseJSON(response);
-                   if(isValidJson){
-                       // appending option to select element
-                       data = data.getTypesResponseList;
-                        $.each(data, function (key, item) {
-                            $('#select').append($('<option>', {
-                                value: item.type,
-                                text : item.label
-                            }));
-                        });
-               }else {
-                     alert("Something went wrong! Please try again later");
-                     $.aaacplApp.redirectTo('login');   //REDIRECT TO login or we can make a page having a
-                       //panel showing messages when REST API behaves inappropriately or sends incorrect data
-                  }
-              },
-                error: function() {
-                $('#register-failure').show();
-                $('#register-failure .message-text').html('Something went wrong. Kindly try later');
-               }
-            });
-         });
+	 $.aaacplApp.ajaxCall("GET", 'user/userTypes', function success(data){
+		data = data.getTypesResponseList;
+		$.each(data, function (key, item) {
+			$('#select').append($('<option>', {
+				value: item.type,
+				text : item.label
+			}));
+		});
+	 }, function error(msg){
+	 
+	 });
+             
 
 	// be default hiding the success and error alert messages
 		$('#register-success').hide();
@@ -141,21 +123,15 @@ $.aaacplApp.registerPage.executeScript = function(){
 
 		// ajax call only when client side validation is completed
 		function registerFormAjaxCall(registerForm){
-		var formData = JSON.stringify(registerForm.serializeArray()); // JSON data of values entered in form
-			 $.ajax({
-			 type: "POST",
-			 url: $.aaacplApp.apiSrvPath + 'user/register', //REST API call
-			 data: formData,
-			 dataType: "jsonp",
-			 success: function(response) {
+			var formData = JSON.stringify(registerForm.serializeArray()); // JSON data of values entered in form
+			$.aaacplApp.ajaxCall("POST", 'user/register', function success(response){
 				$('#register-success').show();
 				$('#register-form').hide();
-			 },
-			 error: function() {
+			}, function error(msg){
 				$('#register-failure').show();
 				$('#register-failure .message-text').html('Unable to register. Kindly provide correct details');
-			 }
-		});
+			},
+			formData);
 		}
 		
 		// on submit function of form is called to perform client side validation
