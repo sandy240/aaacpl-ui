@@ -45,7 +45,7 @@ $.aaacplApp.pageSidebar.getLayout = function (userInfo){
 };
 $.aaacplApp.pageSidebar.getPrctMenuItems = function (){
 	var tml = '<ul class="sidebar-menu">' +
-			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
+			'<li><a href="#/"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-history"></i><span>HISTORY</span></a></li>' +
             '<li><a href="#"><i class="fa fa-circle"></i><span>Live Auctions</span></a></li>' +
@@ -55,7 +55,7 @@ $.aaacplApp.pageSidebar.getPrctMenuItems = function (){
 };
 $.aaacplApp.pageSidebar.getClientMenuItems = function (){
 	var tml =  '<ul class="sidebar-menu">' +
-			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
+			'<li><a href="#/"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
 			'<li><a href="#"><i class="fa fa-history"></i><span>HISTORY</span></a></li>' +
             '<li><a href="#"><i class="fa fa-circle"></i><span>OBSERVATION</span></a></li>' +
@@ -64,9 +64,9 @@ $.aaacplApp.pageSidebar.getClientMenuItems = function (){
 };
 $.aaacplApp.pageSidebar.getAdminMenuItems = function (){
 	var tml =  '<ul class="sidebar-menu">' +
-			'<li><a href="#"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
+			'<li><a href="#/"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
-            '<li><a href="#/manage"><i class="fa fa-cog"></i><span>MANAGE</span></a></li>' +
+            '<li><a href="#/manage/dept"><i class="fa fa-cog"></i><span>MANAGE</span></a></li>' +
 			'<li><a href="#/"><i class="fa fa-pie-chart"></i><span>REPORTS</span></a></li>' +
           '</ul>';
 		  return tml;

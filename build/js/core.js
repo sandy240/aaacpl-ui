@@ -45,7 +45,7 @@ $.aaacplApp = {
 		"profile": '#/profile',
 		"history": '#/history',
 		"auction": '#/auction',
-		"manage": '#/manage'
+		"manage-dept": '#/manage/dept'
 	},
 
 	//Viewport element where content will be displayed
@@ -90,21 +90,32 @@ $.aaacplApp = {
 		}
 	},
 	renderPage : function(routeobj, container){
+		var _this = this;
 		if(routeobj.presenter){
 			// Render route template :
 			container.html(routeobj.presenter());	
 		}
 		if(routeobj.controller){
-			$(document).ready(routeobj.controller());
+			$(document).ready(function(){
+				routeobj.controller();
+				_this.commonLayoutReady();
+			});
 		}
-		//AdminLTE app.js
-		if(typeof $.AdminLTE == 'undefined'){
-			var scrpt = document.createElement('script');
-			scrpt.src = "dist/js/app.min.js";
-			document.body.appendChild(scrpt);
-		} else {
-			$.AdminLTE.layout.fix();
-		}
+		
+		
+		//TEMPORARY PATCH WORK TO RELOAD BOOTSTRAP AND ADMINLTE MODULES
+		$('script[src$="bootstrap.min.js"]').remove();
+		$('script[src$="app.min.js"]').remove();
+		
+		var scrpt = document.createElement('script');
+		scrpt.src = "bootstrap/js/bootstrap.min.js";
+		scrpt.async = false;
+		document.body.appendChild(scrpt);
+		
+		var scrpt = document.createElement('script');
+		scrpt.src = "dist/js/app.min.js";
+		scrpt.async = false;
+		document.body.appendChild(scrpt);
 	},
 	init : function(){
 		var _this = this;
@@ -156,9 +167,11 @@ $.aaacplApp = {
 		});
 		
 		//MANAGE - DEPARTMENTS
-		_this.route('/manage', 'manage_dept', function () {	
-			var manageContents = _this.managePage.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageContents , "Departments <i class='fa fa-link'></i> Auctions <i class='fa fa-link'></i> Lots"));
+		_this.route('/manage/dept', 'manage_dept', function () {	
+			var manageDeptContents = _this.manageDept.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageDeptContents , "Departments"));
+		}, function(){
+			_this.manageDept.executeScript();
 		});
 		
 		//PROFILE PAGE
@@ -219,6 +232,18 @@ $.aaacplApp = {
 		
 		return pageCommonHeader + pageCommonSidebar + actualContents + pageCommonFooter;
 	},
+	commonLayoutReady : function(){
+		var _this = this;
+		if(_this.pageHeader.executeScript){
+			_this.pageHeader.executeScript();
+		}
+		if(_this.pageSidebar.executeScript){
+			_this.pageSidebar.executeScript();
+		}
+		if(_this.pageFooter.executeScript){
+			_this.pageFooter.executeScript();
+		}
+	},
 
 	redirectTo : function(sectionTo) {
 		var section = sectionTo , _this = this;
@@ -247,7 +272,18 @@ $.aaacplApp = {
 		}
 		document.cookie = name +"="+value+";expires=+"+expires+";path=/";
 	},
-
+	deleteCookie : function(name) {
+		document.cookie = name +'=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	},
+	queryParams : function(key){
+		var url = window.location.href;
+		name = name.replace(/[\[\]]/g, "\\$&");
+		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+			results = regex.exec(url);
+		if (!results) return null;
+		if (!results[2]) return '';
+		return decodeURIComponent(results[2].replace(/\+/g, " "));
+	},
     tryParseJSON : function (jsonString){
               try {
                   var jsonData = JSON.parse(jsonString);
@@ -282,13 +318,38 @@ $.aaacplApp = {
 				errorCallback(msg);
 			}
 		});
+	},
+	logoutUser : function(){
+		var _this = this;
+		_this.deleteCookie(_this.userAuthKey);
+		//RESET USER INFO
+		_this.dataStorage.userInfo = {
+			"typeId": 0,
+			"email": "",
+			"vatNumber": "",
+			"panNumber": "",
+			"material": "",
+			"city": "",
+			"pin": 0,
+			"phone": 0,
+			"mobile": 0,
+			"companyName": "",
+			"userTypeLabel": "",
+			"name": "",
+			"id": 0,
+			"state": "",
+			"address": "",
+			"country": ""
+		}
+		_this.redirectTo("login");
 	}
 };
 $.aaacplApp.pageHeader = {};
 $.aaacplApp.pageSidebar = {};
 $.aaacplApp.pageContent = {};
 $.aaacplApp.dashboardPage = {};
-$.aaacplApp.managePage = {};
+$.aaacplApp.manageDept = {};
+$.aaacplApp.manageAuction = {};
 $.aaacplApp.profilePage = {};
 $.aaacplApp.pageFooter = {};
 $.aaacplApp.loginPage = {};

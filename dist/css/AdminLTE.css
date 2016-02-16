@@ -187,19 +187,19 @@ a:focus {
   margin-top: 5px;
 }
 /*** CUSTOM STYLES FOR AAACPL ****/
-#departments > .box-header > .box-title {
+.manage > .box-header > .box-title {
   font-size: 22px;
 }
-#departments > .box-body {
+.manage > .box-body {
   padding-top: 30px;
   padding-left: 30px;
   padding-right: 30px;
 }
-#departments .box.dept-row {
+.manage .box.dept-row {
   margin-bottom: 30px;
 }
-#departments .box.dept-row .box-header .fa-plus::before,
-#departments .box.dept-row .box-header .fa-minus::before {
+.manage .box.dept-row .box-header .fa-plus::before,
+.manage .box.dept-row .box-header .fa-minus::before {
   content: "\f044";
 }
 .navbar button.sidebar-toggle {

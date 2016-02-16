@@ -42,7 +42,7 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
                     '  <a href="#" class="btn btn-default btn-flat">Change Password</a>'+
                   '  </div>'+
                    ' <div class="pull-right">'+
-                    '  <a href="#" class="btn btn-default btn-flat">Sign out</a>'+
+                    '  <button  id="sign-out-user" class="btn btn-default btn-flat">Sign out</button>'+
                   ' </div>'+
                  ' </li>'+
                 '</ul>'+
@@ -55,5 +55,7 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
 };
 
 $.aaacplApp.pageHeader.executeScript = function(){
-
+	$('#sign-out-user').click(function(){
+		$.aaacplApp.logoutUser();
+	});
 };
