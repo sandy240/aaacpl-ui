@@ -18,60 +18,60 @@ $.aaacplApp.registerPage.getLayout = function (){
 		'</div>'+
         '<form method="post" action="" id="submit">'+
         '  <div id="account-type" class="form-group has-feedback">'+
-		'	  <select id="select" class="form-control" required>'+
+		'	  <select id="select" class="form-control" name="typeId" required>'+
 		'       <option value="">Select Account Type</option>'+
 		'	  </select>'+
         '  </div>'+
 		 ' <div class="form-group has-feedback">'+
-          '  <input type="text" class="form-control" placeholder="Full name" required>'+
+          '  <input type="text" class="form-control" name="name" placeholder="Full name" required>'+
            ' <span class="glyphicon glyphicon-user form-control-feedback"></span>'+
           '</div>'+
           '<div class="form-group has-feedback">'+
-           ' <input type="email" class="form-control" placeholder="Email" required>'+
+           ' <input type="email" class="form-control" name="email" placeholder="Email" required>'+
            ' <span class="glyphicon glyphicon-envelope form-control-feedback"></span>'+
           '</div>'+
           '<div class="form-group has-feedback">'+
-          '  <input type="password" class="form-control" placeholder="Password" required>'+
+          '  <input type="password" class="form-control" name="password" placeholder="Password" required>'+
           '  <span class="glyphicon glyphicon-lock form-control-feedback"></span>'+
           '</div>'+
 		  '<div class="form-group">'+
-          '  <input type="text" class="form-control" placeholder="Company name (Optional)">'+
+          '  <input type="text" class="form-control" name="companyName" placeholder="Company name (Optional)">'+
           '</div>'+
 		  '<div class="row">'+
 		'	  <div class="form-group col-sm-6">'+
-		'		<input type="text" class="form-control" placeholder="PAN no." required>'+
+		'		<input type="text" class="form-control" name="panNumber" placeholder="PAN no." required>'+
 		'	  </div>'+
 		'	  <div class="form-group col-sm-6">'+
-		'		<input type="text" class="form-control" placeholder="VAT no." required>'+
+		'		<input type="text" name="vatNumber" class="form-control" placeholder="VAT no." required>'+
 		'	  </div>'+
 		 ' </div>'+
           '<div class="form-group">'+
-           ' <textarea class="form-control" placeholder="Material Description"></textarea>'+
+           ' <textarea class="form-control" name="material" placeholder="Material Description"></textarea>'+
           '</div>'+
 		  '<div class="form-group">'+
-          '  <textarea class="form-control" placeholder="Address" required></textarea>'+
+          '  <textarea class="form-control" name="address" placeholder="Address" required></textarea>'+
           '</div>'+
 		  '<div class="row">'+
 			'  <div class="form-group col-sm-6">'+
-			'	<input type="text" class="form-control" placeholder="City" required>'+
+			'	<input type="text" class="form-control" name="city" placeholder="City" required>'+
 			 ' </div>'+
 			  '<div class="form-group col-sm-6">'+
-				'<input type="text" class="form-control" placeholder="Pin Code" required>'+
+				'<input type="text" class="form-control" name="pin" placeholder="Pin Code" required>'+
 			  '</div>'+
 		  '</div>'+
 		  '<div class="row">'+
 			'  <div class="form-group col-sm-6">'+
-			'	<input type="text" class="form-control" placeholder="Country" required>'+
+			'	<input type="text" class="form-control" name="country" placeholder="Country" required>'+
 			 ' </div>'+
 			  '<div class="form-group col-sm-6">'+
-				'<input type="text" class="form-control" placeholder="State" required>'+
+				'<input type="text" class="form-control" name="state" placeholder="State" required>'+
 			  '</div>'+
 		  '</div>'+
 		 ' <div class="form-group">'+
-         '   <input type="text" class="form-control" placeholder="Phone" required>'+
+         '   <input type="text" class="form-control" name="phone" placeholder="Phone (Optional)">'+
          ' </div>'+
 		 ' <div class="form-group">'+
-         '   <input type="text" class="form-control" placeholder="Mobile no. (Optional)">'+
+         '   <input type="text" class="form-control" name="mobile" placeholder="Mobile no" required>'+
          ' </div>'+
          ' <div class="row">'+
          '   <div class="col-xs-8">'+
@@ -123,7 +123,11 @@ $.aaacplApp.registerPage.executeScript = function(){
 
 		// ajax call only when client side validation is completed
 		function registerFormAjaxCall(registerForm){
-			var formData = JSON.stringify(registerForm.serializeArray()); // JSON data of values entered in form
+			var formData = registerForm.serializeArray(); // JSON data of values entered in form
+			    registerPost = {};
+			     $.each(formData, function (key, item) {
+                				 registerPost[item.name] = item.value;
+                			 });
 			$.aaacplApp.ajaxCall("POST", 'user/register', function success(response){
 				$('#register-success').show();
 				$('#register-form').hide();
@@ -131,7 +135,8 @@ $.aaacplApp.registerPage.executeScript = function(){
 				$('#register-failure').show();
 				$('#register-failure .message-text').html('Unable to register. Kindly provide correct details');
 			},
-			formData);
+			//POST PAYLOAD
+            JSON.stringify(registerPost));
 		}
 		
 		// on submit function of form is called to perform client side validation

@@ -179,7 +179,7 @@ $.aaacplApp = {
 			var userProfileContents = _this.profilePage.getLayout();
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("PROFILE", userProfileContents , ""));
 		},function(){
-		    _this.profilePage.executeScript();
+		    _this.profilePage.executeScript(_this.dataStorage.userInfo);
 		});
 		
 		
