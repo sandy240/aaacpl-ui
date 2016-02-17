@@ -20,7 +20,7 @@ $.aaacplApp.profilePage.getLayout = function (){
 '<form method="post" action="" id="editProfileForm">'+
 
 'Account Type <div id="account-type" class="form-group">'+
-'<select id="editProfileType" class="form-control" required readonly name="type">'+
+'<select id="editProfileType" class="form-control" required readonly name="typeId">'+
 '</select>'+
 '</div>'+
 '<div class="form-group">'+
@@ -29,46 +29,46 @@ $.aaacplApp.profilePage.getLayout = function (){
 
 
 '<div class="form-group">'+
-'Company name <input id="editProfileCompanyName" name="CompanyName" type="text" class="form-control" readonly>'+
+'Company name <input id="editProfileCompanyName" name="companyName" type="text" class="form-control" readonly>'+
 '</div>'+
 '<div class="form-group">'+
-'Material Description <textarea id="editProfileMaterial" name="Material" class="form-control" readonly></textarea>'+
-'</div>'+
-
-
-'<div class="form-group">'+
-'PAN no <input id="editProfilePan" name="pan" type="text" class="form-control" required readonly>'+
-'</div>'+
-'<div class="form-group">'+
-'VAT no <input id="editProfileVat" name="vat" type="text" class="form-control" required readonly>'+
+'Material Description <textarea id="editProfileMaterial" name="material" class="form-control" readonly></textarea>'+
 '</div>'+
 
 
 '<div class="form-group">'+
-'Address <textarea id="editProfileAddress" name="Address" class="form-control" required></textarea>'+
+'PAN no <input id="editProfilePan" name="panNumber" type="text" class="form-control" required readonly>'+
 '</div>'+
 '<div class="form-group">'+
-'City <input id="editProfileCity" name="City" type="text" class="form-control" required>'+
+'VAT no <input id="editProfileVat" name="vatNumber" type="text" class="form-control" required readonly>'+
+'</div>'+
+
+
+'<div class="form-group">'+
+'Address <textarea id="editProfileAddress" name="address" class="form-control" required readonly></textarea>'+
+'</div>'+
+'<div class="form-group">'+
+'City <input id="editProfileCity" name="city" type="text" class="form-control" required readonly>'+
 ' </div>'+
 '<div class="form-group">'+
-'Pin Code <input id="editProfilePinCode" name="PinCode" type="text" class="form-control" required>'+
+'Pin Code <input id="editProfilePinCode" name="pin" type="text" class="form-control" required readonly>'+
 '</div>'+
 '<div class="form-group">'+
-'Country <input id="editProfileCountry" name="Country" type="text" class="form-control" required>'+
+'Country <input id="editProfileCountry" name="country" type="text" class="form-control" required readonly>'+
 ' </div>'+
 '<div class="form-group">'+
-'State <input id="editProfileState" name="State" type="text" class="form-control" required>'+
+'State <input id="editProfileState" name="state" type="text" class="form-control" required readonly>'+
 '</div>'+
 
 
 '<div class="form-group">'+
-'Email <input id="editProfileEmail" name="Email" type="email" class="form-control" required readonly>'+
+'Email <input id="editProfileEmail" name="email" type="email" class="form-control" required readonly>'+
 '</div>'+
 '<div class="form-group">'+
-'Phone <input id="editProfilePhone" name="Phone" type="text" class="form-control" required>'+
+'Phone <input id="editProfilePhone" name="phone" type="text" class="form-control" required readonly>'+
 '</div>'+
 '<div class="form-group">'+
-'Mobile <input id="editProfileMobile" name="Mobile" type="text" class="form-control">'+
+'Mobile <input id="editProfileMobile" name="mobile" type="text" class="form-control" readonly>'+
 '</div>'+
 
 '<!-- reset password will be added later '+
@@ -131,7 +131,4 @@ $.aaacplApp.profilePage.executeScript = function(userInfo){
     $("#editProfilePhone").val(userInfo.phone);
     $("#editProfileMobile").val(userInfo.mobile);
     }
-
-
-
 };

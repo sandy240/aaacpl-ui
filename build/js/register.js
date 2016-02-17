@@ -16,7 +16,7 @@ $.aaacplApp.registerPage.getLayout = function (){
 		'<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>'+
 		'  <strong>Error !</strong> <span class="message-text"></span>'+
 		'</div>'+
-        '<form method="post" action="" id="submit">'+
+        '<form method="post" action="" id="registerForm">'+
         '  <div id="account-type" class="form-group has-feedback">'+
 		'	  <select id="select" class="form-control" name="typeId" required>'+
 		'       <option value="">Select Account Type</option>'+
@@ -112,7 +112,7 @@ $.aaacplApp.registerPage.executeScript = function(){
 	// be default hiding the success and error alert messages
 		$('#register-success').hide();
 		$('#register-failure').hide();
-		var registerForm = $('#submit');
+		var registerForm = $('#registerForm');
 		registerForm[0].reset();
 		
         $('input').iCheck({
@@ -124,7 +124,7 @@ $.aaacplApp.registerPage.executeScript = function(){
 		// ajax call only when client side validation is completed
 		function registerFormAjaxCall(registerForm){
 			var formData = registerForm.serializeArray(); // JSON data of values entered in form
-			    registerPost = {};
+			var registerPost = {};
 			     $.each(formData, function (key, item) {
                 				 registerPost[item.name] = item.value;
                 			 });
