@@ -38,17 +38,36 @@ $.aaacplApp.manageAuction.getLayout = function (){
                     '  </div>'+
                     '  <input type="text" class="form-control pull-right" id="auctionDateRange">'+
                     '</div><!-- /.input group -->'+
-                  '</div><!-- /.form group -->'+			 
-              '</div>'+
+                  '</div><!-- /.form group -->'+
+             '<!-- Description -->'+
+                  '<div class="form-group">'+
+                  '<label>Description</label>'+
+                  '<textarea class="form-control" id="auctionDescription"></textarea>'+
+                  '</div>'+
+  	 '<!-- auction Type -->'+
+                  '<div class="form-group">'+
+                  '<label>Auction Type</label>'+
+                    '<select id="auctiontype" class="form-control">'+
+                    '<option value="1">Forward Auction</option>'+
+                    '<option value="2">Reverse Auction</option>'+
+                    '</select>'+
+                  '</div>'+
+     '<!-- auction Catalog -->'+
+                  '<div class="form-group">'+
+                  '<label>Catalog</label>'+
+                  '<input type="file" id="auctionCatalog">'+
+                  '</div>'+
+                  '</div>'+
+                  '<!-- /.modal-body -->'+
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
               '  <button type="button" class="btn btn-primary">Save changes</button>'+
               '</div>'+
 			  '</form>'+
-            '</div>'+
-            '<!-- /.modal-content -->'+
           '</div>'+
-          '<!-- /.modal-dialog -->'+
+          '<!-- /.modal-content -->'+
+        '</div>'+
+       '<!-- /.modal-dialog -->'+
         '</div>';
 		
 	return tmpl;
@@ -86,6 +105,24 @@ $.aaacplApp.manageAuction.executeScript = function(){
                     '  <input type="text" class="form-control pull-right" id="auction'+value.auctionId+'DateRange">'+
                     '</div><!-- /.input group -->'+
                   '</div><!-- /.form group -->'+
+                        '<!-- Description -->'+
+                                    '<div class="form-group">'+
+                                    '<label>Description</label>'+
+                                    '<textarea class="form-control" id="auction'+value.auctionId+'Description" value="auction1"></textarea>'+
+                                    '</div>'+
+                    	 '<!-- auction Type -->'+
+                                    '<div class="form-group">'+
+                                    '<label>Auction Type</label>'+
+                                      '<select id="auction'+value.auctionId+'Type" class="form-control">'+
+                                      '<option value="1">Forward Auction</option>'+
+                                      '<option value="2">Reverse Auction</option>'+
+                                      '</select>'+
+                                    '</div>'+
+                       '<!-- auction Catalog -->'+
+                                    '<div class="form-group">'+
+                                    '<label>Catalog</label>'+
+                                    '<input type="file" id="auction'+value.auctionId+'Catalog">'+
+                                    '</div>'+
 				'</div>'+
 				'</div>'+
 				'<div class="box-footer">'+
