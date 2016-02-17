@@ -100,7 +100,7 @@ $.aaacplApp.registerPage.executeScript = function(){
 		data = data.getTypesResponseList;
 		$.each(data, function (key, item) {
 			$('#select').append($('<option>', {
-				value: item.type,
+				value: item.typeId,
 				text : item.label
 			}));
 		});
