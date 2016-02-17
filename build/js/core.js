@@ -45,7 +45,8 @@ $.aaacplApp = {
 		"profile": '#/profile',
 		"history": '#/history',
 		"auction": '#/auction',
-		"manage-dept": '#/manage/dept'
+		"manage-dept": '#/manage/dept',
+		"manage-auction": '#/manage/auction',		
 	},
 
 	//Viewport element where content will be displayed
@@ -69,6 +70,7 @@ $.aaacplApp = {
 		// Current route url (getting rid of '#' in hash as well):
 		var url = location.hash.slice(1) || '/';
 		// Get route by url:
+		url = url.split("?")[0];
 		
 		var routeObj = _this.routes[url];
 		
@@ -102,20 +104,22 @@ $.aaacplApp = {
 			});
 		}
 		
+		$(document).ready(function(){
+			//TEMPORARY PATCH WORK TO RELOAD BOOTSTRAP AND ADMINLTE MODULES
+			//$('script[src$="bootstrap.min.js"]').remove();
+			$('script[src$="app.min.js"]').remove();
+			
+			//var scrpt = document.createElement('script');
+			//scrpt.src = "bootstrap/js/bootstrap.min.js";
+			//scrpt.async = false;
+			//document.body.appendChild(scrpt);
+			
+			var scrpt = document.createElement('script');
+			scrpt.src = "dist/js/app.min.js";
+			scrpt.async = false;
+			document.body.appendChild(scrpt);
+		});
 		
-		//TEMPORARY PATCH WORK TO RELOAD BOOTSTRAP AND ADMINLTE MODULES
-		$('script[src$="bootstrap.min.js"]').remove();
-		$('script[src$="app.min.js"]').remove();
-		
-		var scrpt = document.createElement('script');
-		scrpt.src = "bootstrap/js/bootstrap.min.js";
-		scrpt.async = false;
-		document.body.appendChild(scrpt);
-		
-		var scrpt = document.createElement('script');
-		scrpt.src = "dist/js/app.min.js";
-		scrpt.async = false;
-		document.body.appendChild(scrpt);
 	},
 	init : function(){
 		var _this = this;
@@ -172,6 +176,14 @@ $.aaacplApp = {
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageDeptContents , "Departments"));
 		}, function(){
 			_this.manageDept.executeScript();
+		});
+		
+		//MANAGE - AUCTIONS
+		_this.route('/manage/auctions', 'manage_auctions', function () {	
+			var manageAuctionContents = _this.manageAuction.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageAuctionContents , "Auctions"));
+		}, function(){
+			_this.manageAuction.executeScript();
 		});
 		
 		//PROFILE PAGE
@@ -277,12 +289,18 @@ $.aaacplApp = {
 	},
 	queryParams : function(key){
 		var url = window.location.href;
-		name = name.replace(/[\[\]]/g, "\\$&");
-		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-			results = regex.exec(url);
-		if (!results) return null;
-		if (!results[2]) return '';
-		return decodeURIComponent(results[2].replace(/\+/g, " "));
+		var parts = url.split("?");
+		var params = [];
+		if(parts.length > 1 && parts[1]!=""){
+			params = parts[1].split("&");
+			for(var i=0;i<params.length;i++){
+				var tparam = params[i].split("=");
+				if(tparam.length>0 && tparam[0] == key){
+					return tparam.length>1 ? tparam[1] : "";
+				}
+			}
+		}
+		return "";
 	},
     tryParseJSON : function (jsonString){
               try {

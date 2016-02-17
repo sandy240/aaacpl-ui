@@ -5,7 +5,7 @@ $.aaacplApp.manageDept.getLayout = function (){
 	**/
 	var tmpl = '<div id="departments" class="box box-solid manage">'+
              '<div class="box-header">'+
-               '<h3 class="box-title">Manage Departments</h3>'+
+               '<h3 class="box-title">Departments</h3>'+
 			   '<div class="box-tools pull-right">'+
 			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-dept-form">New Department</button>'+
 			   '</div>'+
