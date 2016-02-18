@@ -368,6 +368,7 @@ $.aaacplApp.pageContent = {};
 $.aaacplApp.dashboardPage = {};
 $.aaacplApp.manageDept = {};
 $.aaacplApp.manageAuction = {};
+$.aaacplApp.manageLot = {};
 $.aaacplApp.profilePage = {};
 $.aaacplApp.pageFooter = {};
 $.aaacplApp.loginPage = {};

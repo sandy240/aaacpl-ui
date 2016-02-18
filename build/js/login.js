@@ -13,7 +13,7 @@ $.aaacplApp.loginPage.getLayout = function (){
 		'</div>'+
         '<form action="" method="post" id="login">'+
         '  <div class="form-group has-feedback">'+
-        '    <input name="name" type="email" class="form-control" placeholder="Email" required>'+
+        '    <input name="email" type="email" class="form-control" placeholder="Email" required>'+
          '   <span class="glyphicon glyphicon-envelope form-control-feedback"></span>'+
          ' </div>'+
          ' <div class="form-group has-feedback">'+
