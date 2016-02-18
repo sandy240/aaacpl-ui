@@ -12,9 +12,11 @@ $.aaacplApp.registerPage.getLayout = function (){
 		'</div>'+
 		'<div id="register-form">'+
         '<p class="login-box-msg">GET REGISTERED FOR THE MEMBERSHIP</p>'+
-		'<div class="alert alert-danger" id="register-failure">'+
+        '<div id="register-failure">'+
+		'<div class="alert alert-danger">'+
 		'<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>'+
-		'  <strong>Error !</strong> <span class="message-text"></span>'+
+		'<strong>Error !</strong> <span class="message-text"></span>'+
+		'</div>'+
 		'</div>'+
         '<form method="post" action="" id="registerForm">'+
         '  <div id="account-type" class="form-group has-feedback">'+
