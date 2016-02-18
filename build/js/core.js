@@ -46,7 +46,8 @@ $.aaacplApp = {
 		"history": '#/history',
 		"auction": '#/auction',
 		"manage-dept": '#/manage/dept',
-		"manage-auction": '#/manage/auction',		
+		"manage-auction": '#/manage/auctions',		
+		"manage-lot": '#/manage/lots'		
 	},
 
 	//Viewport element where content will be displayed
@@ -105,14 +106,8 @@ $.aaacplApp = {
 		}
 		
 		$(document).ready(function(){
-			//TEMPORARY PATCH WORK TO RELOAD BOOTSTRAP AND ADMINLTE MODULES
-			//$('script[src$="bootstrap.min.js"]').remove();
+			//TEMPORARY PATCH WORK TO RELOAD ADMINLTE MODULES
 			$('script[src$="app.min.js"]').remove();
-			
-			//var scrpt = document.createElement('script');
-			//scrpt.src = "bootstrap/js/bootstrap.min.js";
-			//scrpt.async = false;
-			//document.body.appendChild(scrpt);
 			
 			var scrpt = document.createElement('script');
 			scrpt.src = "dist/js/app.min.js";
@@ -184,6 +179,14 @@ $.aaacplApp = {
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageAuctionContents , "Auctions"));
 		}, function(){
 			_this.manageAuction.executeScript();
+		});
+		
+		//MANAGE - LOTS
+		_this.route('/manage/lots', 'manage_lots', function () {	
+			var manageLotContents = _this.manageLot.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageLotContents , "Lots"));
+		}, function(){
+			_this.manageLot.executeScript();
 		});
 		
 		//PROFILE PAGE

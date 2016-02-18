@@ -29,6 +29,10 @@ $.aaacplApp.manageLot.getLayout = function (){
 			  ' <label for="lotInputName">Lot Name</label>'+
 			   ' <input type="text" class="form-control" id="lotInputName" name="name">'+
 			 '</div>'+
+			  '<div class="form-group">'+
+			  ' <label for="lotInputDesc">Lot Description</label>'+
+			   ' <input type="text" class="form-control" id="lotInputDesc" name="description">'+
+			 '</div>'+
 			 '<!-- Date and time range -->'+
                   '<div class="form-group">'+
                    ' <label>Lot start and end date:</label>'+
@@ -62,19 +66,23 @@ $.aaacplApp.manageLot.executeScript = function(){
 			var lotList = response.lotResponseList;
 			$.each(lotList, function(key , value){
 				
-				var lotRow = '<div class="box box-warning collapsed-box lot-row" id="ar-'+value.lotId+'">'+
+				var lotRow = '<div class="box box-warning collapsed-box lot-row" id="ar-'+value.id+'">'+
 				' <div class="box-header with-border">'+
 				'  <h3 class="box-title"><i class="fa fa-bank"></i>'+value.name+'</h3>'+
 				 ' <div class="box-tools pull-right">'+
 				  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
-				  '  <a href="#/manage/lots?lotid='+value.lotId+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE PARTICIPATORS</a>'+
+				  '  <button type="button" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE PARTICIPATORS</a>'+
 				  '</div>'+
 				'</div>'+
 				'<div class="box-body">'+
 				'<div class="form" role="form">'+
 				 '<div class="form-group">'+
-				  ' <label for="lot'+value.lotId+'InputName">Lot Name</label>'+
-				   ' <input type="text" class="form-control" id="lot'+value.lotId+'InputName" value="'+value.name+'">'+
+				  ' <label for="lot'+value.id+'InputName">Lot Name</label>'+
+				   ' <input type="text" class="form-control" id="lot'+value.id+'InputName" value="'+value.name+'">'+
+				 '</div>'+
+				 '<div class="form-group">'+
+				  ' <label for="lot'+value.id+'InputName">Lot Description</label>'+
+				   ' <input type="text" class="form-control" id="lot'+value.id+'InputName" value="'+value.description+'">'+
 				 '</div>'+
 				 '<!-- Date and time range -->'+
                   '<div class="form-group">'+
@@ -83,8 +91,8 @@ $.aaacplApp.manageLot.executeScript = function(){
                     '  <div class="input-group-addon">'+
                     '    <i class="fa fa-clock-o"></i>'+
                     '  </div>'+
-                    '  <input type="text" class="form-control pull-right" id="lot'+value.lotId+'DateRange">'+
-                    '</div><!-- /.input group -->'+
+                    '  <input type="text" class="form-control pull-right" id="lot'+value.id+'DateRange">'+
+                    '  </div><!-- /.input group -->'+
                   '</div><!-- /.form group -->'+
 				'</div>'+
 				'</div>'+
@@ -94,7 +102,7 @@ $.aaacplApp.manageLot.executeScript = function(){
 			'</div>';
 			 
 			 $("#lot-rows-cont").append(lotRow);
-			 $('#lot'+value.lotId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});	
+			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});	
 			});
 		}, function error(msg){
 			
