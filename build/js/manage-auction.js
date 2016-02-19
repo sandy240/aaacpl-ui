@@ -125,7 +125,7 @@ var createAuctionForm = $('#createAuctionForm');
 
 	if($.aaacplApp.queryParams('deptid')){
 		$.aaacplApp.ajaxCall("GET","auction/list/" + $.aaacplApp.queryParams('deptid'),function success(response){
-			var auctionList = response.auctionResponseList;
+			var auctionList = response.auctionResponseList || [];
 			$.each(auctionList, function(key , value){
 				
 				var auctionRow = '<div class="box box-warning collapsed-box auction-row" id="ar-'+value.auctionId+'">'+
@@ -138,7 +138,7 @@ var createAuctionForm = $('#createAuctionForm');
 				'</div>'+
 				'<div class="box-body">'+
 				'<div id="editAuctionFormSection">'+
-                    '<form id="createAuctionForm" class="form" role="form">'+
+                    '<form id="editAuctionForm" class="form" role="form">'+
                    '<div id="auctionEdit-success" style="display:none;">'+
                    '<div class="alert alert-success">'+
                    '<strong>Auction has been created successfully! </strong>'+

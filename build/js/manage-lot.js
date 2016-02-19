@@ -121,8 +121,8 @@ var createLotsForm = $('#createLotsForm');
 	
 	$('#lotDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});	
 	if($.aaacplApp.queryParams('auctionid')){
-		$.aaacplApp.ajaxCall("GET","lot/list/" + $.aaacplApp.queryParams('auctionid'),function success(response){
-			var lotList = response.lotResponseList;
+		$.aaacplApp.ajaxCall("GET","lots/list/"+$.aaacplApp.queryParams('auctionid'),function success(response){
+			var lotList = response.lotsResponseList || [];
 			$.each(lotList, function(key , value){
 				
 				var lotRow = '<div class="box box-warning collapsed-box lot-row" id="ar-'+value.id+'">'+
@@ -134,25 +134,48 @@ var createLotsForm = $('#createLotsForm');
 				  '</div>'+
 				'</div>'+
 				'<div class="box-body">'+
-				'<div class="form" role="form">'+
+				'<div id="editLotFormSection">'+
+                   '<form id="editLotForm" class="form" role="form">'+
+                   '<div id="lotEdit-success" style="display:none;">'+
+                   '<div class="alert alert-success">'+
+                   '<strong>Auction has been created successfully! </strong>'+
+                   '</div>'+
+                   '</div>'+
+                  '<div id="LotEdit-failure" style="display:none;">'+
+                  '<div class="alert alert-danger">'+
+                  '<strong>Error !</strong> <span class="message-text"></span>'+
+                  '</div>'+
+                  '</div>'+
 				 '<div class="form-group">'+
 				  ' <label for="lot'+value.id+'InputName">Lot Name</label>'+
 				   ' <input type="text" class="form-control" id="lot'+value.id+'InputName" value="'+value.name+'">'+
 				 '</div>'+
-				 '<div class="form-group">'+
-				  ' <label for="lot'+value.id+'InputName">Lot Description</label>'+
-				   ' <input type="text" class="form-control" id="lot'+value.id+'InputName" value="'+value.description+'">'+
-				 '</div>'+
-				 '<!-- Date and time range -->'+
+				 '<!-- startBid -->'+
                   '<div class="form-group">'+
-                   ' <label>Lot start and end date:</label>'+
-                   ' <div class="input-group">'+
-                    '  <div class="input-group-addon">'+
-                    '    <i class="fa fa-clock-o"></i>'+
-                    '  </div>'+
-                    '  <input type="text" class="form-control pull-right" id="lot'+value.id+'DateRange">'+
-                    '  </div><!-- /.input group -->'+
-                  '</div><!-- /.form group -->'+
+                  '<label>Start Bid</label>'+
+                  '<input type="text" class="form-control" id="lotStartBid" value="'+value.startBid+'" name="startBid" required>'+
+                  '</div>'+
+                  '<!-- Difference Factor-->'+
+                   '<div class="form-group">'+
+                   '<label>Difference Factor</label>'+
+                   '<input type="text" class="form-control" id="lotdifferenceFactor" value="'+value.differenceFactor+'" name="differenceFactor" required>'+
+                   '</div>'+
+				 '<!-- Date and time range -->'+
+                   '<div class="form-group">'+
+                    ' <label>Lot start and end date:</label>'+
+                    ' <div class="input-group">'+
+                     '  <div class="input-group-addon">'+
+                     '    <i class="fa fa-clock-o"></i>'+
+                     '  </div>'+
+                     '  <input type="text" class="form-control pull-right" id="lot'+value.id+'DateRange" value="'+value.startDate+' - '+value.endDate+'">'+
+                     '  </div><!-- /.input group -->'+
+                   '</div><!-- /.form group -->'+
+				 '<!-- Description -->'+
+                     '<div class="form-group">'+
+                     '<label>Description</label>'+
+                     '<textarea class="form-control" name="description" id="lot'+value.id+'InputName" value="'+value.description+'"></textarea>'+
+                     '</div>'+
+                  '</form>'+
 				'</div>'+
 				'</div>'+
 				'<div class="box-footer">'+
@@ -164,7 +187,7 @@ var createLotsForm = $('#createLotsForm');
 			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});	
 			});
 		}, function error(msg){
-			
+
 		});
 	}
 	
