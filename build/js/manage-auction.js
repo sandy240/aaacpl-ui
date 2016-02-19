@@ -137,10 +137,21 @@ var createAuctionForm = $('#createAuctionForm');
 				  '</div>'+
 				'</div>'+
 				'<div class="box-body">'+
-				'<div class="form" role="form">'+
+				'<div id="editAuctionFormSection">'+
+                    '<form id="createAuctionForm" class="form" role="form">'+
+                   '<div id="auctionEdit-success" style="display:none;">'+
+                   '<div class="alert alert-success">'+
+                   '<strong>Auction has been created successfully! </strong>'+
+                   '</div>'+
+                   '</div>'+
+                  '<div id="auctionEdit-failure" style="display:none;">'+
+                  '<div class="alert alert-danger">'+
+                  '<strong>Error !</strong> <span class="message-text"></span>'+
+                  '</div>'+
+                  '</div>'+
 				 '<div class="form-group">'+
 				  ' <label for="auction'+value.auctionId+'InputName">Auction Name</label>'+
-				   ' <input type="text" class="form-control" id="auction'+value.auctionId+'InputName" value="'+value.name+'">'+
+				   ' <input type="text" class="form-control" name="name" id="auction'+value.auctionId+'InputName" value="'+value.name+'">'+
 				 '</div>'+
 				 '<!-- Date and time range -->'+
                   '<div class="form-group">'+
@@ -155,12 +166,12 @@ var createAuctionForm = $('#createAuctionForm');
                         '<!-- Description -->'+
                                     '<div class="form-group">'+
                                     '<label>Description</label>'+
-                                    '<textarea class="form-control" id="auction'+value.auctionId+'Description" value="'+value.description+'"></textarea>'+
+                                    '<textarea class="form-control" name="description" id="auction'+value.auctionId+'Description" value="'+value.description+'"></textarea>'+
                                     '</div>'+
                     	 '<!-- auction Type -->'+
                                     '<div class="form-group">'+
                                     '<label>Auction Type</label>'+
-                                      '<select id="auction'+value.auctionId+'Type" class="form-control">'+
+                                      '<select id="auction'+value.auctionId+'Type" name="auctionTypeId" class="form-control">'+
                                       '<option value="1">Forward Auction</option>'+
                                       '<option value="2">Reverse Auction</option>'+
                                       '</select>'+
@@ -168,17 +179,20 @@ var createAuctionForm = $('#createAuctionForm');
                        '<!-- auction Catalog -->'+
                                     '<div class="form-group">'+
                                     '<label>Catalog</label>'+
-                                    '<input type="text" id="auction'+value.auctionId+'Catalog"  class="form-control" value="'+value.catalog+'">'+
+                                    '<input type="text" id="auction'+value.auctionId+'Catalog"  name="catalog" class="form-control" value="'+value.catalog+'">'+
                                     '</div>'+
+                                    '</form>'+
 				'</div>'+
 				'</div>'+
 				'<div class="box-footer">'+
 					'  <button type="button" class="btn bg-orange">UPDATE</button>'+
+					 ' <button type="button" class="btn" data-dismiss="modal">Reset</button>'+
 				'</div>'+
 			'</div>';
 			 
 			 $("#auction-rows-cont").append(auctionRow);
-			 $('#auction'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});	
+			 $('#auction'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
+
 			});
 		}, function error(msg){
 			

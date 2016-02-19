@@ -22,17 +22,34 @@ $.aaacplApp.manageLot.getLayout = function (){
                ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
                '   <span aria-hidden="true">×</span></button>'+
                ' <h4 class="modal-title" id="model-heading">Add New Lot</h4>'+
+                  '<div id="lotsCreate-success">'+
+                  '<div class="alert alert-success">'+
+                  '<strong>Lots has been created successfully! </strong>'+
+                  '</div>'+
+                  '</div>'+
+                 '<div id="lotsCreate-failure">'+
+                 '<div class="alert alert-danger">'+
+                 '<strong>Error !</strong> <span class="message-text"></span>'+
+                 '</div>'+
+                 '</div>'+
               '</div>'+
-			  '<form class="form" role="form">'+
+               '<div id="createLotsFormSection">'+
+			  '<form id="createLotsForm" class="form" role="form">'+
               '<div class="modal-body">'+
 			 '<div class="form-group">'+
 			  ' <label for="lotInputName">Lot Name</label>'+
-			   ' <input type="text" class="form-control" id="lotInputName" name="name">'+
+			   ' <input type="text" class="form-control" id="lotInputName" name="name" required>'+
 			 '</div>'+
-			  '<div class="form-group">'+
-			  ' <label for="lotInputDesc">Lot Description</label>'+
-			   ' <input type="text" class="form-control" id="lotInputDesc" name="description">'+
-			 '</div>'+
+			 '<!-- startBid -->'+
+                 '<div class="form-group">'+
+                 '<label>Start Bid</label>'+
+                 '<input type="text" class="form-control" id="lotStartBid" name="startBid" required>'+
+                 '</div>'+
+                 '<!-- Difference Factor-->'+
+                  '<div class="form-group">'+
+                  '<label>Difference Factor</label>'+
+                  '<input type="text" class="form-control" id="lotdifferenceFactor" name="differenceFactor" required>'+
+                  '</div>'+
 			 '<!-- Date and time range -->'+
                   '<div class="form-group">'+
                    ' <label>Lot start and end date:</label>'+
@@ -40,15 +57,22 @@ $.aaacplApp.manageLot.getLayout = function (){
                     '  <div class="input-group-addon">'+
                     '    <i class="fa fa-clock-o"></i>'+
                     '  </div>'+
-                    '  <input type="text" class="form-control pull-right" id="lotDateRange">'+
+                    '  <input type="text" class="form-control pull-right" id="lotDateRange" required>'+
                     '</div><!-- /.input group -->'+
-                  '</div><!-- /.form group -->'+			 
-              '</div>'+
+                  '</div><!-- /.form group -->'+
+                  '<!-- Description -->'+
+                                    '<div class="form-group">'+
+                                    '<label>Description</label>'+
+                                    '<textarea class="form-control" id="lotDescription" name="description" required></textarea>'+
+                                    '</div>'+
+                                      '</div>'+
+                                                      '<!-- /.modal-body -->'+
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-              '  <button type="button" class="btn btn-primary">Save changes</button>'+
+              '  <button type="submit" class="btn btn-primary">Save changes</button>'+
               '</div>'+
 			  '</form>'+
+               '</div>'+
             '</div>'+
             '<!-- /.modal-content -->'+
           '</div>'+
@@ -59,6 +83,41 @@ $.aaacplApp.manageLot.getLayout = function (){
 };
 
 $.aaacplApp.manageLot.executeScript = function(){
+
+
+// be default hiding the success and error alert messages
+		$('#lotsCreate-success').hide();
+		$('#lotsCreate-failure').hide();
+
+var createLotsForm = $('#createLotsForm');
+        // on submit function of form is called to perform client side validation
+		createLotsForm.submit(function(event){
+			event.preventDefault(); // Prevent the form from submitting via the browser
+			createLotsFormAjaxCall(createLotsForm);
+		});
+
+		// ajax call only when client side validation is completed
+        function createLotsFormAjaxCall(createAuctionForm){
+            var dateRangeValue = $('#lotDateRange').val(); // getting the entire dateRange value
+            var formData = createLotsForm.serializeArray(); // JSON data of values entered in form
+            var lotsPost = {};
+                 $.each(formData, function (key, item) {
+                                 lotsPost[item.name] = item.value;
+                             });
+                 lotsPost["auctionId"] = $.aaacplApp.queryParams('auctionid');
+                 lotsPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
+                 lotsPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
+                 lotsPost["createdBy"] = $.aaacplApp.getLoggedInUserId();
+            $.aaacplApp.ajaxCall("POST", 'lots/create', function success(response){
+                $('#lotsCreate-success').show();
+                $('#createLotsFormSection').hide();
+            }, function error(msg){
+                $('#lotsCreate-failure').show();
+                $('#lotsCreate-failure .message-text').html('Unable to create lots. Please provide correct details.');
+            },
+            //POST PAYLOAD
+            JSON.stringify(lotsPost));
+        }
 	
 	$('#lotDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});	
 	if($.aaacplApp.queryParams('auctionid')){
