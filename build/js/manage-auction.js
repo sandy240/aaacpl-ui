@@ -3,7 +3,17 @@ $.aaacplApp.manageAuction.getLayout = function (){
 	/***
 	** COMPLETE AUCTION PAGE LAYOUT 
 	**/
-	var tmpl = '<div class="box box-solid manage">'+
+	var tmpl = '<div id="form-success">'+
+               '<div class="alert alert-success">'+
+               '<strong>Auction has been created successfully! </strong>'+
+               '</div>'+
+               '</div>'+
+			   '<div id="form-failure">'+
+              '<div class="alert alert-danger">'+
+              '<strong>Error !</strong> <span class="message-text"></span>'+
+              '</div>'+
+              '</div>'+
+	'<div class="box box-solid manage">'+
              '<div class="box-header">'+
                '<h3 class="box-title">Auctions</h3>'+
 			   '<div class="box-tools pull-right">'+
@@ -22,16 +32,6 @@ $.aaacplApp.manageAuction.getLayout = function (){
                ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
                '   <span aria-hidden="true">×</span></button>'+
                ' <h4 class="modal-title" id="model-heading">New Auction</h4>'+
-               '<div id="auctionCreate-success">'+
-               '<div class="alert alert-success">'+
-               '<strong>Auction has been created successfully! </strong>'+
-               '</div>'+
-               '</div>'+
-              '<div id="auctionCreate-failure">'+
-              '<div class="alert alert-danger">'+
-              '<strong>Error !</strong> <span class="message-text"></span>'+
-              '</div>'+
-              '</div>'+
               '</div>'+
               '<div id="createAuctionFormSection">'+
 			  '<form id="createAuctionForm" class="form" role="form">'+
@@ -87,44 +87,61 @@ $.aaacplApp.manageAuction.getLayout = function (){
 
 $.aaacplApp.manageAuction.executeScript = function(){
 
-// be default hiding the success and error alert messages
-		$('#auctionCreate-success').hide();
-		$('#auctionCreate-failure').hide();
+		var _this = this;
+		
+		// be default hiding the success and error alert messages
+		$('#form-success').hide();
+		$('#form-failure').hide();
 
-var createAuctionForm = $('#createAuctionForm');
+		var createAuctionForm = $('#createAuctionForm');
+		
+		$('#add-auction-form').on('shown.bs.modal', function () {
+		  createAuctionForm[0].reset();
+		});
         // on submit function of form is called to perform client side validation
 		createAuctionForm.submit(function(event){
 			event.preventDefault(); // Prevent the form from submitting via the browser
-			createAuctionFormAjaxCall(createAuctionForm);
-		});
-
-		// ajax call only when client side validation is completed
-        function createAuctionFormAjaxCall(createAuctionForm){
-            var dateRangeValue = $('#auctionDateRange').val(); // getting the entire dateRange value
+			var dateRangeValue = $('#auctionDateRange').val(); // getting the entire dateRange value
             var formData = createAuctionForm.serializeArray(); // JSON data of values entered in form
             var auctionPost = {};
                  $.each(formData, function (key, item) {
                                  auctionPost[item.name] = item.value;
-                             });
+                  });
                  auctionPost["deptId"] = $.aaacplApp.queryParams('deptid');
                  auctionPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
                  auctionPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
                  auctionPost["createdBy"] = $.aaacplApp.getLoggedInUserId();
             $.aaacplApp.ajaxCall("POST", 'auction/create', function success(response){
-                $('#auctionCreate-success').show();
-                $('#createAuctionFormSection').hide();
+				$("#add-auction-form").modal('hide');
+				if(response.successMessage && response.successMessage != ""){
+					$('#form-success').show();
+					_this.loadAuctionRows();
+				} else {
+					$('#form-failure').show();
+					$('#form-failure .message-text').html('Unable to create auction. Please try again.');
+				}
             }, function error(msg){
-                $('#auctionCreate-failure').show();
-                $('#auctionCreate-failure .message-text').html('Unable to create auction. Please provide correct details.');
+				$("#add-auction-form").modal('hide');
+                $('#form-failure').show();
+				$('#form-failure .message-text').html('Unable to create auction. Please try again later.');
             },
             //POST PAYLOAD
             JSON.stringify(auctionPost));
-        }
+		});
+
 	
 	$('#auctionDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
 
 	if($.aaacplApp.queryParams('deptid')){
-		$.aaacplApp.ajaxCall("GET","auction/list/" + $.aaacplApp.queryParams('deptid'),function success(response){
+		_this.loadAuctionRows();
+	}
+	
+};
+
+
+
+$.aaacplApp.manageAuction.loadAuctionRows = function(){
+	$.aaacplApp.ajaxCall("GET","auction/list/" + $.aaacplApp.queryParams('deptid'),function success(response){
 			var auctionList = response.auctionResponseList || [];
 			$.each(auctionList, function(key , value){
 				
@@ -197,8 +214,4 @@ var createAuctionForm = $('#createAuctionForm');
 		}, function error(msg){
 			
 		});
-	}
-	
 };
-
-     

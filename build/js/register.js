@@ -3,7 +3,7 @@ $.aaacplApp.registerPage.getLayout = function (){
 	var tmpl =  '<div class="register-logo">'+
         '<img src="dist/img/logo.png"/>'+
       '</div>'+
-      '<div class="register-box-body">'+
+      '<div class="register-box-body box">'+
 	   ' <div id="register-success">'+
 		'	<div class="alert alert-success">'+
 		'	<strong>You have Registered successfully ! </strong>'+
@@ -12,11 +12,9 @@ $.aaacplApp.registerPage.getLayout = function (){
 		'</div>'+
 		'<div id="register-form">'+
         '<p class="login-box-msg">GET REGISTERED FOR THE MEMBERSHIP</p>'+
-        '<div id="register-failure">'+
-		'<div class="alert alert-danger">'+
+		'<div class="alert alert-danger" id="register-failure">'+
 		'<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>'+
-		'<strong>Error !</strong> <span class="message-text"></span>'+
-		'</div>'+
+		'  <strong>Error !</strong> <span class="message-text"></span>'+
 		'</div>'+
         '<form method="post" action="" id="registerForm">'+
         '  <div id="account-type" class="form-group has-feedback">'+
@@ -89,7 +87,7 @@ $.aaacplApp.registerPage.getLayout = function (){
          ' </div>'+
         '</form>'+
        ' <a href="#/login" class="text-center">Already a memeber with us?</a>'+
-      '</div><!-- /.form-box -->'+
+      '</div><!-- /.form-box -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
 	 ' </div>';
 	return tmpl;
 };
@@ -130,10 +128,13 @@ $.aaacplApp.registerPage.executeScript = function(){
 			     $.each(formData, function (key, item) {
                 				 registerPost[item.name] = item.value;
                 			 });
+							 $(".overlay").show();
 			$.aaacplApp.ajaxCall("POST", 'user/register', function success(response){
+				$(".overlay").hide();
 				$('#register-success').show();
 				$('#register-form').hide();
 			}, function error(msg){
+				
 				$('#register-failure').show();
 				$('#register-failure .message-text').html('Unable to register. Kindly provide correct details');
 			},

@@ -195,6 +195,9 @@ a:focus {
   padding-left: 30px;
   padding-right: 30px;
 }
+.manage .box > .box-title {
+  font-size: 16px;
+}
 .manage .box.dept-row {
   margin-bottom: 30px;
 }

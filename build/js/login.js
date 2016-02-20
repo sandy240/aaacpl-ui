@@ -3,10 +3,10 @@ $.aaacplApp.loginPage.getLayout = function (){
 	var tmpl = '<div class="login-logo">'+
       '  <img src="dist/img/logo.png">'+
       '</div><!-- /.login-logo -->'+
-      '<div class="login-box-body">'+
+      '<div class="login-box-body box">'+
 	  '<!--login section-->'+
 	  '<div id="login-details">'+
-       ' <p class="login-box-msg">LOGIN TO GET STARTED</p>'+
+       ' <p class="login-box-msg">LOGIN TO GET  STARTED</p>'+
 		'<div class="alert alert-danger" id="login-failure">'+
 		'<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>'+
 		'  <strong><span class="message-text">Invalid username or password </span></strong>'+
@@ -36,8 +36,8 @@ $.aaacplApp.loginPage.getLayout = function (){
         '<a href="#/forgot">Forgot password</a><br>'+
 		'<br>'+
 		'New Member? <a href="#/register" class="text-center">Register with us</a>'+
-		'</div>'+
-     ' </div><!-- /.login-box-body -->';
+		'</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
+    ' </div><!-- /.login-box-body -->';
 	return tmpl;
 };
 $.aaacplApp.loginPage.executeScript = function(){
@@ -60,7 +60,9 @@ $.aaacplApp.loginPage.executeScript = function(){
 			 $.each(formData, function (key, item) {
 				 loginPost[item.name] = item.value;
 			 });
+			$(".overlay").show();
 			 $.aaacplApp.ajaxCall("POST", 'user/login', function success(response){
+			$(".overlay").hide();
 				if(response.userId > 0){
 					 /**
 					 * param1 - the auth key
@@ -79,6 +81,7 @@ $.aaacplApp.loginPage.executeScript = function(){
 				 }
 			 }, 
 			 function error(msg){
+$(".overlay").hide();
 			 }, 
 			 //POST PAYLOAD
 			 JSON.stringify(loginPost));

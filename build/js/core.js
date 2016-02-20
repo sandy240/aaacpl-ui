@@ -47,7 +47,8 @@ $.aaacplApp = {
 		"auction": '#/auction',
 		"manage-dept": '#/manage/dept',
 		"manage-auction": '#/manage/auctions',		
-		"manage-lot": '#/manage/lots'		
+		"manage-lot": '#/manage/lots',		
+		"live": '#/live',		
 	},
 
 	//Viewport element where content will be displayed
@@ -168,7 +169,7 @@ $.aaacplApp = {
 		//MANAGE - DEPARTMENTS
 		_this.route('/manage/dept', 'manage_dept', function () {	
 			var manageDeptContents = _this.manageDept.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageDeptContents , "Departments"));
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE DEPARTMENTS", manageDeptContents , "Add / Modify Departments"));
 		}, function(){
 			_this.manageDept.executeScript();
 		});
@@ -176,7 +177,7 @@ $.aaacplApp = {
 		//MANAGE - AUCTIONS
 		_this.route('/manage/auctions', 'manage_auctions', function () {	
 			var manageAuctionContents = _this.manageAuction.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageAuctionContents , "Auctions"));
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE AUCTIONS", manageAuctionContents , "Add / Modify Auctions"));
 		}, function(){
 			_this.manageAuction.executeScript();
 		});
@@ -184,10 +185,19 @@ $.aaacplApp = {
 		//MANAGE - LOTS
 		_this.route('/manage/lots', 'manage_lots', function () {	
 			var manageLotContents = _this.manageLot.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageLotContents , "Lots"));
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageLotContents , "Add / Modify Lots"));
 		}, function(){
 			_this.manageLot.executeScript();
 		});
+		
+		//LIVE
+		_this.route('/live', 'live', function () {	
+			var livePageContents = _this.livePage.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("LIVE", livePageContents , "Auction"));
+		}, function(){
+			_this.livePage.executeScript();
+		});
+		
 		
 		//PROFILE PAGE
 	   _this.route('/profile', 'profile', function () {
@@ -372,6 +382,7 @@ $.aaacplApp.dashboardPage = {};
 $.aaacplApp.manageDept = {};
 $.aaacplApp.manageAuction = {};
 $.aaacplApp.manageLot = {};
+$.aaacplApp.livePage = {};
 $.aaacplApp.profilePage = {};
 $.aaacplApp.pageFooter = {};
 $.aaacplApp.loginPage = {};

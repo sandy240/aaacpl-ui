@@ -3,7 +3,7 @@ $.aaacplApp.forgotPage.getLayout = function (){
 	var tmpl =  '<div class="login-logo">'+
       '  <img src="dist/img/logo.png">'+
       '</div><!-- /.login-logo -->'+
-      '<div class="login-box-body">'+
+      '<div class="login-box-body box">'+
 	  '<!--forgot password section-->'+
 	  '<div id="forgotPassword-success">'+
 		'	<div class="alert alert-success">'+
@@ -27,13 +27,14 @@ $.aaacplApp.forgotPage.getLayout = function (){
 			'		 </div>'+
 			'	 </div>'+
 		   '</form>'+
-	  '</div>'+
+	  '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
      ' </div><!-- /.login-box-body -->';
 	return tmpl;
 };
 
 
 $.aaacplApp.forgotPage.executeScript = function(){
+	
 	// be default hiding the error alert messages
 	  $('#forgot-failure').hide();
 	  $('#forgotPassword-success').hide();
@@ -47,16 +48,21 @@ $.aaacplApp.forgotPage.executeScript = function(){
 		
 		
 		// ajax call only when client side validation is completed
+		$(".overlay").show();
 		function forgotPasswordFormFormAjaxCall(){
+			
 			 $.ajax({
 				 type: 'POST',
 				 url: forgotPasswordForm.attr("action"), //OR JSP URL
-				 data: forgotPasswordForm.serialize(),  
+				 data: forgotPasswordForm.serialize(),
+				
 				 success: function(response) {
+				$(".overlay").hide();  	
 					 $('#forgotPassword-success').show();
 					 $('#forgotPassword-details').hide();
 				},
 				 error: function() {
+				$(".overlay").hide();
 					 $('#forgot-failure').show();
 					 $('#forgot-failure .message-text').html('Invalid username');
 				}
