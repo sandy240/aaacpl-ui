@@ -151,15 +151,15 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 			var auctionList = response.auctionResponseList || [];
 			$.each(auctionList, function(key , value){
 				
-				var auctionRow = '<div class="box box-default box-solid collapsed-box auction-row" id="ar-'+value.auctionId+'">'+
+				var auctionRow = '<div class="box box-default box-solid collapsed-box auction-row" id="ar-'+value.auctionTypeId+'">'+
                                  				' <div class="box-header with-border">'+
                                  				'  <h3 class="box-title">'+value.name+'</h3>'+
                                  				 ' <div class="box-tools pull-right">'+
                                  				  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
-                                 				  '  <a href="#/manage/lots?auctionid='+value.auctionId+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE LOTS</a>'+
+                                 				  '  <a href="#/manage/lots?auctionTypeId='+value.auctionTypeId+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE LOTS</a>'+
                                  				  '</div>'+
                                  				'</div>'+
-                                                     '<form id="editAuctionForm'+value.auctionId+'" class="form" role="form">'+
+                                                     '<form id="editAuctionForm'+value.auctionTypeId+'" class="form" role="form">'+
                                                      '<div class="box-body">'+
                                                     '<div id="auctionEdit-success">'+
                                                     '<div class="alert alert-success">'+
@@ -172,8 +172,8 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                    '</div>'+
                                                    '</div>'+
                                  				 '<div class="form-group">'+
-                                 				  ' <label for="auction'+value.auctionId+'InputName">Auction Name</label>'+
-                                 				   ' <input type="text" class="form-control" name="name" id="auction'+value.auctionId+'InputName" value="'+value.name+'">'+
+                                 				  ' <label for="auction'+value.auctionTypeId+'InputName">Auction Name</label>'+
+                                 				   ' <input type="text" class="form-control" name="name" id="auction'+value.auctionTypeId+'InputName" value="'+value.name+'">'+
                                  				 '</div>'+
                                  				 '<!-- Date and time range -->'+
                                                    '<div class="form-group">'+
@@ -182,18 +182,18 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                      '  <div class="input-group-addon">'+
                                                      '    <i class="fa fa-clock-o"></i>'+
                                                      '  </div>'+
-                                                     '  <input type="text" class="form-control pull-right" id="auction'+value.auctionId+'DateRange" value="'+value.startDate.substr(0, 19)+' - '+value.endDate.substr(0, 19)+'" >'+
+                                                     '  <input type="text" class="form-control pull-right" id="auction'+value.auctionTypeId+'DateRange" value="'+value.startDate.substr(0, 19)+' - '+value.endDate.substr(0, 19)+'" >'+
                                                      '</div><!-- /.input group -->'+
                                                    '</div><!-- /.form group -->'+
                                                          '<!-- Description -->'+
                                                                      '<div class="form-group">'+
                                                                      '<label>Description</label>'+
-                                                                     '<textarea class="form-control" name="description" id="auction'+value.auctionId+'Description" value="'+value.description+'"></textarea>'+
+                                                                     '<textarea class="form-control" name="description" id="auction'+value.auctionTypeId+'Description" value="'+value.description+'"></textarea>'+
                                                                      '</div>'+
                                                      	 '<!-- auction Type -->'+
                                                                      '<div class="form-group">'+
                                                                      '<label>Auction Type</label>'+
-                                                                       '<select id="auction'+value.auctionId+'Type" name="auctionTypeId" class="form-control">'+
+                                                                       '<select id="auction'+value.auctionTypeId+'Type" name="auctionTypeId" class="form-control">'+
                                                                        '<option value="1">Forward Auction</option>'+
                                                                        '<option value="2">Reverse Auction</option>'+
                                                                        '</select>'+
@@ -201,7 +201,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                         '<!-- auction Catalog -->'+
                                                                      '<div class="form-group">'+
                                                                      '<label>Catalog</label>'+
-                                                                     '<input type="text" id="auction'+value.auctionId+'Catalog"  name="catalog" class="form-control" value="'+value.catalog+'">'+
+                                                                     '<input type="text" id="auction'+value.auctionTypeId+'Catalog"  name="catalog" class="form-control" value="'+value.catalog+'">'+
                                                                      '</div>'+
                                                                      '</div>'+
                                  				'<div class="box-footer">'+
@@ -212,21 +212,21 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                  			'</div>';
 			 
 			 $("#auction-rows-cont").append(auctionRow);
-			 $('#auction'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
+			 $('#auction'+value.auctionTypeId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
 
 			  $('#auctionEdit-success').hide();
               $('#auctionEdit-failure').hide();
 
-             $('#editAuctionForm' + value.auctionId).submit(function(event){
-             					var auctionId = event.target.id.replace('editAuctionForm','');
+             $('#editAuctionForm' + value.auctionTypeId).submit(function(event){
+             					var auctionTypeId = event.target.id.replace('editAuctionForm','');
              					event.preventDefault(); // Prevent the form from submitting via the browser
-             					var dateRangeValue = $('#auction'+auctionId+'DateRange').val(); // getting the entire dateRange value
-             					var formData = $('#editAuctionForm' + auctionId).serializeArray(); // JSON data of values entered in form
+             					var dateRangeValue = $('#auction'+auctionTypeId+'DateRange').val(); // getting the entire dateRange value
+             					var formData = $('#editAuctionForm' + auctionTypeId).serializeArray(); // JSON data of values entered in form
              					var auctionPost = {};
              						 $.each(formData, function (key, item) {
              										 auctionPost[item.name] = item.value;
              									 });
-             						 auctionPost["auctionTypeId"] = auctionId;
+             						 auctionPost["auctionTypeId"] = auctionTypeId;
              						 auctionPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
              						 auctionPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
              						 auctionPost["updatedBy"] = $.aaacplApp.getLoggedInUserId();
