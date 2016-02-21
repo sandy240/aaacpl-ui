@@ -5,7 +5,7 @@ $.aaacplApp.manageLot.getLayout = function (){
 	**/
 	var tmpl = '<div id="form-success">'+
                '<div class="alert alert-success">'+
-               '<strong>Lot has been created successfully! </strong>'+
+               '<strong>Lot has been created/updated successfully! </strong>'+
                '</div>'+
                '</div>'+
 			   '<div id="form-failure">'+
@@ -22,12 +22,13 @@ $.aaacplApp.manageLot.getLayout = function (){
             '</div>'+
             '<div class="box-body" id="lot-rows-cont">'+
 			'</div><!-- /.box-body -->'+
+			'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
          ' </div>'+
 		 
 		 //Modal for adding new lots
 		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-lot-form" aria-labelledby="model-heading">'+
           '<div class="modal-dialog" role="document">'+
-           ' <div class="modal-content">'+
+           ' <div class="modal-content box">'+
               '<div class="modal-header">'+
                ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
                '   <span aria-hidden="true">×</span></button>'+
@@ -72,7 +73,7 @@ $.aaacplApp.manageLot.getLayout = function (){
               '  <button type="submit" class="btn btn-primary">Save changes</button>'+
               '</div>'+
 			  '</form>'+
-               '</div>'+
+               '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
             '</div>'+
             '<!-- /.modal-content -->'+
           '</div>'+
@@ -108,7 +109,9 @@ $.aaacplApp.manageLot.executeScript = function(){
 			 lotsPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
 			 lotsPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
 			 lotsPost["createdBy"] = $.aaacplApp.getLoggedInUserId();
+		$(".overlay").show();	 
 		$.aaacplApp.ajaxCall("POST", 'lots/create', function success(response){
+			$(".overlay").hide();
 			$("#add-lot-form").modal('hide');
 			if(response.successMessage && response.successMessage != ""){
 				$('#form-success').show();
@@ -118,6 +121,7 @@ $.aaacplApp.manageLot.executeScript = function(){
 				$('#form-failure .message-text').html('Unable to create lot. Please try again.');
 			}
 		}, function error(msg){
+			$(".overlay").hide();
 			$("#add-lot-form").modal('hide');
 			$('#form-failure').show();
 			$('#form-failure .message-text').html('Unable to create auction. Please try again later.');
@@ -125,35 +129,40 @@ $.aaacplApp.manageLot.executeScript = function(){
 		//POST PAYLOAD
 		JSON.stringify(lotsPost));
 	});
+	
 
 	
 	$('#lotDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});	
-	if($.aaacplApp.queryParams('auctionid')){
-		_this.loadLotRows();
-	}
+	
+	_this.loadLotRows();
+	
 	
 };
 
 
 $.aaacplApp.manageLot.loadLotRows = function(){
-	$.aaacplApp.ajaxCall("GET","lots/list/"+$.aaacplApp.queryParams('auctionid'),function success(response){
+	if($.aaacplApp.queryParams('auctionid') != ""){
+		$(".overlay").show();
+		$.aaacplApp.ajaxCall("GET","lots/list/"+$.aaacplApp.queryParams('auctionid'),function success(response){
+			$(".overlay").hide();
+			$("#lot-rows-cont").html('');
 			var lotList = response.lotsResponseList || [];
 			$.each(lotList, function(key , value){
 				
-				var lotRow = '<div class="box box-warning collapsed-box lot-row" id="ar-'+value.id+'">'+
+				var lotRow = '<div class="box box-default box-solid collapsed-box lot-row" id="ar-'+value.id+'">'+
 				' <div class="box-header with-border">'+
-				'  <h3 class="box-title"><i class="fa fa-bank"></i>'+value.name+'</h3>'+
+				'  <h3 class="box-title">'+value.name+'</h3>'+
 				 ' <div class="box-tools pull-right">'+
 				  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
-				  '  <button type="button" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE PARTICIPATORS</a>'+
+				  '  <button type="button" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE PARTICIPATORS</button>'+
 				  '</div>'+
 				'</div>'+
+				'<form id="editLotForm'+value.id+'" class="form" role="form">'+
 				'<div class="box-body">'+
 				'<div id="editLotFormSection">'+
-                   '<form id="editLotForm" class="form" role="form">'+
                    '<div id="lotEdit-success" style="display:none;">'+
                    '<div class="alert alert-success">'+
-                   '<strong>Auction has been created successfully! </strong>'+
+                   '<strong>Lot has been saved successfully! </strong>'+
                    '</div>'+
                    '</div>'+
                   '<div id="LotEdit-failure" style="display:none;">'+
@@ -163,7 +172,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
                   '</div>'+
 				 '<div class="form-group">'+
 				  ' <label for="lot'+value.id+'InputName">Lot Name</label>'+
-				   ' <input type="text" class="form-control" id="lot'+value.id+'InputName" value="'+value.name+'">'+
+				   ' <input type="text" name="name" class="form-control" id="lot'+value.id+'InputName" value="'+value.name+'">'+
 				 '</div>'+
 				 '<!-- startBid -->'+
                   '<div class="form-group">'+
@@ -190,19 +199,53 @@ $.aaacplApp.manageLot.loadLotRows = function(){
                      '<label>Description</label>'+
                      '<textarea class="form-control" name="description" id="lot'+value.id+'InputName" value="'+value.description+'"></textarea>'+
                      '</div>'+
-                  '</form>'+
 				'</div>'+
 				'</div>'+
 				'<div class="box-footer">'+
-					'  <button type="button" class="btn bg-orange">UPDATE</button>'+
+					'  <button type="submit" class="btn bg-orange">UPDATE</button>'+
 				'</div>'+
+				'</form>'+
 			'</div>';
 			 
 			 $("#lot-rows-cont").append(lotRow);
 			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});	
+			 
+				$('#editLotForm' + value.id).submit(function(event){
+					var lotID = event.target.id.replace('editLotForm','');
+					event.preventDefault(); // Prevent the form from submitting via the browser
+					var dateRangeValue = $('#lot'+lotID+'DateRange').val(); // getting the entire dateRange value
+					var formData = $('#editLotForm' + lotID).serializeArray(); // JSON data of values entered in form
+					var lotsPost = {};
+						 $.each(formData, function (key, item) {
+										 lotsPost[item.name] = item.value;
+									 });
+						 lotsPost["id"] = lotID;
+						 lotsPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
+						 lotsPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
+						 lotsPost["updatedBy"] = $.aaacplApp.getLoggedInUserId();
+					$(".overlay").show();	 
+					$.aaacplApp.ajaxCall("PUT", 'lots/update', function success(response){
+						$(".overlay").hide();
+						if(response.successMessage && response.successMessage != ""){
+							$('#form-success').show();
+						} else {
+							$('#form-failure').show();
+							$('#form-failure .message-text').html('Unable to update lot. Please try again.');
+						}
+					}, function error(msg){
+						$(".overlay").hide();
+						$('#form-failure').show();
+						$('#form-failure .message-text').html('Unable to update auction. Please try again later.');
+					},
+					//POST PAYLOAD
+					JSON.stringify(lotsPost));
+				});
+			 
+			 
 			});
 		}, function error(msg){
-
+			$(".overlay").hide();
 		});
+	}
 };
      

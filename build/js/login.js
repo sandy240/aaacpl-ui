@@ -22,11 +22,11 @@ $.aaacplApp.loginPage.getLayout = function (){
          ' </div>'+
           '<div class="row">'+
            ' <div class="col-xs-8">'+
-            '  <div class="checkbox icheck">'+
+            '  <!-- div class="checkbox icheck">'+
                 '<label>'+
                  ' <input type="checkbox"> Remember Me'+
                 '</label>'+
-              '</div>'+
+              '</div -->'+
             '</div><!-- /.col -->'+
             '<div class="col-xs-4">'+
             '  <button type="submit" class="btn btn-primary btn-block bg-orange btn-flat">Sign In</button>'+
@@ -69,7 +69,7 @@ $.aaacplApp.loginPage.executeScript = function(){
 					 * param2 - the success message from which is the authSessionId $.aaacplApp.userAuthKey
 					 * param3 - cookie expire time in hours
 					 */
-					 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response.successMessage + '::' + response.userId,3); //cookie creation
+					 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response.successMessage + '::' + response.userId,24); //cookie creation
 					 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
 				 } else {
 					 $('#login-failure').show();

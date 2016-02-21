@@ -11,8 +11,8 @@ $.aaacplApp.manageDept.getLayout = function (){
 			   '</div>'+
             '</div>'+
             '<div class="box-body" id="dept-rows-cont">'+
-			'</div><!-- /.box-body -->'+
-         ' </div>'+
+			'</div><!-- /.box-body -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
+         '</div>'+
 		 
 		 //Modal for adding new department
 		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-dept-form" aria-labelledby="model-heading">'+
@@ -42,7 +42,7 @@ $.aaacplApp.manageDept.getLayout = function (){
             '</div>'+
             '<!-- /.modal-content -->'+
           '</div>'+
-          '<!-- /.modal-dialog -->'+
+          '<!-- /.modal-dialog -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
         '</div>';
 		
 	return tmpl;
@@ -61,27 +61,31 @@ $.aaacplApp.manageDept.executeScript = function(){
 		$.each(formData, function (key, item) {
 			payload[item.name] = item.value;
 		});
+		$(".overlay").show();
 		$.aaacplApp.ajaxCall("POST","department/create",function success(response){
+			$(".overlay").hide();
 			if(response.successMessage && response.successMessage == "SUCCESS"){
 				$('#add-dept-form').modal('hide');
 				_this.loadDeptRows();
 			}
 		}, function error(msg){
-			
+			$(".overlay").hide();
 		}, JSON.stringify(payload));
 	});
 	
 };
 
 $.aaacplApp.manageDept.loadDeptRows = function (){
+	$(".overlay").show();
 	$.aaacplApp.ajaxCall("GET","department/list",function success(response){
+		$(".overlay").hide();
 		$("#dept-rows-cont").html('');
 		var deptList = response.departmentResponseList;
 		$.each(deptList, function(key , value){
 			
-			var deptRow = '<div class="box box-warning collapsed-box dept-row" id="dr-'+value.id+'">'+
+			var deptRow = '<div class="box box-default box-solid collapsed-box dept-row" id="dr-'+value.id+'">'+
 			' <div class="box-header with-border">'+
-			'  <h3 class="box-title"><i class="fa fa-bank"></i>'+value.name+'</h3>'+
+			'  <h3 class="box-title">'+value.name+'</h3>'+
 			 ' <div class="box-tools pull-right">'+
 			  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
 			  '  <a href="#/manage/auctions?deptid='+value.id+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE AUCTIONS</a>'+
@@ -108,7 +112,7 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 			
 		});
 	}, function error(msg){
-		
+		$(".overlay").hide();
 	});
 }
 

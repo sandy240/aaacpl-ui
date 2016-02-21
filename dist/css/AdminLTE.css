@@ -198,12 +198,30 @@ a:focus {
 .manage .box > .box-title {
   font-size: 16px;
 }
-.manage .box.dept-row {
-  margin-bottom: 30px;
-}
-.manage .box.dept-row .box-header .fa-plus::before,
-.manage .box.dept-row .box-header .fa-minus::before {
+.manage .box-header .fa-plus::before,
+.manage .box-header .fa-minus::before {
   content: "\f044";
+}
+.live-lot > .box-header > .box-title {
+  font-size: 22px;
+}
+.live-lot .pull-right .label {
+  font-size: 14px;
+}
+.live-lot .info-box-icon {
+  font-size: 30px;
+  height: 106px;
+  line-height: 106px;
+  width: 50px;
+}
+.live-lot .info-box {
+  min-height: 106px;
+}
+.live-lot .info-box-content {
+  margin-left: 55px;
+}
+.live-lot .info-box-number {
+  font-size: 28px;
 }
 .navbar button.sidebar-toggle {
   border: 0;

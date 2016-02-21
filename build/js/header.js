@@ -3,7 +3,7 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
 	var tmpl = ' <!-- Main Header --> '+
       '<header class="main-header">'+
        ' <!-- Logo -->'+
-       ' <a href="index.html" class="logo">'+
+       ' <a href="#" class="logo">'+
         '  <!-- mini logo for sidebar mini 50x50 pixels -->'+
          ' <span class="logo-mini"><img src="dist/img/logo-sm.png" height="50"></span>'+
           '<!-- logo for regular state and mobile devices -->'+
@@ -32,7 +32,7 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
                  ' <li class="user-header">'+
                    ' <img src="dist/img/default-user.png" class="img-circle" alt="User Image">'+
                    ' <p id="userName">'+
-					userInfo.name + ' - ' + userInfo.userTypeLabel +
+					userInfo.name + ' - ' + userInfo.userTypeLabel.split('-')[0] +
                      '<!-- small>Member since Nov. 2012</small -->'+
                   '  </p>'+
                  ' </li>'+

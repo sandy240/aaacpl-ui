@@ -22,12 +22,13 @@ $.aaacplApp.manageAuction.getLayout = function (){
             '</div>'+
             '<div class="box-body" id="auction-rows-cont">'+
 			'</div><!-- /.box-body -->'+
+			'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
          ' </div>'+
 		 
 		 //Modal for adding new auctions
 		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-auction-form" aria-labelledby="model-heading">'+
           '<div class="modal-dialog" role="document">'+
-           ' <div class="modal-content">'+
+           ' <div class="modal-content box">'+
               '<div class="modal-header">'+
                ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
                '   <span aria-hidden="true">×</span></button>'+
@@ -75,7 +76,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
               '  <button type="submit" class="btn btn-primary">Save changes</button>'+
               '</div>'+
 			  '</form>'+
-          '</div>'+
+          '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
           '</div>'+
           '<!-- /.modal-content -->'+
         '</div>'+
@@ -111,7 +112,9 @@ $.aaacplApp.manageAuction.executeScript = function(){
                  auctionPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
                  auctionPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
                  auctionPost["createdBy"] = $.aaacplApp.getLoggedInUserId();
+				 $(".overlay").show();
             $.aaacplApp.ajaxCall("POST", 'auction/create', function success(response){
+				$(".overlay").hide();
 				$("#add-auction-form").modal('hide');
 				if(response.successMessage && response.successMessage != ""){
 					$('#form-success').show();
@@ -121,6 +124,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
 					$('#form-failure .message-text').html('Unable to create auction. Please try again.');
 				}
             }, function error(msg){
+				$(".overlay").hide();
 				$("#add-auction-form").modal('hide');
                 $('#form-failure').show();
 				$('#form-failure .message-text').html('Unable to create auction. Please try again later.');
@@ -132,22 +136,24 @@ $.aaacplApp.manageAuction.executeScript = function(){
 	
 	$('#auctionDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
 
-	if($.aaacplApp.queryParams('deptid')){
-		_this.loadAuctionRows();
-	}
+	_this.loadAuctionRows();
 	
 };
 
 
 
 $.aaacplApp.manageAuction.loadAuctionRows = function(){
-	$.aaacplApp.ajaxCall("GET","auction/list/" + $.aaacplApp.queryParams('deptid'),function success(response){
+	if($.aaacplApp.queryParams('deptid') != ""){
+		$(".overlay").show();
+		$.aaacplApp.ajaxCall("GET","auction/list/" + $.aaacplApp.queryParams('deptid'),function success(response){
+			$(".overlay").hide();
+			$("#auction-rows-cont").html('');
 			var auctionList = response.auctionResponseList || [];
 			$.each(auctionList, function(key , value){
 				
-				var auctionRow = '<div class="box box-warning collapsed-box auction-row" id="ar-'+value.auctionId+'">'+
+				var auctionRow = '<div class="box box-default box-solid collapsed-box auction-row" id="ar-'+value.auctionId+'">'+
 				' <div class="box-header with-border">'+
-				'  <h3 class="box-title"><i class="fa fa-bank"></i>'+value.name+'</h3>'+
+				'  <h3 class="box-title">'+value.name+'</h3>'+
 				 ' <div class="box-tools pull-right">'+
 				  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
 				  '  <a href="#/manage/lots?auctionid='+value.auctionId+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE LOTS</a>'+
@@ -212,6 +218,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 
 			});
 		}, function error(msg){
-			
+			$(".overlay").hide();
 		});
+	}
 };

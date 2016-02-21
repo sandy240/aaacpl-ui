@@ -7,7 +7,7 @@ if (typeof jQuery === "undefined") {
 $.aaacplApp = {
 	
 	//API Root path
-	apiSrvPath : "http://api.aaacpl.com/rest/",
+	apiSrvPath : "http://eauction.aaacpl.com/rest/",
 	
 	userAuthKey : "uAuthIDAAACPL",
 	
@@ -48,7 +48,7 @@ $.aaacplApp = {
 		"manage-dept": '#/manage/dept',
 		"manage-auction": '#/manage/auctions',		
 		"manage-lot": '#/manage/lots',		
-		"live": '#/live',		
+		"live": '#/live'	
 	},
 
 	//Viewport element where content will be displayed
@@ -102,9 +102,10 @@ $.aaacplApp = {
 		if(routeobj.controller){
 			$(document).ready(function(){
 				routeobj.controller();
-				_this.commonLayoutReady();
 			});
 		}
+		if(routeobj.templateId!="login"  || routeobj.templateId!="register")
+		_this.commonLayoutReady();
 		
 		$(document).ready(function(){
 			//TEMPORARY PATCH WORK TO RELOAD ADMINLTE MODULES
@@ -169,7 +170,7 @@ $.aaacplApp = {
 		//MANAGE - DEPARTMENTS
 		_this.route('/manage/dept', 'manage_dept', function () {	
 			var manageDeptContents = _this.manageDept.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE DEPARTMENTS", manageDeptContents , "Add / Modify Departments"));
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageDeptContents , "Add / Modify Departments"));
 		}, function(){
 			_this.manageDept.executeScript();
 		});
@@ -177,7 +178,7 @@ $.aaacplApp = {
 		//MANAGE - AUCTIONS
 		_this.route('/manage/auctions', 'manage_auctions', function () {	
 			var manageAuctionContents = _this.manageAuction.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE AUCTIONS", manageAuctionContents , "Add / Modify Auctions"));
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageAuctionContents , "Add / Modify Auctions"));
 		}, function(){
 			_this.manageAuction.executeScript();
 		});
@@ -196,6 +197,14 @@ $.aaacplApp = {
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("LIVE", livePageContents , "Auction"));
 		}, function(){
 			_this.livePage.executeScript();
+		});
+		
+		//LIVE
+		_this.route('/auction', 'auction', function () {	
+			var auctionListContents = _this.auctionListPage.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("AUCTIONS", auctionListContents , "Live and Upcoming"));
+		}, function(){
+			_this.auctionListPage.executeScript();
 		});
 		
 		
@@ -379,6 +388,7 @@ $.aaacplApp.pageHeader = {};
 $.aaacplApp.pageSidebar = {};
 $.aaacplApp.pageContent = {};
 $.aaacplApp.dashboardPage = {};
+$.aaacplApp.auctionListPage = {};
 $.aaacplApp.manageDept = {};
 $.aaacplApp.manageAuction = {};
 $.aaacplApp.manageLot = {};
