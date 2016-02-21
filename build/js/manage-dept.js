@@ -91,24 +91,65 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 			  '  <a href="#/manage/auctions?deptid='+value.id+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE AUCTIONS</a>'+
 			  '</div>'+
 			'</div>'+
-			'<form class="form" role="form">'+
+			'<form id="editDeptForm'+value.id+'" class="form" role="form">'+
 			'<div class="box-body">'+
+			'<div id="deptEdit-success">'+
+               '<div class="alert alert-success">'+
+               '<strong>Department has been updated successfully! </strong>'+
+               '</div>'+
+               '</div>'+
+              '<div id="deptEdit-failure">'+
+              '<div class="alert alert-danger">'+
+              '<strong>Error !</strong> <span class="message-text"></span>'+
+              '</div>'+
+              '</div>'+
 			 '<div class="form-group">'+
 			  ' <label for="dept'+value.id+'InputName">Department Name</label>'+
-			   ' <input type="text" class="form-control" id="dept'+value.id+'InputName" value="'+value.name+'" required>'+
+			   ' <input type="text" class="form-control" id="dept'+value.id+'InputName" name="name" value="'+value.name+'" required>'+
 			 '</div>'+
 			 '<div class="form-group">'+
 			 ' <label for="dept'+value.id+'InputLogoFile">Department Logo</label>'+
-			   ' <input type="file" class="form-control" id="dept'+value.id+'InputLogoFile">'+
+			   ' <input type="file" class="form-control" name="logoPath" id="dept'+value.id+'InputLogoFile">'+
 			 '</div>'+
 			'</div>'+
 			'<div class="box-footer">'+
-				'  <button type="button" class="btn bg-orange">UPDATE</button>'+
+				'<button type="submit" class="btn bg-orange">UPDATE</button>'+
+                ' <button type="button" class="btn" data-dismiss="modal">Reset</button>'+
 			'</div>'+
 			'</form>'+
 		'</div>';
-		 
+
 		 $("#dept-rows-cont").append(deptRow);
+
+		  $('#deptEdit-success').hide();
+          $('#deptEdit-failure').hide();
+
+        $('#editDeptForm' + value.id).submit(function(event){
+            var deptID = event.target.id.replace('editDeptForm','');
+            event.preventDefault(); // Prevent the form from submitting via the browser
+            var formData = $('#editDeptForm' + deptID).serializeArray(); // JSON data of values entered in form
+            var deptPost = {};
+                 $.each(formData, function (key, item) {
+                                 deptPost[item.name] = item.value;
+                             });
+                 deptPost["id"] = deptID;
+            $(".overlay").show();
+            $.aaacplApp.ajaxCall("PUT", 'department/update', function success(response){
+                $(".overlay").hide();
+                if(response.successMessage && response.successMessage != ""){
+                    $('#deptEdit-success').show();
+                } else {
+                    $('#deptEdit-failure').show();
+                    $('#deptEdit-failure .message-text').html('Unable to update dept. Please try again.');
+                }
+            }, function error(msg){
+                $(".overlay").hide();
+                $('#deptEdit-failure').show();
+                $('#deptEdit-failure .message-text').html('Unable to update dept. Please try again later.');
+            },
+            //POST PAYLOAD
+            JSON.stringify(deptPost));
+        });
 			
 		});
 	}, function error(msg){
