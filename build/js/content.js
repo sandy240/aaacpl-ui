@@ -26,4 +26,10 @@ $.aaacplApp.pageContent.getLayout = function (pageheader, pagecontents , pagesub
 };
 
 $.aaacplApp.pageContent.executeScript = function(){
+	$('.alert').bind('show', function(){
+		var $this = $(this);
+		setTimeout(function(){
+			$this.alert('close');
+		},5000);
+	});
 };

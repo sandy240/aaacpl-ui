@@ -105,7 +105,7 @@ $.aaacplApp.manageLot.executeScript = function(){
 			 $.each(formData, function (key, item) {
 							 lotsPost[item.name] = item.value;
 						 });
-			 lotsPost["auctionId"] = $.aaacplApp.queryParams('auctionTypeId');
+			 lotsPost["auctionId"] = $.aaacplApp.queryParams('auctionid');
 			 lotsPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
 			 lotsPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
 			 lotsPost["createdBy"] = $.aaacplApp.getLoggedInUserId();
@@ -130,21 +130,15 @@ $.aaacplApp.manageLot.executeScript = function(){
 		JSON.stringify(lotsPost));
 	});
 
-
-
 	$('#lotDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
-
 	_this.loadLotRows();
-
-
 };
 
 
 $.aaacplApp.manageLot.loadLotRows = function(){
-	if($.aaacplApp.queryParams('auctionTypeId') != ""){
+	if($.aaacplApp.queryParams('auctionid') != ""){
 		$(".overlay").show();
-		//$.aaacplApp.ajaxCall("GET","lots/list/"+$.aaacplApp.queryParams('auctionTypeId'),function success(response){
-		$.aaacplApp.ajaxCall("GET","lots/list/3",function success(response){
+		$.aaacplApp.ajaxCall("GET","lots/list/"+$.aaacplApp.queryParams('auctionid'),function success(response){
 			$(".overlay").hide();
 			$("#lot-rows-cont").html('');
 			var lotList = response.lotsResponseList || [];
@@ -155,22 +149,12 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 				'  <h3 class="box-title">'+value.name+'</h3>'+
 				 ' <div class="box-tools pull-right">'+
 				  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
-				  '  <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#manageParticipator-form"><i class="fa fa-hdd-o"></i> MANAGE PARTICIPATORS</button>'+
+				  '  <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#manageParticipator-form'+value.id+'"><i class="fa fa-hdd-o"></i> MANAGE PARTICIPATORS</button>'+
 				  '</div>'+
 				'</div>'+
 				'<form id="editLotForm'+value.id+'" class="form" role="form">'+
 				'<div class="box-body">'+
 				'<div id="editLotFormSection">'+
-                   '<div id="lotEdit-success">'+
-                   '<div class="alert alert-success">'+
-                   '<strong>Lot has been saved successfully! </strong>'+
-                   '</div>'+
-                   '</div>'+
-                  '<div id="lotEdit-failure">'+
-                  '<div class="alert alert-danger">'+
-                  '<strong>Error !</strong> <span class="message-text"></span>'+
-                  '</div>'+
-                  '</div>'+
 				 '<div class="form-group">'+
 				  ' <label for="lot'+value.id+'InputName">Lot Name</label>'+
 				   ' <input type="text" name="name" class="form-control" id="lot'+value.id+'InputName" value="'+value.name+'">'+
@@ -208,7 +192,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 				'</div>'+
 				'</form>'+
 				 //Modal for managing participator
-                		 '<div class="modal fade" tabindex="-1" role="dialog" id="manageParticipator-form" aria-labelledby="model-heading">'+
+                		 '<div class="modal fade" tabindex="-1" role="dialog" id="manageParticipator-form' + value.id + '" aria-labelledby="model-heading">'+
                           '<div class="modal-dialog" role="document">'+
                            ' <div class="modal-content">'+
                               '<div class="modal-header">'+
@@ -220,7 +204,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
                               '<div class="modal-body">'+
                 			 '<div class="form-group">'+
                 			  ' <label for="deptInputName">Select Participator</label>'+
-                			  ' <select id="selectParticipator" multiple="multiple" required></select>'+
+                			  ' <select class="selectParticipator form-control" multiple="multiple" required></select>'+
                 			 '</div>'+
                               '</div>'+
                               '<div class="modal-footer">'+
@@ -239,13 +223,10 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
 
 			 var dummydata = [{ id: 0, text: 'user1' }, { id: 1, text: 'user2' }, { id: 2, text: 'user3'}];
-			 $("#selectParticipator").select2({
+			 $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
 			    data: dummydata
 			 });
 
-			 // be default hiding the success and error alert messages
-                $('#lotEdit-success').hide();
-                $('#lotEdit-failure').hide();
 
 				$('#editLotForm' + value.id).submit(function(event){
 					var lotID = event.target.id.replace('editLotForm','');
@@ -260,19 +241,21 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 						 lotsPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
 						 lotsPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
 						 lotsPost["updatedBy"] = $.aaacplApp.getLoggedInUserId();
+						 lotsPost["auctionId"] = $.aaacplApp.queryParams('auctionid');
+						 lotsPost["status"] = $.aaacplApp.queryParams('A');
 					$(".overlay").show();
 					$.aaacplApp.ajaxCall("PUT", 'lots/update', function success(response){
 						$(".overlay").hide();
 						if(response.successMessage && response.successMessage != ""){
-							$('#lotEdit-success').show();
+							$('#form-success').show();
 						} else {
-							$('#lotEdit-failure').show();
-							$('#lotEdit-failure .message-text').html('Unable to update lot. Please try again.');
+							$('#form-failure').show();
+							$('#form-failure .message-text').html('Unable to update lot. Please try again.');
 						}
 					}, function error(msg){
 						$(".overlay").hide();
-						$('#lotEdit-failure').show();
-						$('#lotEdit-failure .message-text').html('Unable to update lot. Please try again later.');
+						$('#form-failure').show();
+						$('#form-failure .message-text').html('Unable to update lot. Please try again later.');
 					},
 					//POST PAYLOAD
 					JSON.stringify(lotsPost));

@@ -3,7 +3,17 @@ $.aaacplApp.manageDept.getLayout = function (){
 	/***
 	** COMPLETE DEPARTMENT PAGE LAYOUT 
 	**/
-	var tmpl = '<div id="departments" class="box box-solid manage">'+
+	var tmpl = '<div id="form-success">'+
+               '<div class="alert alert-success">'+
+               '<strong>Department has been created/updated successfully! </strong>'+
+               '</div>'+
+               '</div>'+
+			   '<div id="form-failure">'+
+              '<div class="alert alert-danger">'+
+              '<strong>Error !</strong> <span class="message-text"></span>'+
+              '</div>'+
+              '</div>'+
+			  '<div id="departments" class="box box-solid manage">'+
              '<div class="box-header">'+
                '<h3 class="box-title">Departments</h3>'+
 			   '<div class="box-tools pull-right">'+
@@ -53,6 +63,10 @@ $.aaacplApp.manageDept.executeScript = function(){
 	
 	_this.loadDeptRows();
 	
+	$('#form-success').hide();
+		$('#form-failure').hide();
+
+	
 	var addNewDeptForm = $("#add-dept-form form");
 	addNewDeptForm.submit(function(event){
 		event.preventDefault(); // Prevent the form from submitting via the browser
@@ -93,16 +107,6 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 			'</div>'+
 			'<form id="editDeptForm'+value.id+'" class="form" role="form">'+
 			'<div class="box-body">'+
-			'<div id="deptEdit-success">'+
-               '<div class="alert alert-success">'+
-               '<strong>Department has been updated successfully! </strong>'+
-               '</div>'+
-               '</div>'+
-              '<div id="deptEdit-failure">'+
-              '<div class="alert alert-danger">'+
-              '<strong>Error !</strong> <span class="message-text"></span>'+
-              '</div>'+
-              '</div>'+
 			 '<div class="form-group">'+
 			  ' <label for="dept'+value.id+'InputName">Department Name</label>'+
 			   ' <input type="text" class="form-control" id="dept'+value.id+'InputName" name="name" value="'+value.name+'" required>'+
@@ -121,8 +125,6 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 
 		 $("#dept-rows-cont").append(deptRow);
 
-		  $('#deptEdit-success').hide();
-          $('#deptEdit-failure').hide();
 
         $('#editDeptForm' + value.id).submit(function(event){
             var deptID = event.target.id.replace('editDeptForm','');
@@ -137,15 +139,15 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
             $.aaacplApp.ajaxCall("PUT", 'department/update', function success(response){
                 $(".overlay").hide();
                 if(response.successMessage && response.successMessage != ""){
-                    $('#deptEdit-success').show();
+                    $('#form-success').show();
                 } else {
-                    $('#deptEdit-failure').show();
-                    $('#deptEdit-failure .message-text').html('Unable to update dept. Please try again.');
+                    $('#form-failure').show();
+                    $('#form-failure .message-text').html('Unable to update department. Please try again.');
                 }
             }, function error(msg){
                 $(".overlay").hide();
-                $('#deptEdit-failure').show();
-                $('#deptEdit-failure .message-text').html('Unable to update dept. Please try again later.');
+                $('#form-failure').show();
+                $('#form-failure .message-text').html('Unable to update department. Please try again later.');
             },
             //POST PAYLOAD
             JSON.stringify(deptPost));
