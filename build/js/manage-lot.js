@@ -131,25 +131,46 @@ $.aaacplApp.manageLot.executeScript = function(){
 	});
 
 	$('#lotDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
+
 	_this.loadLotRows();
 };
 
 
-$.aaacplApp.manageLot.loadLotRows = function(){
+$.aaacplApp.manageLot.loadLotRows = function(userListDetails){
 	if($.aaacplApp.queryParams('auctionid') != ""){
 		$(".overlay").show();
 		$.aaacplApp.ajaxCall("GET","lots/list/"+$.aaacplApp.queryParams('auctionid'),function success(response){
 			$(".overlay").hide();
 			$("#lot-rows-cont").html('');
+
 			var lotList = response.lotsResponseList || [];
 			$.each(lotList, function(key , value){
+
+			 var userListDetails= [];
+            // function to loop over ajax response and create user list details
+                function getUserList(userList){
+                       var getUserList = [];
+                       for( var i=0; i < userList.length; i++ ) {
+                           var userDetails = {};
+                           userDetails["id"] = userList[i].id;
+                           userDetails["text"] = userList[i].name;
+                           getUserList.push(userDetails);
+                       }
+                       return getUserList;
+                        }
+
+            // get list of participators for each lot
+            $.aaacplApp.ajaxCall("GET", 'user/list', function success(response){
+               var userList = response || [];
+               userListDetails = getUserList(userList);
+            }, function error(msg){});
 
 				var lotRow = '<div class="box box-default box-solid collapsed-box lot-row" id="ar-'+value.id+'">'+
 				' <div class="box-header with-border">'+
 				'  <h3 class="box-title">'+value.name+'</h3>'+
 				 ' <div class="box-tools pull-right">'+
 				  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
-				  '  <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#manageParticipator-form'+value.id+'"><i class="fa fa-hdd-o"></i> MANAGE PARTICIPATORS</button>'+
+				  '  <button type="button" class="btn btn-box-tool" id="manage_participatorBtn" data-toggle="modal" data-target="#manageParticipator-form'+value.id+'"><i class="fa fa-hdd-o"></i> MANAGE PARTICIPATORS</button>'+
 				  '</div>'+
 				'</div>'+
 				'<form id="editLotForm'+value.id+'" class="form" role="form">'+
@@ -198,13 +219,14 @@ $.aaacplApp.manageLot.loadLotRows = function(){
                               '<div class="modal-header">'+
                                ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
                                '   <span aria-hidden="true">×</span></button>'+
-                               ' <h4 class="modal-title" id="model-heading">Add participator</h4>'+
+                               ' <h4 class="modal-title" id="model-heading">Add participators</h4>'+
                               '</div>'+
-                			  '<form class="participatorForm" role="form">'+
+                			  '<form class="participatorForm" role="form" id="#participatorForm'+value.id+'">'+
                               '<div class="modal-body">'+
+
                 			 '<div class="form-group">'+
-                			  ' <label for="deptInputName">Select Participator</label>'+
-                			  ' <select class="selectParticipator form-control" multiple="multiple" required></select>'+
+                			  ' <label for="deptInputName">Participators </label>'+
+                			  ' <select class="selectParticipator form-control" multiple="multiple" name="userIdList" required></select>'+
                 			 '</div>'+
                               '</div>'+
                               '<div class="modal-footer">'+
@@ -222,11 +244,40 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 			 $("#lot-rows-cont").append(lotRow);
 			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
 
-			 var dummydata = [{ id: 0, text: 'user1' }, { id: 1, text: 'user2' }, { id: 2, text: 'user3'}];
-			 $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
-			    data: dummydata
-			 });
+             $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
+               data: userListDetails
+               });
 
+                $('#participatorForm'+ value.id).submit(function(event){
+                                var participatorList = {
+                                "participationInfoList":[]
+                                };
+             					var lotID = event.target.id.replace('participatorForm','');
+             					event.preventDefault(); // Prevent the form from submitting via the browser
+             					var formData = $('#participatorForm' + lotID).serializeArray(); // JSON data of values entered in form
+             					var participatorPost = {};
+             						 $.each(formData, function (key, item) {
+             										 participatorPost[item.name] = item.value;
+             									 });
+             						 participatorPost["lotId"] = lotID;
+             						 participatorList.participationInfoList.push(participatorPost);
+             					$(".overlay").show();
+             					$.aaacplApp.ajaxCall("POST", 'participator/create', function success(response){
+             						$(".overlay").hide();
+             						if(response.successMessage && response.successMessage != ""){
+             							$('#form-success').show();
+             						} else {
+             							$$('#form-failure').show().show();
+             							$('#form-failure .message-text').html('Unable to add participator. Please try again later.');
+             						}
+             					}, function error(msg){
+             						$(".overlay").hide();
+             						$('#form-failure').show();
+             						$('#form-failure .message-text').html('Unable to add participator. Please try again later.');
+             					},
+             					//POST PAYLOAD
+             					JSON.stringify(participatorList));
+             				});
 
 				$('#editLotForm' + value.id).submit(function(event){
 					var lotID = event.target.id.replace('editLotForm','');
@@ -260,8 +311,6 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 					//POST PAYLOAD
 					JSON.stringify(lotsPost));
 				});
-
-
 			});
 		}, function error(msg){
 			$(".overlay").hide();
