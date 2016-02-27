@@ -33,7 +33,9 @@ $.aaacplApp = {
 			"state": "",
 			"address": "",
 			"country": ""
-		}
+		},
+		// list of users
+		userList: []
 	},
 
 	// a map to store all the template and their relative path
@@ -184,7 +186,7 @@ $.aaacplApp = {
 		});
 		
 		//MANAGE - LOTS
-		_this.route('/manage/lots', 'manage_lots', function () {	
+		_this.route('/manage/lots', 'manage_lots', function () {
 			var manageLotContents = _this.manageLot.getLayout();
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageLotContents , "Add / Modify Lots"));
 		}, function(){
@@ -382,7 +384,22 @@ $.aaacplApp = {
 			"country": ""
 		}
 		_this.redirectTo("login");
-	}
+	},
+
+	getUserList: function(){
+	var _this = this;
+	// get list of participators for each lot
+            _this.ajaxCall("GET", 'user/list', function success(response){
+                var userList = response || [];
+                        userList.forEach( function (item)
+                        {
+                            var userDetails = {};
+                            userDetails["id"] = item.id;
+                            userDetails["text"] = item.name;
+                            _this.dataStorage.userList.push(userDetails);
+                        });
+                    }, function error(msg){});
+	},
 };
 $.aaacplApp.pageHeader = {};
 $.aaacplApp.pageSidebar = {};

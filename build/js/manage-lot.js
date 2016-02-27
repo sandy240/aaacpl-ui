@@ -16,6 +16,7 @@ $.aaacplApp.manageLot.getLayout = function (){
 	'<div class="box box-solid manage">'+
              '<div class="box-header">'+
                '<h3 class="box-title">Lots</h3>'+
+               '<div><a href="javascript:history.back()" class="btn btn-box-tool"><span id="auctionIdField"></span></a></div>'+
 			   '<div class="box-tools pull-right">'+
 			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-lot-form">Add New Lot</button>'+
 			   '</div>'+
@@ -90,6 +91,7 @@ $.aaacplApp.manageLot.executeScript = function(){
 		$('#form-success').hide();
 		$('#form-failure').hide();
 
+    $('#auctionIdField').html("AUCTION ID: "+$.aaacplApp.queryParams('auctionid'));
 
 	var createLotsForm = $('#createLotsForm');
 
@@ -131,12 +133,12 @@ $.aaacplApp.manageLot.executeScript = function(){
 	});
 
 	$('#lotDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
-
+    $.aaacplApp.getUserList();
 	_this.loadLotRows();
 };
 
 
-$.aaacplApp.manageLot.loadLotRows = function(userListDetails){
+$.aaacplApp.manageLot.loadLotRows = function(){
 	if($.aaacplApp.queryParams('auctionid') != ""){
 		$(".overlay").show();
 		$.aaacplApp.ajaxCall("GET","lots/list/"+$.aaacplApp.queryParams('auctionid'),function success(response){
@@ -145,27 +147,33 @@ $.aaacplApp.manageLot.loadLotRows = function(userListDetails){
 
 			var lotList = response.lotsResponseList || [];
 			$.each(lotList, function(key , value){
+				var lotRow = //Modal for managing participator
+                 '<div class="modal fade" tabindex="-1" role="dialog" id="manageParticipator-form' + value.id + '" aria-labelledby="model-heading">'+
+                   '<div class="modal-dialog">'+
+                    ' <div class="modal-content">'+
+                       '<div class="modal-header">'+
+                        ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+                        '   <span aria-hidden="true">×</span></button>'+
+                        ' <h4 class="modal-title" id="model-heading">Add participators</h4>'+
+                        '<div><span class="btn-box-tool" id="lotIdField"></span></div>'+
+                       '</div>'+
+                      '<form class="participatorForm" role="form" id="#participatorForm'+value.id+'">'+
+                       '<div class="modal-body">'+
+                      ' <label for="deptInputName">Participators </label>'+
+                      ' <select class="selectParticipator form-control" multiple="multiple" name="userIdList" required></select>'+
+                       '</div>'+
+                       '<div class="modal-footer">'+
+                       '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
+                       '  <button type="submit" class="btn btn-primary">Assign</button>'+
+                       '</div>'+
+                      '</form>'+
+                     '</div>'+
+                     '<!-- /.modal-content -->'+
+                   '</div>'+
+                   '<!-- /.modal-dialog -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
+                 '</div>'+
 
-			 var userListDetails= [];
-            // function to loop over ajax response and create user list details
-                function getUserList(userList){
-                       var getUserList = [];
-                       for( var i=0; i < userList.length; i++ ) {
-                           var userDetails = {};
-                           userDetails["id"] = userList[i].id;
-                           userDetails["text"] = userList[i].name;
-                           getUserList.push(userDetails);
-                       }
-                       return getUserList;
-                        }
-
-            // get list of participators for each lot
-            $.aaacplApp.ajaxCall("GET", 'user/list', function success(response){
-               var userList = response || [];
-               userListDetails = getUserList(userList);
-            }, function error(msg){});
-
-				var lotRow = '<div class="box box-default box-solid collapsed-box lot-row" id="ar-'+value.id+'">'+
+				'<div class="box box-default box-solid collapsed-box lot-row" id="ar-'+value.id+'">'+
 				' <div class="box-header with-border">'+
 				'  <h3 class="box-title">'+value.name+'</h3>'+
 				 ' <div class="box-tools pull-right">'+
@@ -175,7 +183,6 @@ $.aaacplApp.manageLot.loadLotRows = function(userListDetails){
 				'</div>'+
 				'<form id="editLotForm'+value.id+'" class="form" role="form">'+
 				'<div class="box-body">'+
-				'<div id="editLotFormSection">'+
 				 '<div class="form-group">'+
 				  ' <label for="lot'+value.id+'InputName">Lot Name</label>'+
 				   ' <input type="text" name="name" class="form-control" id="lot'+value.id+'InputName" value="'+value.name+'">'+
@@ -200,52 +207,32 @@ $.aaacplApp.manageLot.loadLotRows = function(userListDetails){
                      '  <input type="text" class="form-control pull-right" id="lot'+value.id+'DateRange" value="'+value.startDate+' - '+value.endDate+'">'+
                      '  </div><!-- /.input group -->'+
                    '</div><!-- /.form group -->'+
+                   '<div class="form-group">'+
+                                 '<label>Status</label>'+
+                                   '<select class="form-control" name="status">'+
+                                   '<option value="A">Active</option>'+
+                                   '<option value="I">Inactive</option>'+
+                                   '</select>'+
+                                 '</div>'+
 				 '<!-- Description -->'+
                      '<div class="form-group">'+
                      '<label>Description</label>'+
                      '<textarea class="form-control" name="description" id="lot'+value.id+'InputName" value="'+value.description+'"></textarea>'+
                      '</div>'+
 				'</div>'+
-				'</div>'+
 				'<div class="box-footer">'+
 					'  <button type="submit" class="btn bg-orange">UPDATE</button>'+
 					'  <button type="button" class="btn">Reset</button>'+
 				'</div>'+
 				'</form>'+
-				 //Modal for managing participator
-                		 '<div class="modal fade" tabindex="-1" role="dialog" id="manageParticipator-form' + value.id + '" aria-labelledby="model-heading">'+
-                          '<div class="modal-dialog" role="document">'+
-                           ' <div class="modal-content">'+
-                              '<div class="modal-header">'+
-                               ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
-                               '   <span aria-hidden="true">×</span></button>'+
-                               ' <h4 class="modal-title" id="model-heading">Add participators</h4>'+
-                              '</div>'+
-                			  '<form class="participatorForm" role="form" id="#participatorForm'+value.id+'">'+
-                              '<div class="modal-body">'+
-
-                			 '<div class="form-group">'+
-                			  ' <label for="deptInputName">Participators </label>'+
-                			  ' <select class="selectParticipator form-control" multiple="multiple" name="userIdList" required></select>'+
-                			 '</div>'+
-                              '</div>'+
-                              '<div class="modal-footer">'+
-                              '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-                              '  <button type="submit" class="btn btn-primary">Assign</button>'+
-                              '</div>'+
-                			  '</form>'+
-                            '</div>'+
-                            '<!-- /.modal-content -->'+
-                          '</div>'+
-                          '<!-- /.modal-dialog -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
-                        '</div>';
 			'</div>';
 
 			 $("#lot-rows-cont").append(lotRow);
 			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
+			 $('#lotIdField').html("LOT ID: "+value.id);
 
              $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
-               data: userListDetails
+               data: $.aaacplApp.dataStorage.userList
                });
 
                 $('#participatorForm'+ value.id).submit(function(event){
@@ -293,7 +280,6 @@ $.aaacplApp.manageLot.loadLotRows = function(userListDetails){
 						 lotsPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
 						 lotsPost["updatedBy"] = $.aaacplApp.getLoggedInUserId();
 						 lotsPost["auctionId"] = $.aaacplApp.queryParams('auctionid');
-						 lotsPost["status"] = $.aaacplApp.queryParams('A');
 					$(".overlay").show();
 					$.aaacplApp.ajaxCall("PUT", 'lots/update', function success(response){
 						$(".overlay").hide();

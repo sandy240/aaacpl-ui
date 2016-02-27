@@ -16,6 +16,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
 	'<div class="box box-solid manage">'+
              '<div class="box-header">'+
                '<h3 class="box-title">Auctions</h3>'+
+               '<div><a href="javascript:history.back()" class="btn btn-box-tool"><span id="departmentIdField"></span></a></div>'+
 			   '<div class="box-tools pull-right">'+
 			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-auction-form">New Auction</button>'+
 			   '</div>'+
@@ -93,6 +94,8 @@ $.aaacplApp.manageAuction.executeScript = function(){
 		// be default hiding the success and error alert messages
 		$('#form-success').hide();
 		$('#form-failure').hide();
+
+		$('#departmentIdField').html("DEPARTMENT ID: "+$.aaacplApp.queryParams('deptid'));
 
 		var createAuctionForm = $('#createAuctionForm');
 		
@@ -187,6 +190,14 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                        '<option value="2">Reverse Auction</option>'+
                                                                        '</select>'+
                                                                      '</div>'+
+                                                         '<!-- status -->'+
+                                                                     '<div class="form-group">'+
+                                                                     '<label>Status</label>'+
+                                                                       '<select class="form-control" name="status">'+
+                                                                       '<option value="A">Active</option>'+
+                                                                       '<option value="I">Inactive</option>'+
+                                                                       '</select>'+
+                                                                     '</div>'+
                                                         '<!-- auction Catalog -->'+
                                                                      '<div class="form-group">'+
                                                                      '<label>Catalog</label>'+
@@ -218,7 +229,6 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              						 auctionPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
              						 auctionPost["updatedBy"] = $.aaacplApp.getLoggedInUserId();
              						 auctionPost["deptId"] = $.aaacplApp.queryParams('deptid');
-             						 auctionPost["status"] = "A";
              					$(".overlay").show();
              					$.aaacplApp.ajaxCall("PUT", 'auction/update', function success(response){
              						$(".overlay").hide();

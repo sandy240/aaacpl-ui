@@ -111,6 +111,13 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 			  ' <label for="dept'+value.id+'InputName">Department Name</label>'+
 			   ' <input type="text" class="form-control" id="dept'+value.id+'InputName" name="name" value="'+value.name+'" required>'+
 			 '</div>'+
+              '<div class="form-group">'+
+              '<label for="dept'+value.id+'status">Status</label>'+
+                '<select class="form-control" name="status">'+
+                '<option value="A">Active</option>'+
+                '<option value="I">Inactive</option>'+
+                '</select>'+
+              '</div>'+
 			 '<div class="form-group">'+
 			 ' <label for="dept'+value.id+'InputLogoFile">Department Logo</label>'+
 			   ' <input type="file" class="form-control" name="logoPath" id="dept'+value.id+'InputLogoFile">'+
