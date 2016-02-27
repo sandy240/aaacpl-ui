@@ -3,13 +3,15 @@ $.aaacplApp.manageDept.getLayout = function (){
 	/***
 	** COMPLETE DEPARTMENT PAGE LAYOUT 
 	**/
-	var tmpl = '<div id="form-success">'+
+	var tmpl = '<div id="form-success" style="display:none;">'+
                '<div class="alert alert-success">'+
+               '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
                '<strong>Department has been created/updated successfully! </strong>'+
                '</div>'+
                '</div>'+
-			   '<div id="form-failure">'+
+			   '<div id="form-failure" style="display:none;">'+
               '<div class="alert alert-danger">'+
+              '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
               '<strong>Error !</strong> <span class="message-text"></span>'+
               '</div>'+
               '</div>'+
@@ -32,6 +34,12 @@ $.aaacplApp.manageDept.getLayout = function (){
                ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
                '   <span aria-hidden="true">×</span></button>'+
                ' <h4 class="modal-title" id="model-heading">New Department</h4>'+
+                '<div id="deptForm-failure" style="display:none;">'+
+                 '<div class="alert alert-danger">'+
+                 '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
+                 '<strong>Error !</strong> <span class="message-text"></span>'+
+                 '</div>'+
+                 '</div>'+
               '</div>'+
 			  '<form class="form" role="form">'+
               '<div class="modal-body">'+
@@ -46,7 +54,8 @@ $.aaacplApp.manageDept.getLayout = function (){
               '</div>'+
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-              '  <button type="submit" class="btn btn-primary">Save changes</button>'+
+              '  <button type="submit" class="btn bg-orange">Save changes</button>'+
+              '  <button type="reset" class="btn">Reset</button>'+
               '</div>'+
 			  '</form>'+
             '</div>'+
@@ -62,11 +71,7 @@ $.aaacplApp.manageDept.executeScript = function(){
 	var _this = this;
 	
 	_this.loadDeptRows();
-	
-	$('#form-success').hide();
-		$('#form-failure').hide();
 
-	
 	var addNewDeptForm = $("#add-dept-form form");
 	addNewDeptForm.submit(function(event){
 		event.preventDefault(); // Prevent the form from submitting via the browser
@@ -78,12 +83,17 @@ $.aaacplApp.manageDept.executeScript = function(){
 		$(".overlay").show();
 		$.aaacplApp.ajaxCall("POST","department/create",function success(response){
 			$(".overlay").hide();
-			if(response.successMessage && response.successMessage == "SUCCESS"){
+			if(response.successMessage){
 				$('#add-dept-form').modal('hide');
+				$('#form-success').show();
 				_this.loadDeptRows();
-			}
+			}else {
+                $('#deptForm-failure').show().show();
+                $('#deptForm-failure .message-text').html('Unable to create department. Please try again later.');
+            }
 		}, function error(msg){
 			$(".overlay").hide();
+			$('#deptForm-failure').show();
 		}, JSON.stringify(payload));
 	});
 	
@@ -125,13 +135,15 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 			'</div>'+
 			'<div class="box-footer">'+
 				'<button type="submit" class="btn bg-orange">UPDATE</button>'+
-                ' <button type="button" class="btn" data-dismiss="modal">Reset</button>'+
+                ' <button type="button" id="resetEditDept" class="btn">Reset</button>'+
 			'</div>'+
 			'</form>'+
 		'</div>';
 
 		 $("#dept-rows-cont").append(deptRow);
-
+		 $("#resetEditDept").click(function(){
+		     $("#editDeptForm"+value.id)[0].reset();
+		 });
 
         $('#editDeptForm' + value.id).submit(function(event){
             var deptID = event.target.id.replace('editDeptForm','');
@@ -145,7 +157,7 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
             $(".overlay").show();
             $.aaacplApp.ajaxCall("PUT", 'department/update', function success(response){
                 $(".overlay").hide();
-                if(response.successMessage && response.successMessage != ""){
+                if(response.successMessage){
                     $('#form-success').show();
                 } else {
                     $('#form-failure').show();

@@ -3,13 +3,15 @@ $.aaacplApp.manageLot.getLayout = function (){
 	/***
 	** COMPLETE LOT PAGE LAYOUT
 	**/
-	var tmpl = '<div id="form-success">'+
+	var tmpl = '<div id="form-success" style="display:none;">'+
                '<div class="alert alert-success">'+
                '<strong>Lot has been created/updated successfully! </strong>'+
+               '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
                '</div>'+
                '</div>'+
-			   '<div id="form-failure">'+
+			   '<div id="form-failure" style="display:none;">'+
               '<div class="alert alert-danger">'+
+              '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
               '<strong>Error !</strong> <span class="message-text"></span>'+
               '</div>'+
               '</div>'+
@@ -72,6 +74,7 @@ $.aaacplApp.manageLot.getLayout = function (){
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
               '  <button type="submit" class="btn btn-primary">Save changes</button>'+
+              '  <button type="reset" class="btn">Reset</button>'+
               '</div>'+
 			  '</form>'+
                '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
@@ -86,10 +89,6 @@ $.aaacplApp.manageLot.getLayout = function (){
 
 $.aaacplApp.manageLot.executeScript = function(){
 	var _this = this;
-
-	// be default hiding the success and error alert messages
-		$('#form-success').hide();
-		$('#form-failure').hide();
 
     $('#auctionIdField').html("AUCTION ID: "+$.aaacplApp.queryParams('auctionid'));
 
@@ -115,18 +114,18 @@ $.aaacplApp.manageLot.executeScript = function(){
 		$.aaacplApp.ajaxCall("POST", 'lots/create', function success(response){
 			$(".overlay").hide();
 			$("#add-lot-form").modal('hide');
-			//if(response.successMessage && response.successMessage != ""){
+			if(response.successMessage){
 				$('#form-success').show();
 				_this.loadLotRows();
-			/*} else {
+			} else {
 				$('#form-failure').show();
 				$('#form-failure .message-text').html('Unable to create lot. Please try again.');
-				}*/
+				}
 			}, function error(msg){
 			$(".overlay").hide();
 			$("#add-lot-form").modal('hide');
 			$('#form-failure').show();
-			$('#form-failure .message-text').html('Unable to create auction. Please try again later.');
+			$('#form-failure .message-text').html('Unable to create lot. Please try again later.');
 		},
 		//POST PAYLOAD
 		JSON.stringify(lotsPost));
@@ -156,12 +155,26 @@ $.aaacplApp.manageLot.loadLotRows = function(){
                         '   <span aria-hidden="true">×</span></button>'+
                         ' <h4 class="modal-title" id="model-heading">Add participators</h4>'+
                         '<div><span class="btn-box-tool" id="lotIdField"></span></div>'+
+                        '<div id="participatorForm-success" style="display:none;">'+
+                       '<div class="alert alert-success">'+
+                       '<strong>Participator added successfully! </strong>'+
+                       '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
                        '</div>'+
-                      '<form class="participatorForm" role="form" id="#participatorForm'+value.id+'">'+
+                       '</div>'+
+                       '<div id="participatorForm-failure" style="display:none;">'+
+                      '<div class="alert alert-danger">'+
+                      '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
+                      '<strong>Error !</strong> <span class="message-text"></span>'+
+                      '</div>'+
+                      '</div>'+
+                       '</div>'+
+                      '<form class="participatorForm" role="form" id="participatorForm'+value.id+'">'+
                        '<div class="modal-body">'+
-                      ' <label for="deptInputName">Participators </label>'+
-                      ' <select class="selectParticipator form-control" multiple="multiple" name="userIdList" required></select>'+
-                       '</div>'+
+                       '<div class="form-group">'+
+                        ' <label for="deptInputName">Participators </label>'+
+                        ' <select class="selectParticipator form-control select2" multiple="multiple" name="userIdList" data-placeholder="Select user(s)" style="width: 100%;" required></select>'+
+                         '</div>'+
+                         '</div>'+
                        '<div class="modal-footer">'+
                        '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
                        '  <button type="submit" class="btn btn-primary">Assign</button>'+
@@ -222,12 +235,15 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 				'</div>'+
 				'<div class="box-footer">'+
 					'  <button type="submit" class="btn bg-orange">UPDATE</button>'+
-					'  <button type="button" class="btn">Reset</button>'+
+					' <button type="button" id="resetEditLot" class="btn">Reset</button>'+
 				'</div>'+
 				'</form>'+
 			'</div>';
 
 			 $("#lot-rows-cont").append(lotRow);
+			  $("#resetEditLot").click(function(){
+                          		     $("#editLotForm"+value.id)[0].reset();
+                          		 });
 			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
 			 $('#lotIdField').html("LOT ID: "+value.id);
 
@@ -243,24 +259,25 @@ $.aaacplApp.manageLot.loadLotRows = function(){
              					event.preventDefault(); // Prevent the form from submitting via the browser
              					var formData = $('#participatorForm' + lotID).serializeArray(); // JSON data of values entered in form
              					var participatorPost = {};
+             					participatorPost["userIdList"] = [];
              						 $.each(formData, function (key, item) {
-             										 participatorPost[item.name] = item.value;
+             										 participatorPost["userIdList"].push(item.value);
              									 });
              						 participatorPost["lotId"] = lotID;
              						 participatorList.participationInfoList.push(participatorPost);
              					$(".overlay").show();
              					$.aaacplApp.ajaxCall("POST", 'participator/create', function success(response){
              						$(".overlay").hide();
-             						if(response.successMessage && response.successMessage != ""){
-             							$('#form-success').show();
+             						if(response.successMessage){
+             							$('#participatorForm-success').show();
              						} else {
-             							$$('#form-failure').show().show();
-             							$('#form-failure .message-text').html('Unable to add participator. Please try again later.');
+             							$('#participatorForm-failure').show().show();
+             							$('#participatorForm-failure .message-text').html('Unable to add participator. Please try again later.');
              						}
              					}, function error(msg){
              						$(".overlay").hide();
-             						$('#form-failure').show();
-             						$('#form-failure .message-text').html('Unable to add participator. Please try again later.');
+             						$('#participatorForm-failure').show();
+             						$('#participatorForm-failure .message-text').html('Unable to add participator. Please try again later.');
              					},
              					//POST PAYLOAD
              					JSON.stringify(participatorList));
@@ -283,7 +300,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 					$(".overlay").show();
 					$.aaacplApp.ajaxCall("PUT", 'lots/update', function success(response){
 						$(".overlay").hide();
-						if(response.successMessage && response.successMessage != ""){
+						if(response.successMessage){
 							$('#form-success').show();
 						} else {
 							$('#form-failure').show();

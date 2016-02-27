@@ -7,13 +7,14 @@ $.aaacplApp.registerPage.getLayout = function (){
 	   ' <div id="register-success">'+
 		'	<div class="alert alert-success">'+
 		'	<strong>You have Registered successfully ! </strong>'+
+		'<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
 		'	</div>'+
 		'	<p>A verification link has been sent to your email address. Please check you mail.<br><br> Please note: You will be able to login once admin verify the other details and activate your account. You will receive a notification for the same.</p>'+
 		'</div>'+
 		'<div id="register-form">'+
         '<p class="login-box-msg">GET REGISTERED FOR THE MEMBERSHIP</p>'+
 		'<div class="alert alert-danger" id="register-failure">'+
-		'<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>'+
+		'<span class="close" data-dismiss="alert" aria-label="close">&#215;</span>'+
 		'  <strong>Error !</strong> <span class="message-text"></span>'+
 		'</div>'+
         '<form method="post" action="" id="registerForm">'+

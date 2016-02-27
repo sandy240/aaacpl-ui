@@ -3,13 +3,15 @@ $.aaacplApp.manageAuction.getLayout = function (){
 	/***
 	** COMPLETE AUCTION PAGE LAYOUT 
 	**/
-	var tmpl = '<div id="form-success">'+
+	var tmpl = '<div id="form-success" style="display:none;">'+
                '<div class="alert alert-success">'+
                '<strong>Auction has been created/updated successfully! </strong>'+
+               '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
                '</div>'+
                '</div>'+
-			   '<div id="form-failure">'+
+			   '<div id="form-failure" style="display:none;">'+
               '<div class="alert alert-danger">'+
+              '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
               '<strong>Error !</strong> <span class="message-text"></span>'+
               '</div>'+
               '</div>'+
@@ -75,6 +77,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
               '  <button type="submit" class="btn btn-primary">Save changes</button>'+
+              '  <button type="reset" class="btn">Reset</button>'+
               '</div>'+
 			  '</form>'+
           '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
@@ -90,10 +93,6 @@ $.aaacplApp.manageAuction.getLayout = function (){
 $.aaacplApp.manageAuction.executeScript = function(){
 
 		var _this = this;
-		
-		// be default hiding the success and error alert messages
-		$('#form-success').hide();
-		$('#form-failure').hide();
 
 		$('#departmentIdField').html("DEPARTMENT ID: "+$.aaacplApp.queryParams('deptid'));
 
@@ -119,7 +118,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
             $.aaacplApp.ajaxCall("POST", 'auction/create', function success(response){
 				$(".overlay").hide();
 				$("#add-auction-form").modal('hide');
-				if(response.successMessage && response.successMessage != ""){
+				if(response.successMessage){
 					$('#form-success').show();
 					_this.loadAuctionRows();
 				} else {
@@ -206,12 +205,15 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                      '</div>'+
                                  				'<div class="box-footer">'+
                                  					'  <button type="submit" class="btn bg-orange">UPDATE</button>'+
-                                 					 ' <button type="button" class="btn" data-dismiss="modal">Reset</button>'+
+                                 					' <button type="button" id="resetEditAuction" class="btn">Reset</button>'+
                                  				'</div>'+
                                  				 '</form>'+
                                  			'</div>';
 			 
 			 $("#auction-rows-cont").append(auctionRow);
+			  $("#resetEditAuction").click(function(){
+             		     $("#editAuctionForm"+value.auctionId)[0].reset();
+             		 });
 			 $('#auction'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
 
 
@@ -232,7 +234,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              					$(".overlay").show();
              					$.aaacplApp.ajaxCall("PUT", 'auction/update', function success(response){
              						$(".overlay").hide();
-             						if(response.successMessage && response.successMessage != ""){
+             						if(response.successMessage){
              							$('#form-success').show();
              						} else {
              							$('#form-failure').show();

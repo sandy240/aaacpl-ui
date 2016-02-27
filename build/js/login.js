@@ -8,7 +8,7 @@ $.aaacplApp.loginPage.getLayout = function (){
 	  '<div id="login-details">'+
        ' <p class="login-box-msg">LOGIN TO GET  STARTED</p>'+
 		'<div class="alert alert-danger" id="login-failure">'+
-		'<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>'+
+		'<span class="close" data-dismiss="alert" aria-label="close">&#215;</span>'+
 		'  <strong><span class="message-text">Invalid username or password </span></strong>'+
 		'</div>'+
         '<form action="" method="post" id="login">'+
