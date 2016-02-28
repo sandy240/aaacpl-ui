@@ -76,7 +76,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
                   '<!-- /.modal-body -->'+
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-              '  <button type="submit" class="btn btn-primary">Save changes</button>'+
+              '  <button type="submit" class="btn bg-orange">Save changes</button>'+
               '  <button type="reset" class="btn">Reset</button>'+
               '</div>'+
 			  '</form>'+
@@ -91,10 +91,16 @@ $.aaacplApp.manageAuction.getLayout = function (){
 };
 
 $.aaacplApp.manageAuction.executeScript = function(){
-
 		var _this = this;
 
-		$('#departmentIdField').html("DEPARTMENT ID: "+$.aaacplApp.queryParams('deptid'));
+        var deptName;
+        var deptList = $.aaacplApp.dataStorage.deptList;
+        $.each(deptList, function(key , value){
+            if(value.id == $.aaacplApp.queryParams('deptid')){
+                deptName = value.name;
+            }
+        });
+		$('#departmentIdField').html("DEPARTMENT NAME: "+deptName);
 
 		var createAuctionForm = $('#createAuctionForm');
 		
@@ -137,7 +143,6 @@ $.aaacplApp.manageAuction.executeScript = function(){
 
 	
 	$('#auctionDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
-
 	_this.loadAuctionRows();
 	
 };
@@ -147,17 +152,16 @@ $.aaacplApp.manageAuction.executeScript = function(){
 $.aaacplApp.manageAuction.loadAuctionRows = function(){
 	if($.aaacplApp.queryParams('deptid') != ""){
 		$(".overlay").show();
-		$.aaacplApp.ajaxCall("GET","auction/list/" + $.aaacplApp.queryParams('deptid'),function success(response){
-			$(".overlay").hide();
+			var auctionList = $.aaacplApp.dataStorage.auctionList;
 			$("#auction-rows-cont").html('');
-			var auctionList = response.auctionResponseList || [];
+		    $(".overlay").hide();
 			$.each(auctionList, function(key , value){
 				var auctionRow = '<div class="box box-default box-solid collapsed-box auction-row" id="ar-'+value.auctionId+'">'+
                                  				' <div class="box-header with-border">'+
                                  				'  <h3 class="box-title">'+value.name+'</h3>'+
                                  				 ' <div class="box-tools pull-right">'+
                                  				  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
-                                 				  '  <a href="#/manage/lots?auctionid='+value.auctionId+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE LOTS</a>'+
+                                 				  '  <a href="#/manage/lots?auctionid='+value.auctionId+'" id="href'+value.auctionId+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE LOTS</a>'+
                                  				  '</div>'+
                                  				'</div>'+
                                                      '<form id="editAuctionForm'+value.auctionId+'" class="form" role="form">'+
@@ -211,7 +215,12 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                  			'</div>';
 			 
 			 $("#auction-rows-cont").append(auctionRow);
-			  $("#resetEditAuction").click(function(){
+
+			 $("#href"+value.auctionId).on('click', function() {
+                         $.aaacplApp.getLotList(value.auctionId);
+             });
+
+			 $("#resetEditAuction").click(function(){
              		     $("#editAuctionForm"+value.auctionId)[0].reset();
              		 });
 			 $('#auction'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
@@ -250,8 +259,5 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              				});
 
 			});
-		}, function error(msg){
-			$(".overlay").hide();
-		});
 	}
 };

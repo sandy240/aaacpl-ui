@@ -5,7 +5,7 @@ $.aaacplApp.manageLot.getLayout = function (){
 	**/
 	var tmpl = '<div id="form-success" style="display:none;">'+
                '<div class="alert alert-success">'+
-               '<strong>Lot has been created/updated successfully! </strong>'+
+               '<strong>Success !</strong> <span class="message-text"></span>'+
                '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
                '</div>'+
                '</div>'+
@@ -73,7 +73,7 @@ $.aaacplApp.manageLot.getLayout = function (){
                                      '<!-- /.modal-body -->'+
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-              '  <button type="submit" class="btn btn-primary">Save changes</button>'+
+              '  <button type="submit" class="btn bg-orange">Save changes</button>'+
               '  <button type="reset" class="btn">Reset</button>'+
               '</div>'+
 			  '</form>'+
@@ -89,8 +89,14 @@ $.aaacplApp.manageLot.getLayout = function (){
 
 $.aaacplApp.manageLot.executeScript = function(){
 	var _this = this;
-
-    $('#auctionIdField').html("AUCTION ID: "+$.aaacplApp.queryParams('auctionid'));
+    var auctionName;
+    var auctionList = $.aaacplApp.dataStorage.auctionList;
+        $.each(auctionList, function(key , value){
+            if(value.auctionId == $.aaacplApp.queryParams('auctionid')){
+                auctionName = value.name;
+            }
+        });
+    $('#auctionIdField').html("AUCTION NAME: "+auctionName);
 
 	var createLotsForm = $('#createLotsForm');
 
@@ -116,6 +122,7 @@ $.aaacplApp.manageLot.executeScript = function(){
 			$("#add-lot-form").modal('hide');
 			if(response.successMessage){
 				$('#form-success').show();
+				$('#form-success .message-text').html('Lot created.')
 				_this.loadLotRows();
 			} else {
 				$('#form-failure').show();
@@ -132,7 +139,6 @@ $.aaacplApp.manageLot.executeScript = function(){
 	});
 
 	$('#lotDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
-    $.aaacplApp.getUserList();
 	_this.loadLotRows();
 };
 
@@ -140,12 +146,10 @@ $.aaacplApp.manageLot.executeScript = function(){
 $.aaacplApp.manageLot.loadLotRows = function(){
 	if($.aaacplApp.queryParams('auctionid') != ""){
 		$(".overlay").show();
-		$.aaacplApp.ajaxCall("GET","lots/list/"+$.aaacplApp.queryParams('auctionid'),function success(response){
+		var lotList = $.aaacplApp.dataStorage.lotList;
+		    $("#lot-rows-cont").html('');
 			$(".overlay").hide();
-			$("#lot-rows-cont").html('');
-
-			var lotList = response.lotsResponseList || [];
-			$.each(lotList, function(key , value){
+		$.each(lotList, function(key , value){
 				var lotRow = //Modal for managing participator
                  '<div class="modal fade" tabindex="-1" role="dialog" id="manageParticipator-form' + value.id + '" aria-labelledby="model-heading">'+
                    '<div class="modal-dialog">'+
@@ -154,13 +158,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
                         ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
                         '   <span aria-hidden="true">×</span></button>'+
                         ' <h4 class="modal-title" id="model-heading">Add participators</h4>'+
-                        '<div><span class="btn-box-tool" id="lotIdField"></span></div>'+
-                        '<div id="participatorForm-success" style="display:none;">'+
-                       '<div class="alert alert-success">'+
-                       '<strong>Participator added successfully! </strong>'+
-                       '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-                       '</div>'+
-                       '</div>'+
+                        '<div><span class="btn-box-tool" id="lotIdField'+value.id+'"></span></div>'+
                        '<div id="participatorForm-failure" style="display:none;">'+
                       '<div class="alert alert-danger">'+
                       '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
@@ -177,7 +175,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
                          '</div>'+
                        '<div class="modal-footer">'+
                        '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-                       '  <button type="submit" class="btn btn-primary">Assign</button>'+
+                       '  <button type="submit" class="btn bg-orange">Assign</button>'+
                        '</div>'+
                       '</form>'+
                      '</div>'+
@@ -241,11 +239,23 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 			'</div>';
 
 			 $("#lot-rows-cont").append(lotRow);
+
+			  var lotName;
+              var lotList = $.aaacplApp.dataStorage.lotList;
+
+              $.each(lotList, function(key , item){
+                  if(item.id == value.id){
+                      lotName = value.name;
+                  }
+              });
+              $('#lotIdField'+value.id).html("LOT NAME: "+lotName);
+
+
 			  $("#resetEditLot").click(function(){
-                          		     $("#editLotForm"+value.id)[0].reset();
-                          		 });
+                 $("#editLotForm"+value.id)[0].reset();
+             });
+
 			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
-			 $('#lotIdField').html("LOT ID: "+value.id);
 
              $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
                data: $.aaacplApp.dataStorage.userList
@@ -253,7 +263,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 
                 $('#participatorForm'+ value.id).submit(function(event){
                                 var participatorList = {
-                                "participationInfoList":[]
+                                "participatorInfoList":[]
                                 };
              					var lotID = event.target.id.replace('participatorForm','');
              					event.preventDefault(); // Prevent the form from submitting via the browser
@@ -264,12 +274,14 @@ $.aaacplApp.manageLot.loadLotRows = function(){
              										 participatorPost["userIdList"].push(item.value);
              									 });
              						 participatorPost["lotId"] = lotID;
-             						 participatorList.participationInfoList.push(participatorPost);
+             						 participatorList.participatorInfoList.push(participatorPost);
              					$(".overlay").show();
              					$.aaacplApp.ajaxCall("POST", 'participator/create', function success(response){
              						$(".overlay").hide();
              						if(response.successMessage){
-             							$('#participatorForm-success').show();
+             						    $('#manageParticipator-form' + value.id).modal('hide');
+             							$('#form-success').show();
+             							$('#form-success .message-text').html('Participators added');
              						} else {
              							$('#participatorForm-failure').show().show();
              							$('#participatorForm-failure .message-text').html('Unable to add participator. Please try again later.');
@@ -302,6 +314,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 						$(".overlay").hide();
 						if(response.successMessage){
 							$('#form-success').show();
+							$('#form-success .message-text').html('Lot updated.');
 						} else {
 							$('#form-failure').show();
 							$('#form-failure .message-text').html('Unable to update lot. Please try again.');
@@ -315,9 +328,6 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 					JSON.stringify(lotsPost));
 				});
 			});
-		}, function error(msg){
-			$(".overlay").hide();
-		});
 	}
 };
      

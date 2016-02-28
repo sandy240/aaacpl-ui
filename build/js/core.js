@@ -35,7 +35,13 @@ $.aaacplApp = {
 			"country": ""
 		},
 		// list of users
-		userList: []
+		userList: [],
+
+		deptList: [],
+
+		auctionList : [],
+
+		lotList : []
 	},
 
 	// a map to store all the template and their relative path
@@ -127,7 +133,11 @@ $.aaacplApp = {
 		
 		//Add all possible routes
 		_this.addRoutes();
-		
+
+		// load required data
+		_this.getDeptList();
+		_this.getUserList();
+
 		_this.wrapperElem = $('#main-viewport');
 		
 
@@ -326,25 +336,12 @@ $.aaacplApp = {
 		}
 		return "";
 	},
-    tryParseJSON : function (jsonString){
-              try {
-                  var jsonData = JSON.parse(jsonString);
-                  // Handle non-exception-throwing cases:
-                  // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
-                  // but... JSON.parse(null) returns 'null', and typeof null === "object",
-                  // so we must check for that, too.
-                  if (jsonData && typeof jsonData === "object" && jsonData !== null) {
-                      return jsonData;
-                  }
-              }
-              catch (e) {}
-              return false;
-    },
 
 	ajaxCall : function(method, apiUrl, successCallback, errorCallback, payload){
 		var _this = this;
 		$.ajax({
 		   type: method,
+		   async: false,
 		   url: _this.apiSrvPath + apiUrl,
 		   dataType : "json",
 		   data : typeof payload != 'undefined' ? payload : '',
@@ -400,6 +397,33 @@ $.aaacplApp = {
                         });
                     }, function error(msg){});
 	},
+
+	getDeptList : function() {
+	var _this = this;
+	// get list of departments
+	_this.ajaxCall("GET", 'department/list', function success(response){
+                    _this.dataStorage.deptList = response.departmentResponseList || [];
+                     }, function error(msg){});
+
+	},
+
+	getAuctionList : function(deptId) {
+    	var _this = this;
+    	// get list of auctions
+    	_this.ajaxCall("GET", 'auction/list/'+deptId, function success(response){
+                        _this.dataStorage.auctionList = response.auctionResponseList || [];
+                         }, function error(msg){});
+
+    },
+
+    getLotList : function(auctionId) {
+            var _this = this;
+            // get list of lots
+            _this.ajaxCall("GET", 'lots/list/'+auctionId, function success(response){
+                            _this.dataStorage.lotList = response.lotsResponseList || [];
+                             }, function error(msg){});
+
+            }
 };
 $.aaacplApp.pageHeader = {};
 $.aaacplApp.pageSidebar = {};

@@ -69,7 +69,6 @@ $.aaacplApp.manageDept.getLayout = function (){
 
 $.aaacplApp.manageDept.executeScript = function(){
 	var _this = this;
-	
 	_this.loadDeptRows();
 
 	var addNewDeptForm = $("#add-dept-form form");
@@ -100,19 +99,17 @@ $.aaacplApp.manageDept.executeScript = function(){
 };
 
 $.aaacplApp.manageDept.loadDeptRows = function (){
-	$(".overlay").show();
-	$.aaacplApp.ajaxCall("GET","department/list",function success(response){
-		$(".overlay").hide();
-		$("#dept-rows-cont").html('');
-		var deptList = response.departmentResponseList;
+	    $(".overlay").show();
+		var deptList = $.aaacplApp.dataStorage.deptList;
+		    $("#dept-rows-cont").html('');
+		    $(".overlay").hide();
 		$.each(deptList, function(key , value){
-			
 			var deptRow = '<div class="box box-default box-solid collapsed-box dept-row" id="dr-'+value.id+'">'+
 			' <div class="box-header with-border">'+
 			'  <h3 class="box-title">'+value.name+'</h3>'+
 			 ' <div class="box-tools pull-right">'+
 			  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
-			  '  <a href="#/manage/auctions?deptid='+value.id+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE AUCTIONS</a>'+
+			  '  <a href="#/manage/auctions?deptid='+value.id+'" id="href'+value.id+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE AUCTIONS</a>'+
 			  '</div>'+
 			'</div>'+
 			'<form id="editDeptForm'+value.id+'" class="form" role="form">'+
@@ -141,6 +138,11 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		'</div>';
 
 		 $("#dept-rows-cont").append(deptRow);
+
+		 $("#href"+value.id).on('click', function() {
+            $.aaacplApp.getAuctionList(value.id);
+         });
+
 		 $("#resetEditDept").click(function(){
 		     $("#editDeptForm"+value.id)[0].reset();
 		 });
@@ -173,9 +175,6 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
         });
 			
 		});
-	}, function error(msg){
-		$(".overlay").hide();
-	});
 }
 
      
