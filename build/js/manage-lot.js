@@ -258,7 +258,23 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
 
              $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
-               data: $.aaacplApp.dataStorage.userList
+               data: $.aaacplApp.dataStorage.userList,
+               initSelection : function (element, callback) {
+                       var selectedData = [];
+                       var existingParticipators = {};
+                       var linkedUserIds = value.linkedUserIds || [];
+                       var userList = $.aaacplApp.dataStorage.userList;
+
+                       $.each(linkedUserIds, function (key, item) {
+                                 $.each(userList, function(key , value){
+                                     if(value.id == item){
+                                         existingParticipators = value;
+                                     }
+                                 });
+                         selectedData.push(existingParticipators);//Push values to data array
+                       });
+                       callback(selectedData); // existing values
+                   }
                });
 
                 $('#participatorForm'+ value.id).submit(function(event){
