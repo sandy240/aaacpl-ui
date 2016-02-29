@@ -228,7 +228,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 				 '<!-- Description -->'+
                      '<div class="form-group">'+
                      '<label>Description</label>'+
-                     '<textarea class="form-control" name="description" id="lot'+value.id+'InputName" value="'+value.description+'"></textarea>'+
+                     '<textarea class="form-control" name="description" id="lot'+value.id+'InputName">'+value.description+'</textarea>'+
                      '</div>'+
 				'</div>'+
 				'<div class="box-footer">'+

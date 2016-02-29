@@ -183,7 +183,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                          '<!-- Description -->'+
                                                                      '<div class="form-group">'+
                                                                      '<label>Description</label>'+
-                                                                     '<textarea class="form-control" name="description" id="auction'+value.auctionId+'Description" value="'+value.description+'"></textarea>'+
+                                                                     '<textarea class="form-control" name="description" id="auction'+value.auctionId+'Description">'+value.description+'</textarea>'+
                                                                      '</div>'+
                                                      	 '<!-- auction Type -->'+
                                                                      '<div class="form-group">'+

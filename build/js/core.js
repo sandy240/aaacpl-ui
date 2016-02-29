@@ -138,8 +138,20 @@ $.aaacplApp = {
 		_this.getDeptList();
 		_this.getUserList();
 
+        // load auction data if exists
+		var deptCookie = _this.readCookie('deptId');
+		if(deptCookie && deptCookie != ''){
+		    _this.getAuctionList(deptCookie);
+		}
+
+		 // load auction data if exists
+        var auctionCookie = _this.readCookie('auctionId');
+        if(auctionCookie && auctionCookie != ''){
+            _this.getLotList(auctionCookie);
+        }
+
 		_this.wrapperElem = $('#main-viewport');
-		
+
 
         // Setting a cookie for which the dashboard will be displayed instead of login page
         //document.cookie="uAuthIDAAACPL=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; //note : uncomment line for direct login
@@ -413,7 +425,8 @@ $.aaacplApp = {
     	_this.ajaxCall("GET", 'auction/list/'+deptId, function success(response){
                         _this.dataStorage.auctionList = response.auctionResponseList || [];
                          }, function error(msg){});
-
+        _this.deleteCookie('deptId');
+        _this.writeCookie('deptId',deptId,1);
     },
 
     getLotList : function(auctionId) {
@@ -422,7 +435,8 @@ $.aaacplApp = {
             _this.ajaxCall("GET", 'lots/list/'+auctionId, function success(response){
                             _this.dataStorage.lotList = response.lotsResponseList || [];
                              }, function error(msg){});
-
+             _this.deleteCookie('auctionId');
+             _this.writeCookie('auctionId',auctionId,1);
             }
 };
 $.aaacplApp.pageHeader = {};
