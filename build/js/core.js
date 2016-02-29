@@ -223,7 +223,7 @@ $.aaacplApp = {
 			_this.livePage.executeScript();
 		});
 		
-		//LIVE
+		//AUCTION
 		_this.route('/auction', 'auction', function () {	
 			var auctionListContents = _this.auctionListPage.getLayout();
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("AUCTIONS", auctionListContents , "Live and Upcoming"));
@@ -269,6 +269,14 @@ $.aaacplApp = {
 		}, function(){
 			_this.registerPage.executeScript();
 		});
+
+		//REPORT
+        _this.route('/reports', 'reports', function () {
+        var reportContent = _this.reportPage.getLayout();
+        return _this.wrapInCommonLayout(_this.pageContent.getLayout("REPORTS",  reportContent   , ""));
+        }, function(){
+        _this. reportPage   .executeScript();
+        });
 		
 	},
 	changeBodyLayoutType : function(pageClass){
