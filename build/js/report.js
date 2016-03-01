@@ -32,7 +32,8 @@ $.aaacplApp.reportPage.getLayout = function (){
                 '</div><!-- /.box-body -->'+
                 '<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
                 '<div class="box-footer">'+
-                ' <button type="submit" class="btn bg-orange">Generate Report</button>'+
+                ' <button type="button" class="btn bg-orange" id="btnSheet">Bid Sheet</button>'+
+				' <button type="button" class="btn bg-orange"  id="btnHistory">Bid History</button>'+
                 '</div>'+
                 '</form>'+
              ' </div>';
@@ -40,17 +41,30 @@ $.aaacplApp.reportPage.getLayout = function (){
 	return tmpl;
 };
 
+$.aaacplApp.reportPage.downloadHistory = function(){
+	var auctionId = $("#auctionIdLotReport").val();
+	$('#lotWiseReportForm-success').show();
+	window.open($.aaacplApp.apiSrvPath+'reports/bidSheet/'+auctionId);
+}
+$.aaacplApp.reportPage.downloadSheet = function(){
+	var auctionId = $("#auctionIdLotReport").val();
+	$('#lotWiseReportForm-success').show();
+	window.open($.aaacplApp.apiSrvPath+'reports/bidHistory/'+auctionId);
+}
 $.aaacplApp.reportPage.executeScript = function(){
 		var _this = this;
 		var deptList = $.aaacplApp.dataStorage.deptList;
 
         // on submit function of form is called to perform client side validation
-        $('#lotWiseReportForm').submit(function(event){
+        /*$('#lotWiseReportForm').submit(function(event){
             event.preventDefault(); // Prevent the form from submitting via the browser
             var auctionId = $("#auctionIdLotReport").val();
             $('#lotWiseReportForm-success').show();
             window.open($.aaacplApp.apiSrvPath+'reports/bidSheet/'+auctionId);
-        });
+        });*/
+		
+		$("#btnSheet").on('click',$.aaacplApp.reportPage.downloadSheet);
+		$("#btnHistory").on('click',$.aaacplApp.reportPage.downloadHistory);
 
         $.each(deptList, function (key, item) {
             $('#deptIdLotReport').append($('<option>', {

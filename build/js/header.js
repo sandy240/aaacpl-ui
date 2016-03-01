@@ -15,6 +15,7 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
          ' <button class="sidebar-toggle" data-toggle="offcanvas" role="button">'+
            ' <span class="sr-only">Toggle navigation</span>'+
          ' </button>'+
+		 '<span class="headertitle"><strong>E-Auction</strong><small class="hidden-xs"> - A.A.Auctioneers & Contractors Pvt. Ltd.</small></span>'+
          ' <!-- Navbar Right Menu -->'+
          ' <div class="navbar-custom-menu">'+
          '   <ul class="nav navbar-nav">'+

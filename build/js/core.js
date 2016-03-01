@@ -187,7 +187,13 @@ $.aaacplApp = {
 		//HOME - DASHBOARD
 		_this.route('/', 'home', function () {
 			//TODO - Dashbaord content will be passed to pageContent
-			var dashboard = "";
+			var dashboard = "<h3>Auction</h3><p>Click on &quot;Auction&quot; to select and participate in live auction</p>";
+			if(_this.dataStorage.userInfo.typeId == "1"){
+				dashboard = "<h3>Manage</h3><p>Click on &quot;Manage&quot; to add or modify Departments, Auctions or Lots</p><br><h3>Reports</h3><p>Click on &quot;Reports&quot; to generate reports auction or lot wise</p>";
+			}
+			if(_this.dataStorage.userInfo.typeId == "4"){
+				dashboard = "<h3>Observation</h3><p>Click on &quot;Observation&quot; to observe live bidding for selected live auction</p>";
+			}
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("DASHBOARD", dashboard , "Welcome"));
 		});
 		
