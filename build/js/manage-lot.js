@@ -138,7 +138,7 @@ $.aaacplApp.manageLot.executeScript = function(){
 		JSON.stringify(lotsPost));
 	});
 
-	$('#lotDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
+	$('#lotDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
 	_this.loadLotRows();
 };
 
@@ -255,7 +255,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
                  $("#editLotForm"+value.id)[0].reset();
              });
 
-			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
+			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
 
              $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
                data: $.aaacplApp.dataStorage.userList,

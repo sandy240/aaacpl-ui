@@ -44,12 +44,12 @@ $.aaacplApp.reportPage.getLayout = function (){
 $.aaacplApp.reportPage.downloadHistory = function(){
 	var auctionId = $("#auctionIdLotReport").val();
 	$('#lotWiseReportForm-success').show();
-	window.open($.aaacplApp.apiSrvPath+'reports/bidSheet/'+auctionId);
+	window.open($.aaacplApp.apiSrvPath+'reports/bidHistory/'+auctionId);
 }
 $.aaacplApp.reportPage.downloadSheet = function(){
 	var auctionId = $("#auctionIdLotReport").val();
 	$('#lotWiseReportForm-success').show();
-	window.open($.aaacplApp.apiSrvPath+'reports/bidHistory/'+auctionId);
+	window.open($.aaacplApp.apiSrvPath+'reports/bidSheet/'+auctionId);
 }
 $.aaacplApp.reportPage.executeScript = function(){
 		var _this = this;
