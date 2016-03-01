@@ -142,7 +142,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
 		});
 
 	
-	$('#auctionDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
+	$('#auctionDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
 	_this.loadAuctionRows();
 	
 };
@@ -223,7 +223,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 			 $("#resetEditAuction").click(function(){
              		     $("#editAuctionForm"+value.auctionId)[0].reset();
              		 });
-			 $('#auction'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD hh:mm:ss'});
+			 $('#auction'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
 
 
              $('#editAuctionForm' + value.auctionId).submit(function(event){
