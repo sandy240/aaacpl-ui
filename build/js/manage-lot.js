@@ -73,7 +73,7 @@ $.aaacplApp.manageLot.getLayout = function (){
                                      '<!-- /.modal-body -->'+
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-              '  <button type="submit" class="btn bg-orange">Save changes</button>'+
+              '  <button type="submit" class="btn bg-orange">Create</button>'+
               '  <button type="reset" class="btn">Reset</button>'+
               '</div>'+
 			  '</form>'+
@@ -86,7 +86,7 @@ $.aaacplApp.manageLot.getLayout = function (){
 
 	return tmpl;
 };
-
+$.aaacplApp.manageLot.participatorMasterList = [];
 $.aaacplApp.manageLot.executeScript = function(){
 	var _this = this;
     var auctionName;
@@ -97,6 +97,14 @@ $.aaacplApp.manageLot.executeScript = function(){
             }
         });
     $('#auctionIdField').html("AUCTION NAME: "+auctionName);
+	
+	
+	$.aaacplApp.dataStorage.userList.forEach( function (item){
+			var userDetails = {};
+			userDetails["id"] = item.id;
+			userDetails["text"] = item.companyName;
+			_this.participatorMasterList.push(userDetails);
+	});
 
 	var createLotsForm = $('#createLotsForm');
 
@@ -123,6 +131,8 @@ $.aaacplApp.manageLot.executeScript = function(){
 			if(response.successMessage){
 				$('#form-success').show();
 				$('#form-success .message-text').html('Lot created.')
+				lotsPost.id = response.successMessage;
+				$.aaacplApp.dataStorage.lotList.push(lotsPost);
 				_this.loadLotRows();
 			} else {
 				$('#form-failure').show();
@@ -144,6 +154,7 @@ $.aaacplApp.manageLot.executeScript = function(){
 
 
 $.aaacplApp.manageLot.loadLotRows = function(){
+	var _this = this;
 	if($.aaacplApp.queryParams('auctionid') != ""){
 		$(".overlay").show();
 		var lotList = $.aaacplApp.dataStorage.lotList;
@@ -184,7 +195,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
                    '<!-- /.modal-dialog -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
                  '</div>'+
 
-				'<div class="box box-default box-solid collapsed-box lot-row" id="ar-'+value.id+'">'+
+				'<div class="box box-default box-solid collapsed-box lot-row" id="lr-'+value.id+'">'+
 				' <div class="box-header with-border">'+
 				'  <h3 class="box-title">'+value.name+'</h3>'+
 				 ' <div class="box-tools pull-right">'+
@@ -257,16 +268,16 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 
 			 $('#lot'+value.id+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
 
+			 
              $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
-               data: $.aaacplApp.dataStorage.userList,
+               data: _this.participatorMasterList,
                initSelection : function (element, callback) {
                        var selectedData = [];
                        var existingParticipators = {};
                        var linkedUserIds = value.linkedUserIds || [];
-                       var userList = $.aaacplApp.dataStorage.userList;
 
                        $.each(linkedUserIds, function (key, item) {
-                                 $.each(userList, function(key , value){
+                                 $.each(_this.participatorMasterList, function(key , value){
                                      if(value.id == item){
                                          existingParticipators = value;
                                      }
@@ -329,6 +340,7 @@ $.aaacplApp.manageLot.loadLotRows = function(){
 					$.aaacplApp.ajaxCall("PUT", 'lots/update', function success(response){
 						$(".overlay").hide();
 						if(response.successMessage){
+							$("#lr-"+lotID+" [data-widget]").click();
 							$('#form-success').show();
 							$('#form-success .message-text').html('Lot updated.');
 						} else {

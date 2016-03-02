@@ -20,7 +20,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
                '<h3 class="box-title">Auctions</h3>'+
                '<div><a href="javascript:history.back()" class="btn btn-box-tool"><span id="departmentIdField"></span></a></div>'+
 			   '<div class="box-tools pull-right">'+
-			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-auction-form">New Auction</button>'+
+			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-auction-form">Add New Auction</button>'+
 			   '</div>'+
             '</div>'+
             '<div class="box-body" id="auction-rows-cont">'+
@@ -76,7 +76,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
                   '<!-- /.modal-body -->'+
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-              '  <button type="submit" class="btn bg-orange">Save changes</button>'+
+              '  <button type="submit" class="btn bg-orange">Create</button>'+
               '  <button type="reset" class="btn">Reset</button>'+
               '</div>'+
 			  '</form>'+
@@ -126,6 +126,8 @@ $.aaacplApp.manageAuction.executeScript = function(){
 				$("#add-auction-form").modal('hide');
 				if(response.successMessage){
 					$('#form-success').show();
+					auctionPost.auctionId = response.successMessage;
+					$.aaacplApp.dataStorage.auctionList.push(auctionPost);
 					_this.loadAuctionRows();
 				} else {
 					$('#form-failure').show();
@@ -203,7 +205,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                      '</div>'+
                                                         '<!-- auction Catalog -->'+
                                                                      '<div class="form-group">'+
-                                                                     '<label>Catalog</label>'+
+                                                                     '<label>Catalogue</label>'+
                                                                      '<input type="text" id="auction'+value.auctionId+'Catalog"  name="catalog" class="form-control" value="'+value.catalog+'">'+
                                                                      '</div>'+
                                                                      '</div>'+
@@ -244,6 +246,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              					$.aaacplApp.ajaxCall("PUT", 'auction/update', function success(response){
              						$(".overlay").hide();
              						if(response.successMessage){
+										$("#ar-"+id+" [data-widget]").click();
              							$('#form-success').show();
              						} else {
              							$('#form-failure').show();

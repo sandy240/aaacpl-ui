@@ -387,6 +387,15 @@ $.aaacplApp = {
 	logoutUser : function(){
 		var _this = this;
 		_this.deleteCookie(_this.userAuthKey);
+		
+		_this.ajaxCall("POST","user/logout",function success(response){
+		},function error(msg){
+		}, JSON.stringify({
+			userId : _this.getLoggedInUserId()
+		}));
+		
+		_this.deleteCookie(_this.userAuthKey);
+		
 		//RESET USER INFO
 		_this.dataStorage.userInfo = {
 			"typeId": 0,
@@ -413,14 +422,8 @@ $.aaacplApp = {
 	var _this = this;
 	// get list of participators for each lot
             _this.ajaxCall("GET", 'user/list', function success(response){
-                var userList = response || [];
-                        userList.forEach( function (item)
-                        {
-                            var userDetails = {};
-                            userDetails["id"] = item.id;
-                            userDetails["text"] = item.name;
-                            _this.dataStorage.userList.push(userDetails);
-                        });
+                _this.dataStorage.userList = response || [];
+                       
                     }, function error(msg){});
 	},
 

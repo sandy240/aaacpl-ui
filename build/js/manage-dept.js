@@ -19,7 +19,7 @@ $.aaacplApp.manageDept.getLayout = function (){
              '<div class="box-header">'+
                '<h3 class="box-title">Departments</h3>'+
 			   '<div class="box-tools pull-right">'+
-			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-dept-form">New Department</button>'+
+			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-dept-form">Add New Department</button>'+
 			   '</div>'+
             '</div>'+
             '<div class="box-body" id="dept-rows-cont">'+
@@ -54,7 +54,7 @@ $.aaacplApp.manageDept.getLayout = function (){
               '</div>'+
               '<div class="modal-footer">'+
               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-              '  <button type="submit" class="btn bg-orange">Save changes</button>'+
+              '  <button type="submit" class="btn bg-orange">Create</button>'+
               '  <button type="reset" class="btn">Reset</button>'+
               '</div>'+
 			  '</form>'+
@@ -85,9 +85,11 @@ $.aaacplApp.manageDept.executeScript = function(){
 			if(response.successMessage){
 				$('#add-dept-form').modal('hide');
 				$('#form-success').show();
+				payload.id = response.successMessage;
+				$.aaacplApp.dataStorage.deptList.push(payload);
 				_this.loadDeptRows();
 			}else {
-                $('#deptForm-failure').show().show();
+                $('#deptForm-failure').show();
                 $('#deptForm-failure .message-text').html('Unable to create department. Please try again later.');
             }
 		}, function error(msg){
@@ -160,6 +162,7 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
             $.aaacplApp.ajaxCall("PUT", 'department/update', function success(response){
                 $(".overlay").hide();
                 if(response.successMessage){
+					$("#dr-"+deptID+" [data-widget]").click();
                     $('#form-success').show();
                 } else {
                     $('#form-failure').show();

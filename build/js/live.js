@@ -30,7 +30,9 @@ $.aaacplApp.livePage.getLayout = function (){
                    '</div>'+
                    '<!-- /.modal-dialog -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
                  '</div>'+
-				 '<h2 id="auction-name"></h2>'+
+				 '<h3 id="dept-name"><img src="" height="40"> <span>MIAL Department</span></h3>'+
+				 '<h4 id="auction-name"></h4>'+
+				 
 				 '<div id="lots-toc"></div>'+
 	'<div id="live-auction-lots">No lot(s) available</div>'+
 	'<div></div>';
@@ -47,7 +49,7 @@ $.aaacplApp.livePage.getLots = function(lotDetail){
 	if($.aaacplApp.dataStorage.userInfo.typeId == "4"){
 			bidInputtmpl = "";
 	}
-	var printButtons = ($.aaacplApp.dataStorage.userInfo.typeId == 4) ? '<button type="button" class="btn btn-flat bg-orange" onclick="javascript:window.print()"><i class="fa fa-print"></i> Print</button> <a href="'+$.aaacplApp.apiSrvPath+'reports/lotWiseBid/'+$.aaacplApp.queryParams('auctionid')+'" target="_blank" class="btn btn-flat bg-orange"><i class="fa fa-download"></i> Download</a>' : '';
+	var printButtons = ($.aaacplApp.dataStorage.userInfo.typeId == 4) ? '<button type="button" class="btn btn-flat bg-orange" onclick="javascript:window.print()"><i class="fa fa-print"></i> Print</button> <button type="button" id="userLogged" target="_blank" class="btn btn-flat bg-orange"><i class="fa fa-group"></i> Bidders</a>' : '';
 	var tmpl = '<div class="box box-solid live-lot" id="lot'+lotDetail.id+'" style="display:none">'+
              '<div class="box-header">'+
                '<h3 class="box-title">'+lotDetail.name+' - '+lotDetail.description+'</h3>'+
@@ -127,7 +129,6 @@ $.aaacplApp.livePage.getLots = function(lotDetail){
                   '<table class="table">'+
 				  '<tr>'+
 					 ' <th style="width: 10px">#</th>'+
-					 ' <th>Name</th>'+
 					 ' <th>Company</th>'+
 					 ' <th>Bid Time</th>'+
 					 ' <th>Bid Amount</th>'+
@@ -194,7 +195,6 @@ $.aaacplApp.livePage.renderBidHistory = function(){
 			bidHistoryBody.append(bidTable);
 			var headerTmpl = '<tr>'+
 					 ' <th style="width: 10px">#</th>'+
-					 ' <th>Name</th>'+
 					 ' <th>Company</th>'+
 					 ' <th>Bid Time</th>'+
 					 ' <th>Bid Amount</th>'+
@@ -204,7 +204,6 @@ $.aaacplApp.livePage.renderBidHistory = function(){
 			$.each(bidarr, function(key,value){
 				var rowTmpl = '<tr>'+
 						  '<td>'+(key+1)+'</td>'+
-						 ' <td>'+value.userName+'</td>'+
 						 ' <td>'+value.companyName+'</td>'+
 						 ' <td>'+value.logTime+'</td>'+
 						 ' <td>'+value.bidAmt+'</td>'+
@@ -241,6 +240,13 @@ $.aaacplApp.livePage.executeScript = function(){
 	if($.aaacplApp.queryParams('auctionid')!=""){
 		$.aaacplApp.ajaxCall("GET","auction/auctionInfo/" + $.aaacplApp.queryParams('auctionid'), function success(response){
 			$("#auction-name").html(response.name);
+			var deptInfo = {};
+			$.aaacplApp.dataStorage.deptList.forEach(function (item){
+				if(item.id == response.deptId){
+					deptInfo = item;
+				}
+			} );
+			$("#dept-name span").html(deptInfo.name);
 		}, function error(msg){
 			
 		});
@@ -347,14 +353,12 @@ $.aaacplApp.livePage.updateClock = function (id, srvnow, starttime, endtime) {
 			if(_this.currentLotIndex < _this.lotsData.length){
 				_this.currentLotId = _this.lotsData[_this.currentLotIndex].id;
 			} else {
-				console.info("reset currentLotId");
 				_this.currentLotId = -1;
 			}
 			clock.html('00:00:00');
 			_this.currentBidHistory = [];
 			clearInterval(_this.timeintervalArr[lotid]);
-		}
-		if (t.total < (eTime - sTime)) {
+		} else if (t.total < (eTime - sTime)) {
 			if(_this.currentLotIndex > 0)
 			$("#lot" + _this.lotsData[_this.currentLotIndex-1].id).hide();
 		
