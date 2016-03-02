@@ -321,6 +321,16 @@ $.aaacplApp = {
 		var section = sectionTo , _this = this;
 		window.location.href = _this.template[section];
 	},
+
+	sortArrayUniqueValues : function sortArrayUniqueValues(arr) {
+        arr.sort();
+        var last_i;
+        for (var i=0;i<arr.length;i++)
+            if ((last_i = arr.lastIndexOf(arr[i])) !== i)
+                arr.splice(i+1, last_i-i);
+        return arr;
+    },
+
 	readCookie : function(cookieName){
 		var cookieValue, cookieList, name = cookieName + "=";
 		cookieList = document.cookie.split(';');
