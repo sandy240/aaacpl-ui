@@ -186,7 +186,7 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                 '<div class="modal-body">' +
                 '<div class="form-group">' +
                 ' <label for="deptInputName">Participators </label>' +
-                ' <select class="selectParticipator form-control select2" multiple="multiple" name="userIdList" data-placeholder="Select user(s)" style="width: 100%;"></select>' +
+                ' <select class="selectParticipator form-control select2" multiple="multiple" id="participatorSelectedList'+value.id+'" data-placeholder="Select user(s)" style="width: 100%;"></select>' +
                 '</div>' +
                 '<div class="form-group">' +
                 '<label class="checkbox-inline"><input type="checkbox" id="isAllSelected' + value.id + '" value="">Apply to all LOTS</label>' +
@@ -269,6 +269,11 @@ $.aaacplApp.manageLot.loadLotRows = function() {
             });
             $('#lotIdField' + value.id).html("LOT NAME: " + lotName);
 
+            var selectedParticipator = value.linkedUserIds || [];
+
+            $("#participatorSelectedList"+value.id).select2().on("change",function(e){
+              selectedParticipator = $(this).select2().val() || [];
+            });
 
             $("#resetEditLot").click(function() {
                 $("#editLotForm" + value.id)[0].reset();
@@ -283,19 +288,19 @@ $.aaacplApp.manageLot.loadLotRows = function() {
 
 
             $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
-                data: _this.participatorMasterList,
+                data: _this.participatorMasterList || [],
                 initSelection: function(element, callback) {
                     var selectedData = [];
-                    var existingParticipators = {};
                     var linkedUserIds = value.linkedUserIds || [];
 
                     $.each(linkedUserIds, function(key, item) {
+                    var existingParticipatorsId;
                         $.each(_this.participatorMasterList, function(key, value) {
                             if (value.id == item) {
-                                existingParticipators = value;
+                                existingParticipatorsId = value;
                             }
                         });
-                        selectedData.push(existingParticipators); //Push values to data array
+                        selectedData.push(existingParticipatorsId); //Push values to data array
                     });
                     callback(selectedData); // existing values
                 }
@@ -310,10 +315,7 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                 "userIdList": []
                 };
                 event.preventDefault(); // Prevent the form from submitting via the browser
-                var selectedParticipatorData = $('#participatorForm' + lotID).serializeArray(); // JSON data of values entered in form
-                $.each(selectedParticipatorData, function(key, item) {
-                       participatorPost["userIdList"].push(Number(item.value));
-                 });
+                participatorPost.userIdList =  selectedParticipator;// getting selected values
 
                 if ($("#isAllSelected" + value.id).is(':checked')) {
                 var lots = $.aaacplApp.dataStorage.lotList;
