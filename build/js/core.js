@@ -41,6 +41,8 @@ $.aaacplApp = {
 
 		auctionList : [],
 
+		userInfoList : [],
+
 		lotList : []
 	},
 
@@ -53,6 +55,7 @@ $.aaacplApp = {
 		"profile": '#/profile',
 		"history": '#/history',
 		"auction": '#/auction',
+		"active-userList": '#/activeUsers',
 		"manage-dept": '#/manage/dept',
 		"manage-auction": '#/manage/auctions',		
 		"manage-lot": '#/manage/lots',		
@@ -204,6 +207,14 @@ $.aaacplApp = {
 		}, function(){
 			_this.manageDept.executeScript();
 		});
+
+		//MANAGE - DEPARTMENTS
+        _this.route('/activeUsers', 'active-userList', function () {
+            var activeUsersListContents = _this.activeUsersListPage.getLayout();
+            return _this.wrapInCommonLayout(_this.pageContent.getLayout("ACTIVE USERS", activeUsersListContents , "View / Add/  Edit Users "));
+        }, function(){
+            _this.activeUsersListPage.executeScript();
+        });
 		
 		//MANAGE - AUCTIONS
 		_this.route('/manage/auctions', 'manage_auctions', function () {	
@@ -241,7 +252,7 @@ $.aaacplApp = {
 		//PROFILE PAGE
 	   _this.route('/profile', 'profile', function () {
 			var userProfileContents = _this.profilePage.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("PROFILE", userProfileContents , ""));
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("PROFILE", userProfileContents , "View / Edit account"));
 		},function(){
 		    _this.profilePage.executeScript(_this.dataStorage.userInfo);
 		});
@@ -279,9 +290,9 @@ $.aaacplApp = {
 		//REPORT
         _this.route('/reports', 'reports', function () {
         var reportContent = _this.reportPage.getLayout();
-        return _this.wrapInCommonLayout(_this.pageContent.getLayout("REPORTS",  reportContent   , ""));
+        return _this.wrapInCommonLayout(_this.pageContent.getLayout("REPORTS",  reportContent   , "View reports"));
         }, function(){
-        _this. reportPage   .executeScript();
+        _this.reportPage.executeScript();
         });
 		
 	},
@@ -428,12 +439,19 @@ $.aaacplApp = {
 		_this.redirectTo("login");
 	},
 
+    getUserInfoList: function(userId){
+    var _this = this;
+    // get userInfoList based on userId
+            _this.ajaxCall("GET", 'user/userInfo/'+userId, function success(response){
+                _this.dataStorage.userInfoList.push(response);
+                    }, function error(msg){});
+    },
+
 	getUserList: function(){
 	var _this = this;
 	// get list of participators for each lot
             _this.ajaxCall("GET", 'user/list', function success(response){
                 _this.dataStorage.userList = response || [];
-                       
                     }, function error(msg){});
 	},
 
@@ -480,6 +498,7 @@ $.aaacplApp.pageFooter = {};
 $.aaacplApp.loginPage = {};
 $.aaacplApp.forgotPage = {};
 $.aaacplApp.registerPage = {};
+$.aaacplApp.activeUsersListPage = {};
 $.aaacplApp.init();
 
 
