@@ -9,6 +9,8 @@ $.aaacplApp = {
 	//API Root path
 	apiSrvPath : "http://eauction.aaacpl.com/rest/",
 	
+	uploadPath : "http://eauction.aaacpl.com/tmp/",
+
 	userAuthKey : "uAuthIDAAACPL",
 	
 	// A hash to store our routes:
@@ -384,16 +386,18 @@ $.aaacplApp = {
 		return "";
 	},
 
-	ajaxCall : function(method, apiUrl, successCallback, errorCallback, payload){
+	ajaxCall : function(method, apiUrl, successCallback, errorCallback, payload, isFileUpload){
 		var _this = this;
 		$.ajax({
 		   type: method,
 		   async: false,
 		   url: _this.apiSrvPath + apiUrl,
-		   dataType : "json",
+		   dataType :isFileUpload ? "" : "json",
 		   data : typeof payload != 'undefined' ? payload : '',
 		   crossDomain : true,
-		   contentType : "application/json",
+		   contentType : isFileUpload ? false : "application/json",
+		   processData : isFileUpload ? false : true,
+		   cache : isFileUpload ? false : true,
 		   beforeSend: function(xhr){xhr.setRequestHeader('X-Temp-Header', 'temp-value');},
 		   success: function(response){
 			   if(typeof successCallback != 'undefined')
@@ -407,7 +411,6 @@ $.aaacplApp = {
 	},
 	logoutUser : function(){
 		var _this = this;
-		_this.deleteCookie(_this.userAuthKey);
 		
 		_this.ajaxCall("POST","user/logout",function success(response){
 		},function error(msg){
