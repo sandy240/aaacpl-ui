@@ -70,7 +70,13 @@ $.aaacplApp.manageAuction.getLayout = function (){
      '<!-- auction Catalog -->'+
                   '<div class="form-group">'+
                   '<label>Catalog</label>'+
-                  '<input type="file" id="auctionCatalog" name="catalog">'+
+                  '<input type="hidden" id="auctionCatalogPath" name="catalog" value=""/>'+
+                  '<div class="row">'+
+                  '<div class="col-md-6"><input type="file" class="form-control" id="auctionInputFile"></div>'+
+                  '<div class="col-sm-6"><button type="button" class="btn btn-primary" id="auctionUploadCatalogFile">Upload</button></div>'+
+                  '</div>'+
+                  '<div class="form-group" id="catalogFileInfo"> '+
+                  '</div>'+
                   '</div>'+
                   '</div>'+
                   '<!-- /.modal-body -->'+
@@ -93,6 +99,28 @@ $.aaacplApp.manageAuction.getLayout = function (){
 $.aaacplApp.manageAuction.executeScript = function(){
 		var _this = this;
 
+		$("#auctionUploadCatalogFile").on('click',function(e){
+            		var file = $('#auctionInputFile').get(0).files[0];
+            		var formData = new FormData();
+            		formData.append('file', file);
+            		$.aaacplApp.ajaxCall("POST", "files/upload?fn=logo_" + value.id, function success(response){
+            			$("#auctionCatalogPath").val(response.filePath);
+            		}, function error(msg){
+            		}, formData,true);
+            	});
+
+          $("#auctionInputFile").on('change',function(){
+          var fileInfo;
+                      if (this.files && this.files[0]) {
+                        var file = this.files[0];
+                            // Present file info and append it to the list of files
+                            fileInfo = "<div><strong>Name:</strong> " + file.name + "</div>";
+                            fileInfo += "<div><strong>Size:</strong> " + parseInt(file.size / 1024, 10) + " kb</div>";
+                            fileInfo += "<div><strong>Type:</strong> " + file.type + "</div>";
+                        }
+                        document.getElementById("catalogFileInfo").innerHTML = fileInfo;
+                });
+
         var deptName;
         var deptList = $.aaacplApp.dataStorage.deptList;
         $.each(deptList, function(key , value){
@@ -106,6 +134,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
 		
 		$('#add-auction-form').on('shown.bs.modal', function () {
 		  createAuctionForm[0].reset();
+		  document.getElementById("catalogFileInfo").innerHTML = "";
 		});
         // on submit function of form is called to perform client side validation
 		createAuctionForm.submit(function(event){
