@@ -106,26 +106,13 @@ $.aaacplApp.registerPage.executeScript = function(){
 			}));
 		});
 	 }, function error(msg){
-	 
 	 });
-
-	 // function to validate PAN card number
-	 function validatePAN(panNumber) {
-	        var isValidPan = false;
-            var regExPanNumber = new RegExp("[A-Z]{5}[0-9]{4}[A-Z]{1}");
-            return regExPanNumber.test(panNumber) || isValidPan; // Check if pattern matches
-     }
-
-     function validateVAT(vatNumber) {
-       var isVatNumber = false;
-       var regExVatNumber = /^[0-9]{9}$/;
-       return regExVatNumber.test(vatNumber) || isVatNumber; // Check if pattern matches
-     }
 
 	// be default hiding the success and error alert messages
 		$('#register-success').hide();
 		$('#register-failure').hide();
 		var registerForm = $('#registerForm');
+
 		registerForm[0].reset();
 		
         $('input').iCheck({
@@ -153,20 +140,37 @@ $.aaacplApp.registerPage.executeScript = function(){
 			//POST PAYLOAD
             JSON.stringify(registerPost));
 		}
-		
+
+
+        $('[name="panNumber"]').on('invalid', function (e) {
+            var regExPanNumber = new RegExp("[A-Z]{5}[0-9]{4}[A-Z]{1}");
+            e.target.setCustomValidity("");
+            if (regExPanNumber.test(e.target.value)) {
+                 e.target.setCustomValidity('Please provide a valid PAN Number');
+            }
+        });
+
+         $('[name="vatNumber"]').on('invalid', function (e) {
+            var regExVatNumber = /^[0-9]{9}$/;
+            e.target.setCustomValidity("");
+            if (regExVatNumber.test(e.target.value)) {
+                 e.target.setCustomValidity('Please provide a valid VAT Number');
+            }
+         });
+
+
+         $('[name="mobile"]').on('invalid', function (e) {
+            var regExMobileNumber = /^\d{10}$/;
+            e.target.setCustomValidity("");
+            if (regExMobileNumber.test(e.target.value)) {
+                 e.target.setCustomValidity('Please provide a valid Mobile Number');
+            }
+        });
+
 		// on submit function of form is called to perform client side validation
 		
 		registerForm.submit(function(event){
 			event.preventDefault(); // Prevent the form from submitting via the browser
-			if(!validatePAN($('[name="panNumber"]').val())){
-                 $('#register-failure').show();
-                 $('#register-failure .message-text').html('Please provide a valid PAN Number');
-			}else if(!validateVAT($('[name="vatNumber"]').val())){
-			    $('#register-failure').show();
-                $('#register-failure .message-text').html('Please provide a valid VAT number');
-			}
-			else{
-            	registerFormAjaxCall(registerForm);
-			}
+            registerFormAjaxCall(registerForm);
 		});
 };
