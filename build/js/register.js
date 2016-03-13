@@ -145,7 +145,7 @@ $.aaacplApp.registerPage.executeScript = function(){
         $('[name="panNumber"]').on('invalid', function (e) {
             var regExPanNumber = new RegExp("[A-Z]{5}[0-9]{4}[A-Z]{1}");
             e.target.setCustomValidity("");
-            if (regExPanNumber.test(e.target.value)) {
+            if (!regExPanNumber.test(e.target.value)) {
                  e.target.setCustomValidity('Please provide a valid PAN Number');
             }
         });
@@ -153,7 +153,7 @@ $.aaacplApp.registerPage.executeScript = function(){
          $('[name="vatNumber"]').on('invalid', function (e) {
             var regExVatNumber = /^[0-9]{9}$/;
             e.target.setCustomValidity("");
-            if (regExVatNumber.test(e.target.value)) {
+            if (!regExVatNumber.test(e.target.value)) {
                  e.target.setCustomValidity('Please provide a valid VAT Number');
             }
          });
@@ -162,7 +162,7 @@ $.aaacplApp.registerPage.executeScript = function(){
          $('[name="mobile"]').on('invalid', function (e) {
             var regExMobileNumber = /^\d{10}$/;
             e.target.setCustomValidity("");
-            if (regExMobileNumber.test(e.target.value)) {
+            if (!regExMobileNumber.test(e.target.value)) {
                  e.target.setCustomValidity('Please provide a valid Mobile Number');
             }
         });
