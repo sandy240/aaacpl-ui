@@ -24,7 +24,7 @@ $.aaacplApp.registerPage.getLayout = function (){
 		'	  </select>'+
         '  </div>'+
 		 ' <div class="form-group has-feedback">'+
-          '  <input type="text" class="form-control" name="name" placeholder="Full name" required>'+
+          '  <input type="text" class="form-control" name="name" placeholder="Full name">'+
            ' <span class="glyphicon glyphicon-user form-control-feedback"></span>'+
           '</div>'+
           '<div class="form-group has-feedback">'+
@@ -36,7 +36,7 @@ $.aaacplApp.registerPage.getLayout = function (){
           '  <span class="glyphicon glyphicon-lock form-control-feedback"></span>'+
           '</div>'+
 		  '<div class="form-group">'+
-          '  <input type="text" class="form-control" name="companyName" placeholder="Company name (Optional)">'+
+          '  <input type="text" class="form-control" name="companyName" placeholder="Company name" required>'+
           '</div>'+
 		  '<div class="row">'+
 		'	  <div class="form-group col-sm-6">'+
@@ -108,7 +108,19 @@ $.aaacplApp.registerPage.executeScript = function(){
 	 }, function error(msg){
 	 
 	 });
-             
+
+	 // function to validate PAN card number
+	 function validatePAN(panNumber) {
+	        var isValidPan = false;
+            var regExPanNumber = new RegExp("[A-Z]{5}[0-9]{4}[A-Z]{1}");
+            return regExPanNumber.test(panNumber) || isValidPan; // Check if pattern matches
+     }
+
+     function validateVAT(vatNumber) {
+       var isVatNumber = false;
+       var regExVatNumber = /^[0-9]{9}$/;
+       return regExVatNumber.test(vatNumber) || isVatNumber; // Check if pattern matches
+     }
 
 	// be default hiding the success and error alert messages
 		$('#register-success').hide();
@@ -135,7 +147,6 @@ $.aaacplApp.registerPage.executeScript = function(){
 				$('#register-success').show();
 				$('#register-form').hide();
 			}, function error(msg){
-				
 				$('#register-failure').show();
 				$('#register-failure .message-text').html('Unable to register. Kindly provide correct details');
 			},
@@ -147,6 +158,15 @@ $.aaacplApp.registerPage.executeScript = function(){
 		
 		registerForm.submit(function(event){
 			event.preventDefault(); // Prevent the form from submitting via the browser
-			registerFormAjaxCall(registerForm);
+			if(!validatePAN($('[name="panNumber"]').val())){
+                 $('#register-failure').show();
+                 $('#register-failure .message-text').html('Please provide a valid PAN Number');
+			}else if(!validateVAT($('[name="vatNumber"]').val())){
+			    $('#register-failure').show();
+                $('#register-failure .message-text').html('Please provide a valid VAT number');
+			}
+			else{
+            	registerFormAjaxCall(registerForm);
+			}
 		});
 };

@@ -130,7 +130,7 @@ $.aaacplApp.manageLot.executeScript = function() {
                 $("#add-lot-form").modal('hide');
                 if (response.successMessage) {
                     $('#form-success').show();
-                    $('#form-success .message-text').html('Lot created.')
+                    $('#form-success .message-text').html('Lot created.');
                     lotsPost.id = response.successMessage;
                     $.aaacplApp.dataStorage.lotList.push(lotsPost);
                     _this.loadLotRows();
@@ -368,6 +368,7 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                             $("#lr-" + lotID + " [data-widget]").click();
                             $('#form-success').show();
                             $('#form-success .message-text').html('Lot updated.');
+                            $.aaacplApp.getLotList($.aaacplApp.queryParams('auctionid'));
                         } else {
                             $('#form-failure').show();
                             $('#form-failure .message-text').html('Unable to update lot. Please try again.');

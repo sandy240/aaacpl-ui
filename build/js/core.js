@@ -43,8 +43,6 @@ $.aaacplApp = {
 
 		auctionList : [],
 
-		userInfoList : [],
-
 		lotList : []
 	},
 
@@ -386,11 +384,11 @@ $.aaacplApp = {
 		return "";
 	},
 
-	ajaxCall : function(method, apiUrl, successCallback, errorCallback, payload, isFileUpload){
+	ajaxCall : function(method, apiUrl, successCallback, errorCallback, payload, isFileUpload, isAsync){
 		var _this = this;
 		$.ajax({
 		   type: method,
-		   async: false,
+		   async: typeof isAsync === 'boolean' ? isAsync : true,
 		   url: _this.apiSrvPath + apiUrl,
 		   dataType :isFileUpload ? "" : "json",
 		   data : typeof payload != 'undefined' ? payload : '',
@@ -442,20 +440,12 @@ $.aaacplApp = {
 		_this.redirectTo("login");
 	},
 
-    getUserInfoList: function(userId){
-    var _this = this;
-    // get userInfoList based on userId
-            _this.ajaxCall("GET", 'user/userInfo/'+userId, function success(response){
-                _this.dataStorage.userInfoList.push(response);
-                    }, function error(msg){});
-    },
-
 	getUserList: function(){
 	var _this = this;
 	// get list of participators for each lot
             _this.ajaxCall("GET", 'user/list', function success(response){
                 _this.dataStorage.userList = response || [];
-                    }, function error(msg){});
+                    }, function error(msg){}, undefined, undefined, false);
 	},
 
 	getDeptList : function() {
@@ -463,7 +453,7 @@ $.aaacplApp = {
 	// get list of departments
 	_this.ajaxCall("GET", 'department/list', function success(response){
                     _this.dataStorage.deptList = response.departmentResponseList || [];
-                     }, function error(msg){});
+                     }, function error(msg){}, undefined, undefined, false);
 
 	},
 
@@ -472,7 +462,7 @@ $.aaacplApp = {
     	// get list of auctions
     	_this.ajaxCall("GET", 'auction/list/'+deptId, function success(response){
                         _this.dataStorage.auctionList = response.auctionResponseList || [];
-                         }, function error(msg){});
+                         }, function error(msg){}, undefined, undefined, false);
         _this.deleteCookie('deptId');
         _this.writeCookie('deptId',deptId,1);
     },
@@ -482,7 +472,7 @@ $.aaacplApp = {
             // get list of lots
             _this.ajaxCall("GET", 'lots/list/'+auctionId, function success(response){
                             _this.dataStorage.lotList = response.lotsResponseList || [];
-                             }, function error(msg){});
+                             }, function error(msg){}, undefined, undefined, false);
              _this.deleteCookie('auctionId');
              _this.writeCookie('auctionId',auctionId,1);
             }

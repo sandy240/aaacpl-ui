@@ -5,7 +5,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
 	**/
 	var tmpl = '<div id="form-success" style="display:none;">'+
                '<div class="alert alert-success">'+
-               '<strong>Auction has been created/updated successfully! </strong>'+
+               '<strong>Success !</strong> <span class="message-text"></span>' +
                '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
                '</div>'+
                '</div>'+
@@ -29,69 +29,72 @@ $.aaacplApp.manageAuction.getLayout = function (){
          ' </div>'+
 		 
 		 //Modal for adding new auctions
-		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-auction-form" aria-labelledby="model-heading">'+
-          '<div class="modal-dialog" role="document">'+
-           ' <div class="modal-content box">'+
-              '<div class="modal-header">'+
-               ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
-               '   <span aria-hidden="true">×</span></button>'+
-               ' <h4 class="modal-title" id="model-heading">New Auction</h4>'+
-              '</div>'+
-              '<div id="createAuctionFormSection">'+
-			  '<form id="createAuctionForm" class="form" role="form">'+
-              '<div class="modal-body">'+
-			 '<div class="form-group">'+
-			  ' <label for="auctionInputName">Auction Name</label>'+
-			   ' <input type="text" class="form-control" id="auctionInputName" name="name" required>'+
-			 '</div>'+
-			 '<!-- Date and time range -->'+
-                  '<div class="form-group">'+
-                   ' <label>Auction start and end date:</label>'+
-                   ' <div class="input-group">'+
-                    '  <div class="input-group-addon">'+
-                    '    <i class="fa fa-clock-o"></i>'+
-                    '  </div>'+
-                    '  <input type="text" class="form-control pull-right" id="auctionDateRange" required>'+
-                    '</div><!-- /.input group -->'+
-                  '</div><!-- /.form group -->'+
-             '<!-- Description -->'+
-                  '<div class="form-group">'+
-                  '<label>Description</label>'+
-                  '<textarea class="form-control" id="auctionDescription" name="description" required></textarea>'+
-                  '</div>'+
-  	 '<!-- auction Type -->'+
-                  '<div class="form-group">'+
-                  '<label>Auction Type</label>'+
-                    '<select id="auctiontype" class="form-control" name="auctionTypeId">'+
-                    '<option value="1">Forward Auction</option>'+
-                    '<option value="2">Reverse Auction</option>'+
-                    '</select>'+
-                  '</div>'+
-     '<!-- auction Catalog -->'+
-                  '<div class="form-group">'+
-                  '<label>Catalog</label>'+
-                  '<input type="hidden" id="auctionCatalogPath" name="catalog" value=""/>'+
-                  '<div class="row">'+
-                  '<div class="col-md-6"><input type="file" class="form-control" id="auctionInputFile"></div>'+
-                  '<div class="col-sm-6"><button type="button" class="btn btn-primary" id="auctionUploadCatalogFile">Upload</button></div>'+
-                  '</div>'+
-                  '<div class="form-group" id="catalogFileInfo"> '+
-                  '</div>'+
-                  '</div>'+
-                  '</div>'+
-                  '<!-- /.modal-body -->'+
-              '<div class="modal-footer">'+
-              '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-              '  <button type="submit" class="btn bg-orange">Create</button>'+
-              '  <button type="reset" class="btn">Reset</button>'+
-              '</div>'+
-			  '</form>'+
-          '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
-          '</div>'+
-          '<!-- /.modal-content -->'+
-        '</div>'+
-       '<!-- /.modal-dialog -->'+
-        '</div>';
+         		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-auction-form" aria-labelledby="model-heading">'+
+                   '<div class="modal-dialog" role="document">'+
+                    ' <div class="modal-content box">'+
+                       '<div class="modal-header">'+
+                        ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+                        '   <span aria-hidden="true">×</span></button>'+
+                        ' <h4 class="modal-title" id="model-heading">New Auction</h4>'+
+                       '</div>'+
+                       '<div id="createAuctionFormSection">'+
+         			  '<form id="createAuctionForm" class="form" role="form">'+
+                       '<div class="modal-body">'+
+         			 '<div class="form-group">'+
+         			  ' <label for="auctionInputName">Auction Name</label>'+
+         			   ' <input type="text" class="form-control" id="auctionInputName" name="name" required>'+
+         			 '</div>'+
+         			 '<!-- Date and time range -->'+
+                           '<div class="form-group">'+
+                            ' <label>Auction start and end date:</label>'+
+                            ' <div class="input-group">'+
+                             '  <div class="input-group-addon">'+
+                             '    <i class="fa fa-clock-o"></i>'+
+                             '  </div>'+
+                             '  <input type="text" class="form-control pull-right" id="auctionDateRange" required>'+
+                             '</div><!-- /.input group -->'+
+                           '</div><!-- /.form group -->'+
+                      '<!-- Description -->'+
+                           '<div class="form-group">'+
+                           '<label>Description</label>'+
+                           '<textarea class="form-control" id="auctionDescription" name="description" required></textarea>'+
+                           '</div>'+
+           	 '<!-- auction Type -->'+
+                           '<div class="form-group">'+
+                           '<label>Auction Type</label>'+
+                             '<select id="auctiontype" class="form-control" name="auctionTypeId">'+
+                             '<option value="1">Forward Auction</option>'+
+                             '<option value="2">Reverse Auction</option>'+
+                             '</select>'+
+                           '</div>'+
+              '<!-- auction Catalog -->'+
+                           '<div class="form-group">'+
+                           '<label>Catalog</label>'+
+                           '<input type="hidden" id="auctionCatalogPath" name="catalog" value=""/>'+
+                           '<div class="row">'+
+                           '<div class="col-md-6"><input type="file" class="form-control" id="auctionInputFile"></div>'+
+                           '<div class="col-sm-6"><button type="button" class="btn btn-primary" id="auctionUploadCatalogFile">Upload</button></div>'+
+                           '</div>'+
+                           '<div class="form-group" id="catalogFileInfo"> '+
+                           '</div>'+
+                           '<div id="form-info" class="alert alert-info" style="display:none;">'+
+                           '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
+                           '<strong>Info !</strong> Click upload button before creating auction for uploading catalog'+
+                           '</div>'+
+                           '</div>'+
+                           '</div>'+
+                           '<!-- /.modal-body -->'+
+                       '<div class="modal-footer">'+
+                       '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
+                       '  <button type="submit" class="btn bg-orange">Create</button>'+
+                       '  <button type="reset" class="btn">Reset</button>'+
+                       '</div>'+
+         			  '</form>'+
+         			  '</div>'+
+                   '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
+                   '</div>'+
+                   '<!-- /.modal-content -->'+
+                 '</div>';
 		
 	return tmpl;
 };
@@ -100,26 +103,30 @@ $.aaacplApp.manageAuction.executeScript = function(){
 		var _this = this;
 
 		$("#auctionUploadCatalogFile").on('click',function(e){
-            		var file = $('#auctionInputFile').get(0).files[0];
-            		var formData = new FormData();
-            		formData.append('file', file);
-            		$.aaacplApp.ajaxCall("POST", "files/upload?fn=logo_" + value.id, function success(response){
-            			$("#auctionCatalogPath").val(response.filePath);
-            		}, function error(msg){
-            		}, formData,true);
-            	});
+            var file = $('#auctionInputFile').get(0).files[0];
+            if(file){
+            var formData = new FormData();
+            formData.append('file', file);
+            $.aaacplApp.ajaxCall("POST", "files/upload?fn=logo", function success(response){
+                $("#auctionCatalogPath").val(response.filePath);
+                 $('#form-info').hide();
+            }, function error(msg){
+            }, formData,true);
+            }
+        });
 
-          $("#auctionInputFile").on('change',function(){
-          var fileInfo;
-                      if (this.files && this.files[0]) {
-                        var file = this.files[0];
-                            // Present file info and append it to the list of files
-                            fileInfo = "<div><strong>Name:</strong> " + file.name + "</div>";
-                            fileInfo += "<div><strong>Size:</strong> " + parseInt(file.size / 1024, 10) + " kb</div>";
-                            fileInfo += "<div><strong>Type:</strong> " + file.type + "</div>";
-                        }
-                        document.getElementById("catalogFileInfo").innerHTML = fileInfo;
-                });
+        $("#auctionInputFile").on('change',function(){
+            var fileInfo;
+                  if (this.files && this.files[0]) {
+                    var file = this.files[0];
+                        // Present file info and append it to the list of files
+                        fileInfo = "<div><strong>Name:</strong> " + file.name + "</div>";
+                        fileInfo += "<div><strong>Size:</strong> " + parseInt(file.size / 1024, 10) + " kb</div>";
+                        fileInfo += "<div><strong>Type:</strong> " + file.type + "</div>";
+                        $('#form-info').show();
+                    }
+                    document.getElementById("catalogFileInfo").innerHTML = fileInfo;
+            });
 
         var deptName;
         var deptList = $.aaacplApp.dataStorage.deptList;
@@ -154,7 +161,8 @@ $.aaacplApp.manageAuction.executeScript = function(){
 				$(".overlay").hide();
 				$("#add-auction-form").modal('hide');
 				if(response.successMessage){
-					$('#form-success').show();
+					 $('#form-success').show();
+                     $('#form-success .message-text').html('Auction has been created.');
 					auctionPost.auctionId = response.successMessage;
 					$.aaacplApp.dataStorage.auctionList.push(auctionPost);
 					_this.loadAuctionRows();
@@ -233,9 +241,20 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                        '</select>'+
                                                                      '</div>'+
                                                         '<!-- auction Catalog -->'+
-                                                                     '<div class="form-group">'+
-                                                                     '<label>Catalogue</label>'+
-                                                                     '<input type="text" id="auction'+value.auctionId+'Catalog"  name="catalog" class="form-control" value="'+value.catalog+'">'+
+                                                                      '<div class="form-group">'+
+                                                                     ' <label>catalogue</label>'+
+                                                                     '<input type="hidden" id="auction'+value.auctionId+'Catalog" name="catalog" value="'+value.catalog+'">'+
+                                                                     '<div class="row">'+
+                                                                       ' <div class="col-md-4"><input type="file" class="form-control" id="auction'+value.auctionId+'auctionInputFile"></div>'+
+                                                                       ' <div class="col-sm-6"><button type="button" class="btn btn-primary" id="auction'+value.auctionId+'auctionUploadCatalogFile">Upload</button></div>'+
+                                                                       '</div>'+
+                                                                       /*$.aaacplApp.uploadPath = "http://eauction.aaacpl.com/tmp/"*/
+                                                                       '<div class="form-group" id="auction'+value.auctionId+'catalogFileInfo"> '+
+                                                                       '</div>'+
+                                                                       '<div id="form-info'+value.auctionId+'" class="alert alert-info" style="display:none;">'+
+                                                                         '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
+                                                                           '<strong>Info !</strong> Click upload button before creating department for uploading logo.'+
+                                                                         '</div>'+
                                                                      '</div>'+
                                                                      '</div>'+
                                  				'<div class="box-footer">'+
@@ -246,6 +265,32 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                  			'</div>';
 			 
 			 $("#auction-rows-cont").append(auctionRow);
+
+			 $("#auction"+value.auctionId+"auctionUploadCatalogFile").on('click',function(e){
+                         var file = $('#auction'+value.auctionId+'auctionInputFile').get(0).files[0];
+                         if(file){
+                         var formData = new FormData();
+                         formData.append('file', file);
+                         $.aaacplApp.ajaxCall("POST", "files/upload?fn=logo_" + value.auctionId, function success(response){
+                             $("#auction"+value.auctionId+"Catalog").val(response.filePath);
+                              $('#form-info'+value.auctionId).hide();
+                         }, function error(msg){
+                         }, formData,true);
+                         }
+                     });
+
+             $("#auction"+value.auctionId+"auctionInputFile").on('change',function(){
+                         var fileInfo;
+                               if (this.files && this.files[0]) {
+                                 var file = this.files[0];
+                                     // Present file info and append it to the list of files
+                                     fileInfo = "<div><strong>Name:</strong> " + file.name + "</div>";
+                                     fileInfo += "<div><strong>Size:</strong> " + parseInt(file.size / 1024, 10) + " kb</div>";
+                                     fileInfo += "<div><strong>Type:</strong> " + file.type + "</div>";
+                                     $('#form-info').show();
+                                 }
+                                 document.getElementById("auction"+value.auctionId+"catalogFileInfo").innerHTML = fileInfo;
+                         });
 
 			 $("#href"+value.auctionId).on('click', function() {
                          $.aaacplApp.getLotList(value.auctionId);
@@ -276,7 +321,9 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              						$(".overlay").hide();
              						if(response.successMessage){
 										$("#ar-"+id+" [data-widget]").click();
-             							$('#form-success').show();
+             							 $('#form-success').show();
+                                         $('#form-success .message-text').html('Auction has been updated.');
+             							$.aaacplApp.getAuctionList($.aaacplApp.queryParams('deptid'));
              						} else {
              							$('#form-failure').show();
              							$('#form-failure .message-text').html('Unable to update auction. Please try again.');

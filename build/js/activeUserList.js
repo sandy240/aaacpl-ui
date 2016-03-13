@@ -32,19 +32,16 @@ $.aaacplApp.activeUsersListPage.getLayout = function() {
 
 $.aaacplApp.activeUsersListPage.executeScript = function() {
     var _this = this;
-    // getting user info for all active users
-    $.each($.aaacplApp.dataStorage.userList, function(key, value) {
-        $(".overlay").show();
-        $.aaacplApp.getUserInfoList(value.id);
-    });
-     $(".overlay").hide();
+    // loading all active users
     _this.loadActiveUsersRows();
 };
 
 $.aaacplApp.activeUsersListPage.loadActiveUsersRows = function() {
-    var userInfoList = $.aaacplApp.dataStorage.userInfoList;
+    var userInfoList = $.aaacplApp.dataStorage.userList;
+    $(".overlay").show();
     $("#activeUserList-rows-cont").html('');
     $.each(userInfoList, function(key, value) {
+    $(".overlay").hide();
         var userRow = '<div class="box box-default box-solid collapsed-box auction-row" id="ar-' + value.id + '">' +
             ' <div class="box-header with-border">' +
             '  <h3 class="box-title">' + value.name + '</h3>' +
