@@ -1,4 +1,4 @@
-$.aaacplApp.activeUsersListPage.getLayout = function() {
+$.aaacplApp.usersListPage.getLayout = function() {
 
     /***
      ** LIST of active users. Can add/edit users
@@ -30,13 +30,13 @@ $.aaacplApp.activeUsersListPage.getLayout = function() {
     return tmpl;
 };
 
-$.aaacplApp.activeUsersListPage.executeScript = function() {
+$.aaacplApp.usersListPage.executeScript = function() {
     var _this = this;
     // loading all active users
     _this.loadActiveUsersRows();
 };
 
-$.aaacplApp.activeUsersListPage.loadActiveUsersRows = function() {
+$.aaacplApp.usersListPage.loadActiveUsersRows = function() {
     var userInfoList = $.aaacplApp.dataStorage.userList;
     $(".overlay").show();
     $("#activeUserList-rows-cont").html('');
@@ -44,7 +44,7 @@ $.aaacplApp.activeUsersListPage.loadActiveUsersRows = function() {
     $(".overlay").hide();
         var userRow = '<div class="box box-default box-solid collapsed-box auction-row" id="ar-' + value.id + '">' +
             ' <div class="box-header with-border">' +
-            '  <h3 class="box-title">' + value.name + '</h3>' +
+            '  <h3 class="box-title">' + value.companyName + ' <small>- ' + (value.typeId == 4 ? "Observer" : (value.typeId != 1 ?  "Participator" : "Administrator")) + '</small></h3>' +
             ' <div class="box-tools pull-right">' +
             '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> Show User Details </button>' +
             '</div>' +
@@ -74,12 +74,12 @@ $.aaacplApp.activeUsersListPage.loadActiveUsersRows = function() {
             '<input type="text" class="form-control" name="companyName" id="userList' + value.id + 'companyName" value="' + value.companyName + '">' +
             '</div>' +
             '<!-- Type -->' +
-            '<div class="form-group">' +
+            '<!-- div class="form-group">' +
             '<label>User Type</label>' +
             '<select id="userList' + value.id + 'Type" name="typeId" class="form-control">' +
             '<option value="'+value.typeId+'">'+value.userTypeLabel+'</option>' +
             '</select>' +
-            '</div>' +
+            '</div -->' +
             '<!-- material -->'+
              '<div class="form-group">'+
              '<label>Material Description</label>' +

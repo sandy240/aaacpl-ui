@@ -55,7 +55,7 @@ $.aaacplApp = {
 		"profile": '#/profile',
 		"history": '#/history',
 		"auction": '#/auction',
-		"active-userList": '#/activeUsers',
+		"userList": '#/users',
 		"manage-dept": '#/manage/dept',
 		"manage-auction": '#/manage/auctions',		
 		"manage-lot": '#/manage/lots',		
@@ -209,11 +209,11 @@ $.aaacplApp = {
 		});
 
 		//MANAGE - DEPARTMENTS
-        _this.route('/activeUsers', 'active-userList', function () {
-            var activeUsersListContents = _this.activeUsersListPage.getLayout();
-            return _this.wrapInCommonLayout(_this.pageContent.getLayout("ACTIVE USERS", activeUsersListContents , "View / Add/  Edit Users "));
+        _this.route('/users', 'userList', function () {
+            var usersListContents = _this.usersListPage.getLayout();
+            return _this.wrapInCommonLayout(_this.pageContent.getLayout("USERS", usersListContents , "View / Add/  Edit Users "));
         }, function(){
-            _this.activeUsersListPage.executeScript();
+            _this.usersListPage.executeScript();
         });
 		
 		//MANAGE - AUCTIONS
@@ -491,7 +491,7 @@ $.aaacplApp.pageFooter = {};
 $.aaacplApp.loginPage = {};
 $.aaacplApp.forgotPage = {};
 $.aaacplApp.registerPage = {};
-$.aaacplApp.activeUsersListPage = {};
+$.aaacplApp.usersListPage = {};
 $.aaacplApp.init();
 
 

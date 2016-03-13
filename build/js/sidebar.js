@@ -67,7 +67,7 @@ $.aaacplApp.pageSidebar.getAdminMenuItems = function (){
 			'<li><a href="#/"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
             '<li><a href="#/manage/dept"><i class="fa fa-cog"></i><span>MANAGE</span></a></li>' +
-            '<li><a href="#/activeUsers"><i class="fa fa-users"></i><span>ACTIVE USERS</span></a></li>' +
+            '<li><a href="#/users"><i class="fa fa-users"></i><span>USERS</span></a></li>' +
 			'<li><a href="#/reports"><i class="fa fa-pie-chart"></i><span>REPORTS</span></a></li>' +
           '</ul>';
 		  return tml;

@@ -23,10 +23,11 @@ $.aaacplApp.registerPage.getLayout = function (){
 		'       <option value="">Select Account Type</option>'+
 		'	  </select>'+
         '  </div>'+
-		 ' <div class="form-group has-feedback">'+
-          '  <input type="text" class="form-control" name="name" placeholder="Full name">'+
-           ' <span class="glyphicon glyphicon-user form-control-feedback"></span>'+
+		
+		  '<div class="form-group">'+
+          '  <input type="text" class="form-control" name="companyName" placeholder="Company name" required>'+
           '</div>'+
+		  
           '<div class="form-group has-feedback">'+
            ' <input type="email" class="form-control" name="email" placeholder="Email" required>'+
            ' <span class="glyphicon glyphicon-envelope form-control-feedback"></span>'+
@@ -34,9 +35,6 @@ $.aaacplApp.registerPage.getLayout = function (){
           '<div class="form-group has-feedback">'+
           '  <input type="password" class="form-control" name="password" placeholder="Password" required>'+
           '  <span class="glyphicon glyphicon-lock form-control-feedback"></span>'+
-          '</div>'+
-		  '<div class="form-group">'+
-          '  <input type="text" class="form-control" name="companyName" placeholder="Company name" required>'+
           '</div>'+
 		  '<div class="row">'+
 		'	  <div class="form-group col-sm-6">'+
@@ -46,6 +44,12 @@ $.aaacplApp.registerPage.getLayout = function (){
 		'		<input type="text" name="vatNumber" class="form-control" placeholder="VAT no." required>'+
 		'	  </div>'+
 		 ' </div>'+
+		 
+		 ' <div class="form-group has-feedback">'+
+          '  <input type="text" class="form-control" name="name" placeholder="Full name (optional)">'+
+           ' <span class="glyphicon glyphicon-user form-control-feedback"></span>'+
+          '</div>'+
+		  
           '<div class="form-group">'+
            ' <textarea class="form-control" name="material" placeholder="Material Description"></textarea>'+
           '</div>'+

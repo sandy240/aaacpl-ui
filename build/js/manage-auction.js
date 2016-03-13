@@ -135,7 +135,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
                 deptName = value.name;
             }
         });
-		$('#departmentIdField').html("DEPARTMENT NAME: "+deptName);
+		$('#departmentIdField').html("DEPARTMENT : "+deptName);
 
 		var createAuctionForm = $('#createAuctionForm');
 		

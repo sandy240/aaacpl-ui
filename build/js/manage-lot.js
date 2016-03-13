@@ -96,7 +96,7 @@ $.aaacplApp.manageLot.executeScript = function() {
             auctionName = value.name;
         }
     });
-    $('#auctionIdField').html("AUCTION NAME: " + auctionName);
+    $('#auctionIdField').html("AUCTION : " + auctionName);
 
 
     $.aaacplApp.dataStorage.userList.forEach(function(item) {
