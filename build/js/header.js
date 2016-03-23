@@ -19,6 +19,8 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
          ' <!-- Navbar Right Menu -->'+
          ' <div class="navbar-custom-menu">'+
          '   <ul class="nav navbar-nav">'+
+         '<!-- send notification -->'+
+          '<li class="user user-menu"><a href="#/notification"><i class="fa fa-share"></i><span>Notify Participators</span></a></li>'+
             '  <!-- User Account Menu -->'+
              ' <li class="dropdown user user-menu">'+
               '  <!-- Menu Toggle Button -->'+

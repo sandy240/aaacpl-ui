@@ -1,11 +1,8 @@
-$.aaacplApp.profilePage.getLayout = function (){
+$.aaacplApp.profilePage.getLayout = function (userInfo){
 	/**
      * COMPLETE Profile Page
     **/
-	var tmpl =   '<div class="register-box-body">'+
-'<!-- alert message for profile page-->'+
-
-'<div id="editProfile-success" class="alert alert-success">'+
+	var tmpl = '<div id="editProfile-success" class="alert alert-success">'+
 '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'+
 '<strong>Success !</strong> Profile has been updated.'+
 '</div>'+
@@ -13,91 +10,94 @@ $.aaacplApp.profilePage.getLayout = function (){
 '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'+
 '<strong>Sorry !</strong> Something went wrong. Try again '+
 '</div>'+
-
-'<div class="row" id="editProfile-form">'+
-'<div class="col-lg-4">'+
-'<p class="login-box-msg">Edit Profile</p>'+
-'<form method="post" action="" id="editProfileForm">'+
-
-'Account Type <div id="account-type" class="form-group">'+
-'<select id="editProfileType" class="form-control" required readonly name="typeId">'+
+'<div class="box box-solid manage">'+
+'<div class="box-header">'+
+'<ul class="nav nav-pills">'+
+'<li><button class="btn bg-orange" id="updateProfile">Update Profile</button></li>'+
+'<li><button class="btn" id="changePassword">Change Password</button></li>'+
+'</ul>'+
+'</div>'+
+'<form id="editProfileForm" class="form" role="form">'+
+'<div class="box-body">'+
+'<div id="updateProfileSection">'+
+'<div class="col-sm-3 col-md-6 col-lg-4" id="accountInfoSection">'+
+'<h3>Account Info</h3>'+
+'<div id="account-type" class="form-group">'+
+'Account Type <select id="editProfileType" class="form-control" required  name="typeId">'+
 '</select>'+
 '</div>'+
 '<div class="form-group">'+
-'Username <input id="editProfileName" type="text" name="name" class="form-control" required readonly>'+
-'</div>'+
-
-
-'<div class="form-group">'+
-'Company name <input id="editProfileCompanyName" name="companyName" type="text" class="form-control" readonly>'+
+'Company name<input id="editProfileCompanyName" name="companyName" value="" type="text" class="form-control" >'+
 '</div>'+
 '<div class="form-group">'+
-'Material Description <textarea id="editProfileMaterial" name="material" class="form-control" readonly></textarea>'+
-'</div>'+
-
-
-'<div class="form-group">'+
-'PAN no <input id="editProfilePan" name="panNumber" type="text" class="form-control" required readonly>'+
+'Material Description <textarea id="editProfileMaterial" name="material" class="form-control"></textarea>'+
 '</div>'+
 '<div class="form-group">'+
-'VAT no <input id="editProfileVat" name="vatNumber" type="text" class="form-control" required readonly>'+
-'</div>'+
-
-
-'<div class="form-group">'+
-'Address <textarea id="editProfileAddress" name="address" class="form-control" required readonly></textarea>'+
+'PAN no <input id="editProfilePan" name="panNumber" type="text" value="" class="form-control" required >'+
 '</div>'+
 '<div class="form-group">'+
-'City <input id="editProfileCity" name="city" type="text" class="form-control" required readonly>'+
+'VAT no <input id="editProfileVat" name="vatNumber" type="text" value="" class="form-control" required >'+
+'</div>'+
+'</div>'+
+'<div class="col-sm-3 col-md-6 col-lg-4" id="ContactInfoSection">'+
+'<h3>Contact Info</h3>'+
+'<div class="form-group">'+
+'Username <input id="editProfileName" type="text" name="name" class="form-control" required >'+
+'</div>'+
+'<div class="form-group">'+
+'Email <input id="editProfileEmail" name="email" type="email" class="form-control" required >'+
+'</div>'+
+'<div class="form-group">'+
+'Phone <input id="editProfilePhone" name="phone" type="text" class="form-control" required >'+
+'</div>'+
+'<div class="form-group">'+
+'Mobile <input id="editProfileMobile" name="mobile" type="text" class="form-control">'+
+'</div>'+
+'</div>'+
+'<div class="col-sm-3 col-md-6 col-lg-4" id="addressInfoSection">'+
+'<h3>Address</h3>'+
+'<div class="form-group">'+
+'Address <textarea id="editProfileAddress" name="address" class="form-control" required ></textarea>'+
+'</div>'+
+'<div class="form-group">'+
+'City <input id="editProfileCity" name="city" type="text" class="form-control" required >'+
+'</div>'+
+'<div class="form-group">'+
+'Pin Code <input id="editProfilePinCode" name="pin" type="text" class="form-control" required >'+
+'</div>'+
+'<div class="form-group">'+
+'Country <input id="editProfileCountry" name="country" type="text" class="form-control" required >'+
 ' </div>'+
 '<div class="form-group">'+
-'Pin Code <input id="editProfilePinCode" name="pin" type="text" class="form-control" required readonly>'+
+'State <input id="editProfileState" name="state" type="text" class="form-control" required >'+
 '</div>'+
-'<div class="form-group">'+
-'Country <input id="editProfileCountry" name="country" type="text" class="form-control" required readonly>'+
-' </div>'+
-'<div class="form-group">'+
-'State <input id="editProfileState" name="state" type="text" class="form-control" required readonly>'+
 '</div>'+
-
-
-'<div class="form-group">'+
-'Email <input id="editProfileEmail" name="email" type="email" class="form-control" required readonly>'+
 '</div>'+
-'<div class="form-group">'+
-'Phone <input id="editProfilePhone" name="phone" type="text" class="form-control" required readonly>'+
 '</div>'+
-'<div class="form-group">'+
-'Mobile <input id="editProfileMobile" name="mobile" type="text" class="form-control" readonly>'+
+'<div class="box-footer">'+
+'<button type="submit" class="btn btn-primary">UPDATE</button>'+
+'<button type="button" id="resetEditprofileForm" class="btn">Reset</button>'+
 '</div>'+
-
-'<!-- reset password will be added later '+
-'<h4>Reset Password</h4>'+
-'<div class="form-group">'+
-'Password <input class="form-control" value="" type="password">'+
-'</div>'+
-'<div class="form-group">'+
-'Confirm password <input class="form-control" value="" type="password">'+
-'</div>'+
-'-->'+
-
-
-
-'<div class="col-xs-4">'+
-'<button type="submit" class="btn btn-primary btn-block bg-orange btn-flat">Save</button>'+
-'</div><!-- /.col -->'+
-'<div class="col-xs-4">'+
-'<input id="resetForm" type="button" value="Reset" class="btn btn-primary btn-block btn-flat">'+
-'</div><!-- /.col -->'+
-
 '</form>'+
-'</div>'+
-'</div>'+
-'</div>'
+'</div>';
 	return tmpl;
 };
 
-$.aaacplApp.profilePage.executeScript = function(userInfo){
+$.aaacplApp.profilePage.executeScript = function(){
+
+    $("#updateProfile").click(function(){
+        $("#changePassword").removeClass("btn-primary");
+        $(this).addClass("btn-primary");
+        $("#changePasswordSection").hide();
+        $("#updateProfileSection").show();
+    });
+
+    $("#changePassword").click(function(){
+        $("#updateProfile").removeClass("btn-primary");
+        $(this).addClass("btn-primary");
+        $("#updateProfileSection").hide();
+        $("#changePasswordSection").show();
+    });
 
     // calling the userInfo function to load all the input fields with values
        loadUserInfo();

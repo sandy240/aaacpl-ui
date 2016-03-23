@@ -43,7 +43,9 @@ $.aaacplApp = {
 
 		auctionList : [],
 
-		lotList : []
+		lotList : [],
+
+		participatorMasterList : []
 	},
 
 	// a map to store all the template and their relative path
@@ -294,6 +296,14 @@ $.aaacplApp = {
         }, function(){
         _this.reportPage.executeScript();
         });
+
+        //NOTIFICATION
+        _this.route('/notification', 'notification', function () {
+        var notificationContent = _this.notificationPage.getLayout();
+        return _this.wrapInCommonLayout(_this.pageContent.getLayout("NOTIFICATION",  notificationContent   , "Notify Users"));
+        }, function(){
+        _this.notificationPage.executeScript();
+        });
 		
 	},
 	changeBodyLayoutType : function(pageClass){
@@ -475,7 +485,17 @@ $.aaacplApp = {
                              }, function error(msg){}, undefined, undefined, false);
              _this.deleteCookie('auctionId');
              _this.writeCookie('auctionId',auctionId,1);
-            }
+            },
+
+    getParticipatorMasterList: function(){
+            var _this = this;
+            $.aaacplApp.dataStorage.userList.forEach(function(item) {
+                    var userDetails = {};
+                    userDetails["id"] = item.email;
+                    userDetails["text"] = item.email;
+                    _this.dataStorage.participatorMasterList.push(userDetails);
+                });
+    }
 };
 $.aaacplApp.pageHeader = {};
 $.aaacplApp.pageSidebar = {};
@@ -492,6 +512,7 @@ $.aaacplApp.loginPage = {};
 $.aaacplApp.forgotPage = {};
 $.aaacplApp.registerPage = {};
 $.aaacplApp.usersListPage = {};
+$.aaacplApp.notificationPage = {};
 $.aaacplApp.init();
 
 
