@@ -253,7 +253,7 @@ $.aaacplApp = {
 		
 		//PROFILE PAGE
 	   _this.route('/profile', 'profile', function () {
-			var userProfileContents = _this.profilePage.getLayout();
+			var userProfileContents = _this.profilePage.getLayout(_this.dataStorage.userInfo);
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("PROFILE", userProfileContents , "View / Edit account"));
 		},function(){
 		    _this.profilePage.executeScript(_this.dataStorage.userInfo);
