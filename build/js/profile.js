@@ -2,14 +2,18 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 	/**
      * COMPLETE Profile Page
     **/
-	var tmpl = '<div id="editProfile-success" class="alert alert-success" style="display:none;">'+
-'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'+
-'<strong>Success !</strong> Profile has been updated.'+
-'</div>'+
-'<div id="editProfile-failure" class="alert alert-danger" style="display:none;">'+
-'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'+
-'<strong>Sorry !</strong> Unable to update. Please try again later. '+
-'</div>'+
+	var tmpl = '<div id="form-success" style="display:none;">'+
+                              '<div class="alert alert-success">'+
+                              '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
+                              '<strong>Success !</strong> <span class="message-text"></span>'+
+                              '</div>'+
+                              '</div>'+
+               			   '<div id="form-failure" style="display:none;">'+
+                             '<div class="alert alert-danger">'+
+                             '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
+                             '<strong>Error !</strong> <span class="message-text"></span>'+
+                             '</div>'+
+                             '</div>'+
 '<div class="box box-solid manage">'+
 '<div class="box-header">'+
 '<ul class="nav nav-pills">'+
@@ -83,9 +87,12 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 '</div>'+
 '</form>'+
 '</div>'+
-'<div id="changePasswordSection"style="display:none;">'+
+'<div id="changePasswordSection" style="display:none;">'+
 '<form id="changePasswordForm" class="form" role="form">'+
 '<div class="box-body">'+
+'<div class="form-group">'+
+'<input name="userId" value="'+userInfo.id+'" type="hidden" class="form-control">'+
+'</div>'+
 '<div class="form-group">'+
 'Old Password<input id="oldPassword" name="oldPassword" type="password" class="form-control" required>'+
 '</div>'+
@@ -93,12 +100,12 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 'New Password <input id="newPassword" name="newPassword" type="password" class="form-control" required>'+
 '</div>'+
 '<div class="form-group">'+
-'Confirm New Password <input id="newConfirmPassword" name="confirmPassword" type="password" value="" class="form-control" required >'+
+'Confirm New Password <input id="newConfirmPassword" type="password" class="form-control" required>'+
 '</div>'+
 '</div>'+
 '<div class="box-footer">'+
 '<button type="submit" class="btn btn-primary">Change</button>'+
-'<button type="button" id="ChangePasswordForm" class="btn" style="margin-left:4px;">Cancel</button>'+
+'<button type="button" id="ChangePasswordFormReset" class="btn" style="margin-left:4px;">Cancel</button>'+
 '</div>'+
 '</form>'+
 '</div>'+
@@ -113,6 +120,8 @@ $.aaacplApp.profilePage.executeScript = function(){
         $(this).addClass("bg-orange");
         $("#changePasswordSection").hide();
         $("#updateProfileSection").show();
+        $('#form-success').hide();
+        $('#form-failure').hide();
     });
 
     $("#changePassword").click(function(){
@@ -120,15 +129,18 @@ $.aaacplApp.profilePage.executeScript = function(){
         $(this).addClass("bg-orange");
         $("#updateProfileSection").hide();
         $("#changePasswordSection").show();
+        $('#form-success').hide();
+        $('#form-failure').hide();
     });
 
     $("#resetEditprofileForm").click(function() {
         $("#editProfileForm")[0].reset();
     });
 
-    $("#resetEditprofileForm").click(function() {
+    $("#ChangePasswordFormReset").click(function() {
         $("#changePasswordForm")[0].reset();
     });
+
 
      $("#editProfilePan").on('invalid', function (e) {
         var regExPanNumber = new RegExp("[A-Z]{5}[0-9]{4}[A-Z]{1}");
@@ -136,18 +148,6 @@ $.aaacplApp.profilePage.executeScript = function(){
         if (!regExPanNumber.test(e.target.value)) {
              e.target.setCustomValidity('Please provide a valid PAN Number');
         }
-     });
-
-     $('#changePasswordForm').validate({
-     rules : {
-         newPassword : {
-             minlength : 5
-         },
-         confirmPassword : {
-             minlength : 5,
-             equalTo : "#newPassword"
-         }
-     }
      });
 
      $("#editProfileVat").on('invalid', function (e) {
@@ -158,8 +158,16 @@ $.aaacplApp.profilePage.executeScript = function(){
         }
      });
 
+     $("#newConfirmPassword").on('invalid', function (e) {
+        var newPassword = $("#newPassword").val();
+        var confirmPassword = $("#newConfirmPassword").val();
+        e.target.setCustomValidity("");
+        if (newPassword !== confirmPassword ) {
+             e.target.setCustomValidity('New and Confirm Password does not match');
+        }
+    });
 
-     $("#editProfileMobile").on('invalid', function (e) {
+    $("#editProfileMobile").on('invalid', function (e) {
         var regExMobileNumber = /^\d{10}$/;
         e.target.setCustomValidity("");
         if (!regExMobileNumber.test(e.target.value)) {
@@ -179,17 +187,45 @@ $.aaacplApp.profilePage.executeScript = function(){
         $.aaacplApp.ajaxCall("POST", 'user/update', function success(response){
             $(".overlay").hide();
             if(response.successMessage && response.successMessage !=""){
-                $('#editProfile-success').show();
+                 $('#form-success').show();
+                 $('#form-success .message-text').html('Profile has been updated.');
             } else {
-                $('#editProfile-failure').show();
+                 $('#form-failure').show();
+                 $('#form-failure .message-text').html('Unable to update profile. Try again later');
             }
         }, function error(msg){
             $(".overlay").hide();
-            $('#editProfile-failure').show();
+            $('#form-failure').show();
+            $('#form-failure .message-text').html('Unable to update profile. Try again later');
         },
         //POST PAYLOAD
         JSON.stringify(editUserPost));
     });
 
+    $('#changePasswordForm').submit(function(event) {
+        event.preventDefault(); // Prevent the form from submitting via the browser
+        var formData = $('#changePasswordForm').serializeArray(); // JSON data of values entered in form
+        var changePasswordObj = {};
+             $.each(formData, function (key, item) {
+                                changePasswordObj[item.name] = item.value;
+             });
+        $(".overlay").show();
+        $.aaacplApp.ajaxCall("POST", 'user/changePassword', function success(response){
+            $(".overlay").hide();
+           if(response.successMessage && response.successMessage !=""){
+                  $('#form-success').show();
+                  $('#form-success .message-text').html('Password has been changed');
+             } else {
+                  $('#form-failure').show();
+                  $('#form-failure .message-text').html('Unable to change password. Try again later');
+             }
+         }, function error(msg){
+             $(".overlay").hide();
+             $('#form-failure').show();
+             $('#form-failure .message-text').html('Unable to change password. Try again later');
+         },
+        //POST PAYLOAD
+        JSON.stringify(changePasswordObj));
+    });
 
 };

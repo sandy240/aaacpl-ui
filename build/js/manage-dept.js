@@ -137,6 +137,7 @@ $.aaacplApp.manageDept.executeScript = function(){
 		}, function error(msg){
 			$(".overlay").hide();
 			$('#deptForm-failure').show();
+			$('#deptForm-failure .message-text').html('Unable to create department. Please try again later.');
 		}, JSON.stringify(payload), undefined, false);
 	});
 	
