@@ -93,7 +93,7 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 'New Password <input id="newPassword" name="newPassword" type="password" class="form-control" required>'+
 '</div>'+
 '<div class="form-group">'+
-'Confirm New Password <input id="newConfirmPassword" type="password" value="" class="form-control" required >'+
+'Confirm New Password <input id="newConfirmPassword" name="confirmPassword" type="password" value="" class="form-control" required >'+
 '</div>'+
 '</div>'+
 '<div class="box-footer">'+
@@ -138,6 +138,18 @@ $.aaacplApp.profilePage.executeScript = function(){
         }
      });
 
+     $('#changePasswordForm').validate({
+     rules : {
+         newPassword : {
+             minlength : 5
+         },
+         confirmPassword : {
+             minlength : 5,
+             equalTo : "#newPassword"
+         }
+     }
+     });
+
      $("#editProfileVat").on('invalid', function (e) {
         var regExVatNumber = /^[0-9]{9}$/;
         e.target.setCustomValidity("");
@@ -162,6 +174,7 @@ $.aaacplApp.profilePage.executeScript = function(){
              $.each(formData, function (key, item) {
                              editUserPost[item.name] = item.value;
                          });
+                         editUserPost["status"] = 'A';
         $(".overlay").show();
         $.aaacplApp.ajaxCall("POST", 'user/update', function success(response){
             $(".overlay").hide();
@@ -177,4 +190,6 @@ $.aaacplApp.profilePage.executeScript = function(){
         //POST PAYLOAD
         JSON.stringify(editUserPost));
     });
+
+
 };
