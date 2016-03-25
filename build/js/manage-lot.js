@@ -205,7 +205,7 @@ $.aaacplApp.manageLot.loadLotRows = function() {
 
                 '<div class="box box-default box-solid collapsed-box lot-row" id="lr-' + value.id + '">' +
                 ' <div class="box-header with-border">' +
-                '  <h3 class="box-title">' + value.name + '</h3>' +
+                '  <h3 id="box-title'+value.id+'" class="box-title">' + value.name + '</h3>' +
                 ' <div class="box-tools pull-right">' +
                 '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>' +
                 '  <button type="button" class="btn btn-box-tool" id="manage_participatorBtn" data-toggle="modal" data-target="#manageParticipator-form' + value.id + '"><i class="fa fa-hdd-o"></i> MANAGE PARTICIPATORS</button>' +
@@ -369,6 +369,7 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                             $('#form-success').show();
                             $('#form-success .message-text').html('Lot updated.');
                             $.aaacplApp.getLotList($.aaacplApp.queryParams('auctionid'));
+                            $("#box-title"+value.id).text(lotsPost.name);
                         } else {
                             $('#form-failure').show();
                             $('#form-failure .message-text').html('Unable to update lot. Please try again.');

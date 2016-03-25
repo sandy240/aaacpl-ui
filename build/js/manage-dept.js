@@ -151,7 +151,7 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		$.each(deptList, function(key , value){
 			var deptRow = '<div class="box box-default box-solid collapsed-box dept-row" id="dr-'+value.id+'">'+
 			' <div class="box-header with-border">'+
-			'  <h3 class="box-title">'+value.name+'</h3>'+
+			'  <h3 id="box-title'+value.id+'" class="box-title">'+value.name+'</h3>'+
 			 ' <div class="box-tools pull-right">'+
 			  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
 			  '  <a href="#/manage/auctions?deptid='+value.id+'" id="href'+value.id+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE AUCTIONS</a>'+
@@ -218,6 +218,7 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		$.aaacplApp.ajaxCall("POST", "files/upload?fn=logo_" + value.id, function success(response){
 			$("#dept"+value.id+"LogoPath").val(response.filePath);
 			$(".overlay").hide();
+			$("#form-info"+value.id).hide();
 		}, function error(msg){
 		    $(".overlay").hide();
 		}, formData,true);
@@ -247,11 +248,12 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
             $(".overlay").show();
             $.aaacplApp.ajaxCall("PUT", 'department/update', function success(response){
                 $(".overlay").hide();
-                if(response.successMessage){
+                if(response.successMessage && response.successMessage != ""){
 					$("#dr-"+deptID+" [data-widget]").click();
                      $('#form-success').show();
                      $('#form-success .message-text').html('Department has been updated');
                     $.aaacplApp.getDeptList();
+                    $("#box-title"+value.id).text(deptPost.name);
                 } else {
                     $('#form-failure').show();
                     $('#form-failure .message-text').html('Unable to update department. Please try again.');

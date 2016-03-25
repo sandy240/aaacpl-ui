@@ -197,7 +197,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 			$.each(auctionList, function(key , value){
 				var auctionRow = '<div class="box box-default box-solid collapsed-box auction-row" id="ar-'+value.auctionId+'">'+
                                  				' <div class="box-header with-border">'+
-                                 				'  <h3 class="box-title">'+value.name+'</h3>'+
+                                 				'  <h3 id="box-title'+value.auctionId+'" class="box-title">'+value.name+'</h3>'+
                                  				 ' <div class="box-tools pull-right">'+
                                  				  '  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i> EDIT</button>'+
                                  				  '  <a href="#/manage/lots?auctionid='+value.auctionId+'" id="href'+value.auctionId+'" class="btn btn-box-tool"><i class="fa fa-hdd-o"></i> MANAGE LOTS</a>'+
@@ -324,6 +324,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              							 $('#form-success').show();
                                          $('#form-success .message-text').html('Auction has been updated.');
              							$.aaacplApp.getAuctionList($.aaacplApp.queryParams('deptid'));
+             							$("#box-title"+value.auctionId).text(auctionPost.name);
              						} else {
              							$('#form-failure').show();
              							$('#form-failure .message-text').html('Unable to update auction. Please try again.');

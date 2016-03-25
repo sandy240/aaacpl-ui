@@ -18,15 +18,18 @@ $.aaacplApp.usersListPage.getLayout = function() {
         '</div>' +
         '<div class="box box-solid manage">' +
         '<div class="box-header">' +
-        '<ul class="nav nav-pills">'+
-            '<li><button class="btn bg-orange" id="activeUsers">Active Users</button></li>'+
-            '<li><button class="btn" id="inactiveUsers">Inactive Users</button></li>'+
+        '<div class="nav-tabs-custom">'+
+                    '<ul class="nav nav-tabs">'+
+                      '<li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Active Users</a></li>'+
+                      '<li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Inactive Users</a></li>'+
           '</ul>'+
         '</div>' +
         '<div class="box-body" >'+
-        '<div id="activeUserList-rows-cont">'+
+        ' <div class="tab-content">'+
+        '<div class="tab-pane active" id="tab_1">'+
         '</div>'+
-        '<div id="inactiveUserList-rows-cont" style="display:none;">'+
+        '<div class="tab-pane" id="tab_2">'+
+        '</div>'+
         '</div>'+
         '</div><!-- /.box-body -->' +
         '<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>' +
@@ -41,26 +44,10 @@ $.aaacplApp.usersListPage.executeScript = function() {
     // loading all active/inactive users
     _this.loadActiveUsersRows(userInfoList);
     _this.loadInactiveUsersRows(userInfoList);
-
-    $("#activeUsers").click(function(){
-        $("#inactiveUsers").removeClass("bg-orange");
-        $(this).addClass("bg-orange");
-        $("#inactiveUserList-rows-cont").hide();
-        $("#activeUserList-rows-cont").show();
-    });
-
-    $("#inactiveUsers").click(function(){
-        $("#activeUsers").removeClass("bg-orange");
-        $(this).addClass("bg-orange");
-        $("#activeUserList-rows-cont").hide();
-        $("#inactiveUserList-rows-cont").show();
-    });
-
-
 };
 
 $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
-    $("#activeUserList-rows-cont").html('');
+    $("#tab_1").html('');
     $.each(userInfoList, function(key, value) {
     if(value.status && value.status =="A"){
     $(".overlay").hide();
@@ -148,7 +135,7 @@ $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
             '</form>' +
             '</div>';
 
-        $("#activeUserList-rows-cont").append(userRow);
+        $("#tab_1").append(userRow);
 
         $("#resetUserList" + value.id).click(function() {
             $("#userListForm" + value.id)[0].reset();
@@ -211,7 +198,7 @@ $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
 };
 
 $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
-   $("#inactiveUserList-rows-cont").html('');
+   $("#tab_2").html('');
     $.each(userInfoList, function(key, value) {
     if(value.status && value.status =="I"){
     $(".overlay").hide();
@@ -299,7 +286,7 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
             '</form>' +
             '</div>';
 
-        $("#inactiveUserList-rows-cont").append(userRow);
+        $("#tab_2").append(userRow);
 
         $("#resetUserList" + value.id).click(function() {
             $("#userListForm" + value.id)[0].reset();
