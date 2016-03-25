@@ -16,12 +16,15 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
                              '</div>'+
 '<div class="box box-solid manage">'+
 '<div class="box-header">'+
-'<ul class="nav nav-pills">'+
-'<li><button class="btn bg-orange" id="updateProfile">Update Profile</button></li>'+
-'<li><button class="btn" id="changePassword">Change Password</button></li>'+
+'<div class="nav-tabs-custom">'+
+            '<ul class="nav nav-tabs">'+
+              '<li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Update Profile</a></li>'+
+              '<li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Change Password</a></li>'+
 '</ul>'+
 '</div>'+
-'<div id="updateProfileSection">'+
+'</div>'+
+'<div class="tab-content">'+
+'<div class="tab-pane active" id="tab_1">'+
 '<form id="editProfileForm" class="form" role="form">'+
 '<div class="box-body">'+
 '<div class="col-sm-3 col-md-6 col-lg-4" id="accountInfoSection">'+
@@ -87,7 +90,7 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 '</div>'+
 '</form>'+
 '</div>'+
-'<div id="changePasswordSection" style="display:none;">'+
+'<div class="tab-pane" id="tab_2">'+
 '<form id="changePasswordForm" class="form" role="form">'+
 '<div class="box-body">'+
 '<div class="form-group">'+
@@ -109,37 +112,20 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 '</div>'+
 '</form>'+
 '</div>'+
+'</div>'+
 '</div>';
 	return tmpl;
 };
 
 $.aaacplApp.profilePage.executeScript = function(){
 
-    $("#updateProfile").click(function(){
-        $("#changePassword").removeClass("bg-orange");
-        $(this).addClass("bg-orange");
-        $("#changePasswordSection").hide();
-        $("#updateProfileSection").show();
-        $('#form-success').hide();
-        $('#form-failure').hide();
-    });
+        $("#resetEditprofileForm").click(function() {
+            $("#editProfileForm")[0].reset();
+        });
 
-    $("#changePassword").click(function(){
-        $("#updateProfile").removeClass("bg-orange");
-        $(this).addClass("bg-orange");
-        $("#updateProfileSection").hide();
-        $("#changePasswordSection").show();
-        $('#form-success').hide();
-        $('#form-failure').hide();
-    });
-
-    $("#resetEditprofileForm").click(function() {
-        $("#editProfileForm")[0].reset();
-    });
-
-    $("#ChangePasswordFormReset").click(function() {
-        $("#changePasswordForm")[0].reset();
-    });
+        $("#ChangePasswordFormReset").click(function() {
+            $("#changePasswordForm")[0].reset();
+        });
 
 
      $("#editProfilePan").on('invalid', function (e) {
