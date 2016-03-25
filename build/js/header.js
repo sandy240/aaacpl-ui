@@ -18,9 +18,10 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
 		 '<span class="headertitle"><strong>E-Auction</strong><small class="hidden-xs"> - A.A.Auctioneers & Contractors Pvt. Ltd.</small></span>'+
          ' <!-- Navbar Right Menu -->'+
          ' <div class="navbar-custom-menu">'+
+         '<input type="hidden" id="adminCheck" value="'+userInfo.typeId+'">'+
          '   <ul class="nav navbar-nav">'+
          '<!-- send notification -->'+
-          '<li class="user user-menu"><a href="#/notification"><i class="fa fa-share"></i><span>Notify Participators</span></a></li>'+
+          '<li class="user user-menu" id="notifyUser"><a href="#/notification"><i class="fa fa-share"></i><span>Notify Users</span></a></li>'+
             '  <!-- User Account Menu -->'+
              ' <li class="dropdown user user-menu">'+
               '  <!-- Menu Toggle Button -->'+
@@ -61,4 +62,6 @@ $.aaacplApp.pageHeader.executeScript = function(){
 	$('#sign-out-user').click(function(){
 		$.aaacplApp.logoutUser();
 	});
+
+	$("#adminCheck").val() == 1 ? $("#notifyUser").show() : $("#notifyUser").hide();
 };
