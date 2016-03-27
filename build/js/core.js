@@ -78,7 +78,8 @@ $.aaacplApp = {
 		}
 	},
 	//Router handler for route URL changes
-	router : function (path, templateId, presenter,controller) {
+	router : function () {
+		
 		var _this = $.aaacplApp;
 		// Lazy load view element:
 		_this.wrapperElem = _this.wrapperElem || $('#main-viewport');
@@ -107,6 +108,7 @@ $.aaacplApp = {
 		}
 	},
 	renderPage : function(routeobj, container){
+		
 		var _this = this;
 		if(routeobj.presenter){
 			// Render route template :
@@ -132,6 +134,8 @@ $.aaacplApp = {
 		
 	},
 	init : function(){
+		$.support.cors = true;
+		
 		var _this = this;
 		
 		var pageURL = window.location.href;
@@ -161,6 +165,7 @@ $.aaacplApp = {
         // Setting a cookie for which the dashboard will be displayed instead of login page
         //document.cookie="uAuthIDAAACPL=neville; expires=Thu, 31 Dec 2016 12:00:00 UTC; path=/"; //note : uncomment line for direct login
 		
+		
 		if(pageURL.indexOf(_this.template['register'])<0){
 			var sId = _this.readCookie(_this.userAuthKey);
 			//Redirection to login if authentication fails i.e session does not exists
@@ -172,9 +177,11 @@ $.aaacplApp = {
 		}
 		
 		// Listen on hash change:
-		window.addEventListener('hashchange', _this.router);
+		window.onhashchange = _this.router;
+		
 		// Listen on page load:
-		window.addEventListener('load', _this.router);
+		window.onload = _this.router;
+		//window.addEventListener('load', _this.router);
 	},
 	getLoggedInUserId : function() {
 		var _this = this;
@@ -396,26 +403,29 @@ $.aaacplApp = {
 
 	ajaxCall : function(method, apiUrl, successCallback, errorCallback, payload, isFileUpload, isAsync){
 		var _this = this;
-		$.ajax({
-		   type: method,
-		   async: typeof isAsync === 'boolean' ? isAsync : true,
-		   url: _this.apiSrvPath + apiUrl,
-		   dataType :isFileUpload ? "" : "json",
-		   data : typeof payload != 'undefined' ? payload : '',
-		   crossDomain : true,
-		   contentType : isFileUpload ? false : "application/json",
-		   processData : isFileUpload ? false : true,
-		   cache : isFileUpload ? false : true,
-		   beforeSend: function(xhr){xhr.setRequestHeader('X-Temp-Header', 'temp-value');},
-		   success: function(response){
-			   if(typeof successCallback != 'undefined')
-				successCallback(response);
-			},
-			error: function(msg){
-				if(typeof errorCallback != 'undefined')
-				errorCallback(msg);
-			}
-		});
+		var cacheBuster = apiUrl.indexOf('?') >= 0 ? '&t='+ Math.random() : '?t=' + Math.random();
+		//setTimeout(function () { //INSTANT TIMEOUT FOR IE9 BUG FIX
+			$.ajax({
+			   type: method,
+			   async: typeof isAsync === 'boolean' ? isAsync : true,
+			   url: _this.apiSrvPath + apiUrl + cacheBuster,
+			   dataType :isFileUpload ? "" : "json",
+			   data : typeof payload != 'undefined' ? payload : '',
+			   crossDomain : true,
+			   contentType : isFileUpload ? false : "application/json",
+			   processData : isFileUpload ? false : true,
+			   cache : isFileUpload ? false : true,
+			   beforeSend: function(xhr){xhr.setRequestHeader('X-Temp-Header', 'temp-value');},
+			   success: function(response){
+				   if(typeof successCallback != 'undefined')
+					successCallback(response);
+				},
+				error: function(msg){
+					if(typeof errorCallback != 'undefined')
+					errorCallback(msg);
+				}
+			});
+		//}, 0);
 	},
 	logoutUser : function(){
 		var _this = this;
