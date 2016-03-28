@@ -202,7 +202,6 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                 '</div>' +
                 '<!-- /.modal-dialog -->' + '<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>' +
                 '</div>' +
-
                 '<div class="box box-default box-solid collapsed-box lot-row" id="lr-' + value.id + '">' +
                 ' <div class="box-header with-border">' +
                 '  <h3 id="box-title'+value.id+'" class="box-title">' + value.name + '</h3>' +

@@ -170,21 +170,21 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
                 '<option value="I">Inactive</option>'+
                 '</select>'+
               '</div>'+
+              '<div class="form-group"> <label for="dept9InputLogoFile">Department Logo</label>'+
+              '<div><input type="hidden" id="dept'+value.id+'LogoPath" name="logoPath" value="'+value.logoPath+'"><input type="file" class="hidden" id="dept'+value.id+'InputLogoFile" accept="image/*">'+
+              '<label class="form-control btn btn-default" for="dept'+value.id+'InputLogoFile" style="width: 10%;">Select a file</label><span id="dept'+value.id+'InputFileText" style="padding:8px;">no file chosen</span>'+
+              '</div>'+
+              '</div>'+
 			 '<div class="form-group">'+
-			 ' <label for="dept'+value.id+'InputLogoFile">Department Logo</label>'+
-			 '<input type="hidden" id="dept'+value.id+'LogoPath" name="logoPath" value=""/>'+
-			 '<div class="row">'+
-			   ' <div class="col-md-4"><input type="file" class="form-control" id="dept'+value.id+'InputLogoFile" accept="image/*"></div>'+
-			   ' <div class="col-sm-6"><button type="button" class="btn btn-primary" id="dept'+value.id+'UploadLogoFile">Upload</button></div>'+
-			   '</div>'+
 			   /*$.aaacplApp.uploadPath = "http://eauction.aaacpl.com/tmp/"*/
 			   '<img class="help-block uploaded img-thumbnail" id="dept'+value.id+'LogoSrc" src="#" alt="No logo uploaded" style="max-height: 150px;">'+
+			   '<button type="button" style="display:none;" class="btn btn-primary" id="dept'+value.id+'UploadLogoFile">Upload</button>'+
+			   '</div>'+
 			   '<div id="form-info'+value.id+'" class="alert alert-info" style="display:none;">'+
                 '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
                   '<strong>Info !</strong> Click upload button before creating department for uploading logo.'+
                 '</div>'+
 			 '</div>'+
-			'</div>'+
 			'<div class="box-footer">'+
 				'<button type="submit" class="btn bg-orange">UPDATE</button>'+
                 ' <button type="button" id="resetEditDept" class="btn">Reset</button>'+
@@ -202,11 +202,16 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		     $("#editDeptForm"+value.id)[0].reset();
 		 });
 
-		 var logoPath = typeof(value.logoPath) !== 'undefined' && value.logoPath !== null ? $.aaacplApp.uploadPath + value.logoPath : '#' ;
-		 $('#dept'+value.id+'LogoSrc').attr('src', logoPath);
+         var logoPath = "#";
+		 if(typeof(value.logoPath) !== 'undefined' && value.logoPath !== null){
+		    logoPath = $.aaacplApp.uploadPath + value.logoPath;
+            $('#dept'+value.id+'LogoSrc').attr('src',logoPath);
+            $('#dept'+value.id+'InputFileText').html(value.logoPath.split('/')[1]);
+		 }
 
 		 $(":reset").click(function(){
                   $('#dept'+value.id+'LogoSrc').attr('src', logoPath);
+                  $('#dept'+value.id+'UploadLogoFile').hide();
                   $("#form-info"+value.id).hide();
              });
 
@@ -218,6 +223,7 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		$.aaacplApp.ajaxCall("POST", "files/upload?fn=logo_" + value.id, function success(response){
 			$("#dept"+value.id+"LogoPath").val(response.filePath);
 			$(".overlay").hide();
+			$('#dept'+value.id+'UploadLogoFile').hide();
 			$("#form-info"+value.id).hide();
 		}, function error(msg){
 		    $(".overlay").hide();
@@ -230,9 +236,11 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 
                 reader.onload = function (e) {
                     $('#dept'+value.id+'LogoSrc').attr('src', e.target.result);
+                    $('#dept'+value.id+'UploadLogoFile').show();
                     $("#form-info"+value.id).show();
                 }
                 reader.readAsDataURL(this.files[0]);
+                $('#dept'+value.id+'InputFileText').html(this.files[0].name);
               }
     	});
 
