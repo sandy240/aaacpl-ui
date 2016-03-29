@@ -170,7 +170,7 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
                 '<option value="I">Inactive</option>'+
                 '</select>'+
               '</div>'+
-              '<div class="form-group"> <label for="dept9InputLogoFile">Department Logo</label>'+
+              '<div class="form-group"> <label>Department Logo</label>'+
               '<div><input type="hidden" id="dept'+value.id+'LogoPath" name="logoPath" value="'+value.logoPath+'"><input type="file" class="hidden" id="dept'+value.id+'InputLogoFile" accept="image/*">'+
               '<label class="form-control btn btn-default" for="dept'+value.id+'InputLogoFile" style="width: 10%;">Select a file</label><span id="dept'+value.id+'InputFileText" style="padding:8px;">no file chosen</span>'+
               '</div>'+

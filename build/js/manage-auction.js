@@ -241,21 +241,21 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                        '</select>'+
                                                                      '</div>'+
                                                         '<!-- auction Catalog -->'+
-                                                                      '<div class="form-group">'+
-                                                                     ' <label>catalogue</label>'+
-                                                                     '<input type="hidden" id="auction'+value.auctionId+'Catalog" name="catalog" value="'+value.catalog+'">'+
-                                                                     '<div class="row">'+
-                                                                       ' <div class="col-md-4"><input type="file" class="form-control" id="auction'+value.auctionId+'auctionInputFile"></div>'+
-                                                                       ' <div class="col-sm-6"><button type="button" class="btn btn-primary" id="auction'+value.auctionId+'auctionUploadCatalogFile">Upload</button></div>'+
-                                                                       '</div>'+
                                                                        /*$.aaacplApp.uploadPath = "http://eauction.aaacpl.com/tmp/"*/
-                                                                       '<div class="form-group" id="auction'+value.auctionId+'catalogFileInfo"> '+
-                                                                       '</div>'+
+                                                                       '<div class="form-group"> <label>Catalogue</label>'+
+                                                                                     '<div><input type="hidden" id="auction'+value.auctionId+'Catalog" name="catalog" value="'+value.catalog+'">'+
+                                                                                     '<input type="file" class="hidden" id="auction'+value.auctionId+'auctionInputFile">'+
+                                                                                     '<label class="form-control btn btn-default" for="auction'+value.auctionId+'auctionInputFile" style="width: 10%;">Select a file</label><span id="auction'+value.id+'InputFileText" style="padding:8px;">no file chosen</span>'+
+                                                                                     '</div>'+
+                                                                                     '</div>'+
+                                                                       			 '<div class="form-group" id="auction'+value.auctionId+'catalogFileInfo">'+
+                                                                       			   /*$.aaacplApp.uploadPath = "http://eauction.aaacpl.com/tmp/"*/
+                                                                       			   '<button type="button" style="display:none;" class="btn btn-primary" id="auction'+value.auctionId+'auctionUploadCatalogFile">Upload</button>'+
+                                                                       			   '</div>'+
                                                                        '<div id="form-info'+value.auctionId+'" class="alert alert-info" style="display:none;">'+
                                                                          '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
-                                                                           '<strong>Info !</strong> Click upload button before creating department for uploading logo.'+
+                                                                           '<strong>Info !</strong> Click upload button to upload file on server.'+
                                                                          '</div>'+
-                                                                     '</div>'+
                                                                      '</div>'+
                                  				'<div class="box-footer">'+
                                  					'  <button type="submit" class="btn bg-orange">UPDATE</button>'+
@@ -266,6 +266,12 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 			 
 			 $("#auction-rows-cont").append(auctionRow);
 
+             var fileName = "no file chosen";
+             if(typeof(value.catalog) !== 'undefined' && value.catalog !== null){
+			 fileName = value.catalog.split('/')[1];
+			 $('#auction'+value.id+'InputFileText').html(fileName);
+			 }
+
 			 $("#auction"+value.auctionId+"auctionUploadCatalogFile").on('click',function(e){
                          var file = $('#auction'+value.auctionId+'auctionInputFile').get(0).files[0];
                          if(file){
@@ -273,6 +279,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                          formData.append('file', file);
                          $.aaacplApp.ajaxCall("POST", "files/upload?fn=logo_" + value.auctionId, function success(response){
                              $("#auction"+value.auctionId+"Catalog").val(response.filePath);
+                              $('#auction'+value.auctionId+'auctionUploadCatalogFile').hide();
                               $('#form-info'+value.auctionId).hide();
                          }, function error(msg){
                          }, formData,true);
@@ -287,7 +294,9 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                      fileInfo = "<div><strong>Name:</strong> " + file.name + "</div>";
                                      fileInfo += "<div><strong>Size:</strong> " + parseInt(file.size / 1024, 10) + " kb</div>";
                                      fileInfo += "<div><strong>Type:</strong> " + file.type + "</div>";
+                                     $('#auction'+value.auctionId+'auctionUploadCatalogFile').show();
                                      $('#form-info').show();
+                                     $('#auction'+value.id+'InputFileText').html(this.files[0].name);
                                  }
                                  document.getElementById("auction"+value.auctionId+"catalogFileInfo").innerHTML = fileInfo;
                          });
@@ -297,7 +306,11 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              });
 
 			 $("#resetEditAuction").click(function(){
-             		     $("#editAuctionForm"+value.auctionId)[0].reset();
+             		    $("#editAuctionForm"+value.auctionId)[0].reset();
+             		    $('#auction'+value.auctionId+'auctionUploadCatalogFile').hide();
+                        $('#form-info').hide();
+                        $('#auction'+value.id+'InputFileText').html(fileName);
+                        document.getElementById("auction"+value.auctionId+"catalogFileInfo").innerHTML = "";
              		 });
 			 $('#auction'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
 
