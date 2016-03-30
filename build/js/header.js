@@ -3,7 +3,7 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
 	var tmpl = ' <!-- Main Header --> '+
       '<header class="main-header">'+
        ' <!-- Logo -->'+
-       ' <a href="#" class="logo">'+
+       ' <a href="/" class="logo">'+
         '  <!-- mini logo for sidebar mini 50x50 pixels -->'+
          ' <span class="logo-mini"><img src="dist/img/logo-sm.png" height="50"></span>'+
           '<!-- logo for regular state and mobile devices -->'+
@@ -29,21 +29,21 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
                '   <!-- The user image in the navbar-->'+
                 '  <img src="dist/img/default-user.png" class="user-image" alt="User Image">'+
                 '  <!-- hidden-xs hides the username on small devices so only the image appears. -->'+
-                 ' <span class="hidden-xs">' + userInfo.name+ '</span>'+
+                 ' <span class="hidden-xs">' + userInfo.companyName+ '</span>'+
                ' </a>'+
                 '<ul class="dropdown-menu">'+
                  ' <!-- The user image in the menu -->'+
                  ' <li class="user-header">'+
                    ' <img src="dist/img/default-user.png" class="img-circle" alt="User Image">'+
                    ' <p id="userName">'+
-					userInfo.name + ' - ' + userInfo.userTypeLabel.split('-')[0] +
+					userInfo.companyName + ' - ' + userInfo.userTypeLabel.split('-')[0] +
                      '<!-- small>Member since Nov. 2012</small -->'+
                   '  </p>'+
                  ' </li>'+
                   '<!-- Menu Footer-->'+
                  ' <li class="user-footer">'+
                    ' <div class="pull-left">'+
-                    '  <a href="#" class="btn btn-default btn-flat">Change Password</a>'+
+                    '  <!-- a href="#" class="btn btn-default btn-flat">Change Password</a -->'+
                   '  </div>'+
                    ' <div class="pull-right">'+
                     '  <button  id="sign-out-user" class="btn btn-default btn-flat">Sign out</button>'+

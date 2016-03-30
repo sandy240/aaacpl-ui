@@ -467,7 +467,15 @@ $.aaacplApp = {
                 _this.dataStorage.userList = response || [];
                     }, function error(msg){}, undefined, undefined, false);
 	},
-
+	getDeptInfoById : function(deptid){
+		var _this = this;
+		for(var i=0;i<_this.dataStorage.deptList.length;i++){
+				if(_this.dataStorage.deptList[i].id == deptid){
+					return _this.dataStorage.deptList[i];
+				}
+			}
+			return {};
+	},
 	getDeptList : function() {
 	var _this = this;
 	// get list of departments
