@@ -1,8 +1,10 @@
 $.aaacplApp.loginPage.getLayout = function (){
 	//This code will be dynamic - for now it is static
-	var tmpl = '<div class="login-logo">'+
+	var tmpl = 
+	'<div class="login-logo">'+
       '  <img src="dist/img/logo.png">'+
       '</div><!-- /.login-logo -->'+
+	  '<div class="lead text-center"><i class="icon fa fa-info-circle"></i> This site is best viewed in IE9+, Chrome and FF</div>'+
       '<div class="login-box-body box">'+
 	  '<!--login section-->'+
 	  '<div id="login-details">'+
@@ -37,7 +39,8 @@ $.aaacplApp.loginPage.getLayout = function (){
 		'<br>'+
 		'New Member? <a href="#/register" class="text-center">Register with us</a>'+
 		'</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
-    ' </div><!-- /.login-box-body -->';
+    ' </div><!-- /.login-box-body -->'+
+	'<div class="text-muted text-center">Copyright &copy; 2016 <a href="#">A.A. Auctioneers & Contractors Pvt. Ltd.</a> All rights reserved.</div>';
 	return tmpl;
 };
 $.aaacplApp.loginPage.executeScript = function(){

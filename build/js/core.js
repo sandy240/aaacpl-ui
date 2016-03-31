@@ -110,6 +110,11 @@ $.aaacplApp = {
 	renderPage : function(routeobj, container){
 		
 		var _this = this;
+		
+		if(_this.dataStorage.userInfo.typeId != 1 && routeobj.templateId=="home"){
+			_this.redirectTo("auction");
+		}
+		
 		if(routeobj.presenter){
 			// Render route template :
 			container.html(routeobj.presenter());	
@@ -198,6 +203,7 @@ $.aaacplApp = {
 		
 		//HOME - DASHBOARD
 		_this.route('/', 'home', function () {
+			
 			//TODO - Dashbaord content will be passed to pageContent
 			var dashboard = "<h3>Auction</h3><p>Click on &quot;Auction&quot; to select and participate in live auction</p>";
 			if(_this.dataStorage.userInfo.typeId == "1"){
@@ -252,7 +258,11 @@ $.aaacplApp = {
 		//AUCTION
 		_this.route('/auction', 'auction', function () {	
 			var auctionListContents = _this.auctionListPage.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("AUCTIONS", auctionListContents , "Live and Upcoming"));
+			var title = "AUCTIONS";
+			if(_this.dataStorage.userInfo.typeId == "4"){
+				title = "OBSERVATION"
+			}
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout(title, auctionListContents , "Live and Upcoming Auctions"));
 		}, function(){
 			_this.auctionListPage.executeScript();
 		});
