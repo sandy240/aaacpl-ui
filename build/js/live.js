@@ -33,8 +33,14 @@ $.aaacplApp.livePage.getLayout = function (){
                    '</div>'+
                    '<!-- /.modal-dialog -->'+
                  '</div>'+
-				 '<h3 id="dept-name"> <span></span></h3>'+
-				 '<h4 id="auction-name"></h4>'+
+				 '<div class="media" id="auc-info">'+
+				  '<div class="media-body">'+
+					  '<h3 class="media-heading" id="auction-name"></h3>'+
+					  '<h4 id="dept-name"> <span></span></h4>'+
+				  '</div>'+
+				'</div>'+
+	
+				 
 			//Lots consolidated list 
 		 ' <div class="box" id="lots-toc" style="display:none">'+
                 '<div class="box-header">'+
@@ -84,10 +90,9 @@ $.aaacplApp.livePage.getLayout = function (){
                        '</div>'+
                        '<div class="modal-body">'+
 					   '<div class="box box-solid">'+
-					    '<ul class="list-group">'+
+					    '<ul class="list-group">'+'</ul>'+
 						'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
 						'</div>'+
-						'</ul>'+
                        '</div>'+
                      '</div>'+
                      '<!-- /.modal-content -->'+
@@ -191,15 +196,7 @@ $.aaacplApp.livePage.getLots = function(lotDetail){
                  ' </div>'+
                 '</div><!-- /.box-header -->'+
                 '<div class="box-body no-padding">'+
-                  '<table class="table">'+
-				  '<tr>'+
-					 ' <th style="width: 10px">#</th>'+
-					 ' <th>Company</th>'+
-					 ' <th>Bid Time</th>'+
-					 ' <th>Bid Amount</th>'+
-					'</tr>'+
-                   '<tr>No bid(s)</tr>'
-                '  </table>'+
+                 
                ' </div><!-- /.box-body -->'+
               '</div><!-- /.box -->'+
 			  
@@ -311,15 +308,18 @@ $.aaacplApp.livePage.renderBidHistory = function(){
 					 ' <th>Company</th>'+
 					 ' <th>Bid Time</th>'+
 					 ' <th>Bid Amount</th>'+
+					 ' <th>Status</th>'+
 					'</tr>';
 			bidTable.append(headerTmpl);
 
 			$.each(bidarr, function(key,value){
+				var isA = (typeof value.isAccepted != 'undefined' && value.isAccepted.toUpperCase()) == "ACCEPTED" ? true : false;
 				var rowTmpl = '<tr>'+
 						  '<td>'+(key+1)+'</td>'+
 						 ' <td>'+value.companyName+'</td>'+
 						 ' <td>'+value.logTime+'</td>'+
 						 ' <td>'+value.bidAmt+'</td>'+
+						 ' <td><span class="label label-'+ (isA ? "success" : "danger") +'">'+ (isA ? "Accepted" : "Rejected") + '</span></td>'+
 						'</tr>';
 				bidTable.append(rowTmpl);
 			});
@@ -357,9 +357,15 @@ $.aaacplApp.livePage.executeScript = function(){
 			var deptInfo = $.aaacplApp.getDeptInfoById(response.deptId);
 			
 			_this.loadLots();
-			$("#dept-name span").html(deptInfo.name);
+			$("#dept-name").html(deptInfo.name);
 			if(deptInfo.logoPath!=null && deptInfo.logoPath!="" && deptInfo.logoPath!="null"){
-					$("#dept-name").prepend('<img src="'+$.aaacplApp.uploadPath + deptInfo.logoPath+'" height="40"/>');
+				var logoPath = $.aaacplApp.uploadPath + deptInfo.logoPath;
+				var imgLogo = '<div class="media-left">'+
+							' <a href="#">'+
+							'  <img class="media-object" src="'+logoPath+'" alt="Dept Logo">'+
+							'</a>'+
+							'</div>';
+					$("#auc-info").prepend(imgLogo);
 			}
 		}, function error(msg){
 			
