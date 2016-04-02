@@ -25,13 +25,13 @@ $.aaacplApp.notificationPage.getLayout = function (){
                 '<div class="form-group">'+
                 '<label>TO: </label>'+
                 '<select class="selectParticipator form-control select2" multiple="multiple" id="participatorList" data-placeholder="Select Participators" style="width: 100%;" required>'+
-                '<option selected="selected">All Participators</option>'+
+                '<option selected="selected">All Users</option>'+
                 '</select>' +
                 '</div>'+
-                '<div class="form-group">'+
+                /*'<div class="form-group">'+
                 '<label>CC: </label>'+
                 '<input type="text" class="form-control" id="cc" value="" name="acknowledgementEmail">'+
-                '</div>'+
+                '</div>'+*/
                 '<div class="form-group">'+
                 '<label>SUBJECT: </label>'+
                 '<input type="text" class="form-control" id="subject" value="" name="subject" required>'+

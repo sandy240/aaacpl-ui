@@ -21,8 +21,8 @@ $.aaacplApp.pageHeader.getLayout = function (userInfo){
          '<input type="hidden" id="adminCheck" value="'+userInfo.typeId+'">'+
          '   <ul class="nav navbar-nav">'+
          '<!-- send notification -->'+
-          '<li id="notifyUser"><a href="#/notification"><i class="fa fa-share"></i><span>Notify Users</span></a></li>'+
-          '<li><a id="sign-out-user" href="#/logout" class="btn btn-flat"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>'+
+          '<li id="notifyUser"><a href="#/notification"><i class="fa fa-share"></i><span> Notify Users</span></a></li>'+
+          '<li><a id="sign-out-user" href="#/logout" class="btn btn-flat"><i class="fa fa-sign-out"></i><span> Logout</span></a></li>'+
                 '</ul>'+
               '</li>'+
            ' </ul>'+

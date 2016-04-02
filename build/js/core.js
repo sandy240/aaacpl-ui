@@ -520,7 +520,7 @@ $.aaacplApp = {
             $.aaacplApp.dataStorage.userList.forEach(function(item) {
                     var userDetails = {};
                     userDetails["id"] = item.email;
-                    userDetails["text"] = item.email;
+                    userDetails["text"] = item.name;
                     _this.dataStorage.participatorMasterList.push(userDetails);
                 });
     }

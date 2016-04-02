@@ -61,6 +61,7 @@ $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
             '<form id="userListForm' + value.id + '" class="form" role="form">' +
             '<div class="box-body">' +
             '<div class="form-group">' +
+            '<input name="typeId" value="'+value.typeId+'" type="hidden">'+
             ' <label>Name</label>' +
             ' <input type="text" class="form-control" name="name" id="userList' + value.id + 'Name" value="' + value.name + '" required>' +
             '</div>' +
@@ -97,7 +98,14 @@ $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
             ' <label>Mobile Number</label>' +
             '  <input type="text" class="form-control" name="mobile" id="userList' + value.id + 'Mobile" value="' + value.mobile + '" required>' +
             '</div><!-- /.form group -->' +
-            '<!-- city -->' +
+            '<div class="form-group">' +
+            ' <label>Phone Number</label>' +
+            '  <input type="text" class="form-control" name="phone" id="userList' + value.id + 'phone" value="' + value.phone + '">' +
+            '</div><!-- /.form group -->' +
+            '<div class="form-group">'+
+            '<label>Address</label>' +
+            '<textarea id="userList' + value.id + 'address" name="address" class="form-control" required>'+value.address+'</textarea>'+
+            '</div>'+
             '<div class="form-group">' +
             '<label>City</label>' +
             '<input type="text" id="userList' + value.id + 'city"  name="city" class="form-control" value="' + value.city + '" required>' +
@@ -181,6 +189,8 @@ $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
             	$(".overlay").hide();
             	if(response.successMessage && response.successMessage !=""){
             		$('#form-success').show();
+            		$.aaacplApp.getUserList();
+            		$.aaacplApp.usersListPage.executeScript();
             	} else {
             		$('#form-failure').show();
             		$('#form-failure .message-text').html('Unable to update user. Please try again.');
@@ -212,13 +222,14 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
             '<form id="userListForm' + value.id + '" class="form" role="form">' +
             '<div class="box-body">' +
             '<div class="form-group">' +
+            '<input name="typeId" value="'+value.typeId+'" type="hidden">'+
             ' <label>Name</label>' +
-            ' <input type="text" class="form-control" name="name" id="userList' + value.id + 'Name" value="' + value.name + '">' +
+            ' <input type="text" class="form-control" name="name" id="userList' + value.id + 'Name" value="' + value.name + '" required>' +
             '</div>' +
             '<!-- status -->' +
             '<div class="form-group">' +
             '<label>Status</label>' +
-            '<select class="form-control" name="status">' +
+            '<select class="form-control" name="status" required>' +
             '<option value="I">Inactive</option>' +
             '<option value="A">Active</option>' +
             '</select>' +
@@ -226,17 +237,17 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
             '<!-- email -->' +
             '<div class="form-group">' +
             '<label>Email</label>' +
-            '<input type="text" class="form-control" name="email" id="userList' + value.id + 'email" value="' + value.email + '">' +
+            '<input type="email" class="form-control" name="email" id="userList' + value.id + 'email" value="' + value.email + '" required>' +
             '</div>' +
              '<!-- company -->' +
             '<div class="form-group">' +
             '<label>Company</label>' +
-            '<input type="text" class="form-control" name="companyName" id="userList' + value.id + 'companyName" value="' + value.companyName + '">' +
+            '<input type="text" class="form-control" name="companyName" id="userList' + value.id + 'companyName" value="' + value.companyName + '" required>' +
             '</div>' +
             '<!-- Type -->' +
             '<!-- div class="form-group">' +
             '<label>User Type</label>' +
- ' <input type="text" class="form-control" name="typeId" id="userList' + value.id + 'Type" value="'+value.typeId+'">' +
+            ' <input type="text" class="form-control" name="typeId" id="userList' + value.id + 'Type" value="'+value.typeId+'" required>' +
             '</div -->' +
             '<!-- material -->'+
              '<div class="form-group">'+
@@ -246,37 +257,44 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
             '<!-- Mobile number -->' +
             '<div class="form-group">' +
             ' <label>Mobile Number</label>' +
-            '  <input type="text" class="form-control" name="mobile" id="userList' + value.id + 'Mobile" value="' + value.mobile + '">' +
+            '  <input type="text" class="form-control" name="mobile" id="userList' + value.id + 'Mobile" value="' + value.mobile + '" required>' +
             '</div><!-- /.form group -->' +
-            '<!-- city -->' +
+            '<div class="form-group">' +
+            ' <label>Phone Number</label>' +
+            '  <input type="text" class="form-control" name="phone" id="userList' + value.id + 'phone" value="' + value.phone + '">' +
+            '</div><!-- /.form group -->' +
+            '<div class="form-group">'+
+            '<label>Address</label>' +
+            '<textarea id="userList' + value.id + 'address" name="address" class="form-control" required>'+value.address+'</textarea>'+
+            '</div>'+
             '<div class="form-group">' +
             '<label>City</label>' +
-            '<input type="text" id="userList' + value.id + 'city"  name="city" class="form-control" value="' + value.city + '">' +
+            '<input type="text" id="userList' + value.id + 'city"  name="city" class="form-control" value="' + value.city + '" required>' +
             '</div>' +
             '<!-- State -->' +
             '<div class="form-group">' +
             '<label>State</label>' +
-            '<input type="text" id="userList' + value.id + 'state"  name="state" class="form-control" value="' + value.state + '">' +
+            '<input type="text" id="userList' + value.id + 'state"  name="state" class="form-control" value="' + value.state + '" required>' +
             '</div>' +
             '<!-- country -->' +
             '<div class="form-group">' +
             '<label>Country</label>' +
-            '<input type="text" id="userList' + value.id + 'country"  name="country" class="form-control" value="' + value.country + '">' +
+            '<input type="text" id="userList' + value.id + 'country"  name="country" class="form-control" value="' + value.country + '" required>' +
             '</div>' +
             '<!-- pin code -->' +
             '<div class="form-group">' +
             '<label>pin code</label>' +
-            '<input type="text" id="userList' + value.id + 'pin"  name="pin" class="form-control" value="' + value.pin + '">' +
+            '<input type="text" id="userList' + value.id + 'pin"  name="pin" class="form-control" value="' + value.pin + '" required>' +
             '</div>' +
             '<!-- PAN  -->' +
             '<div class="form-group">' +
             '<label>Pan Number</label>' +
-            '<input type="text" id="userList' + value.id + 'pan"  name="panNumber" class="form-control" value="' + value.panNumber + '">' +
+            '<input type="text" id="userList' + value.id + 'pan"  name="panNumber" class="form-control" value="' + value.panNumber + '" required>' +
             '</div>' +
             '<!-- VAT -->' +
             '<div class="form-group">' +
             '<label>Vat Number</label>' +
-            '<input type="text" id="userList' + value.id + 'vat"  name="vatNumber" class="form-control" value="' + value.vatNumber + '">' +
+            '<input type="text" id="userList' + value.id + 'vat"  name="vatNumber" class="form-control" value="' + value.vatNumber + '" required>' +
             '</div>' +
             '</div>' +
             '<div class="box-footer">' +
@@ -317,7 +335,7 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
             }
         });
 
-        $('#userListForm' + value.id).submit(function(event) {
+         $('#userListForm' + value.id).submit(function(event) {
             var id = event.target.id.replace('userListForm', '');
             event.preventDefault(); // Prevent the form from submitting via the browser
             var formData = $('#userListForm' + id).serializeArray(); // JSON data of values entered in form
@@ -327,10 +345,12 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
             				 });
             	 editUserPost["id"] = id;
             $(".overlay").show();
-            $.aaacplApp.ajaxCall("POST ", 'user/update', function success(response){
+            $.aaacplApp.ajaxCall("POST", 'user/update', function success(response){
             	$(".overlay").hide();
-            	if(response.successMessage && response.successMessage != ""){
+            	if(response.successMessage && response.successMessage !=""){
             		$('#form-success').show();
+            		$.aaacplApp.getUserList();
+            		$.aaacplApp.usersListPage.executeScript();
             	} else {
             		$('#form-failure').show();
             		$('#form-failure .message-text').html('Unable to update user. Please try again.');

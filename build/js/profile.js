@@ -27,14 +27,14 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 '<div class="tab-pane active" id="tab_1">'+
 '<form id="editProfileForm" class="form" role="form">'+
 '<div class="box-body">'+
+'<h6>Note: Fields in grey are non editable</h6>'+
 '<div class="col-sm-3 col-md-6 col-lg-4" id="accountInfoSection">'+
-'<h3>Account Info</h3>'+
-'<div id="account-type" class="form-group">'+
-'Account Type <select id="editProfileType" class="form-control" required  name="typeId">'+
-'<option value="'+userInfo.typeId+'">'+userInfo.userTypeLabel+'</option>'+
-'</select>'+
+'<h4>Account Info</h4>'+
+'<div class="form-group">'+
+'Account Type <input value="'+userInfo.userTypeLabel+'" class="form-control" readonly>'+
 '</div>'+
 '<div class="form-group">'+
+'<input name="typeId" value="'+userInfo.typeId+'" type="hidden" class="form-control">'+
 '<input name="id" value="'+userInfo.id+'" type="hidden" class="form-control">'+
 '</div>'+
 '<div class="form-group">'+
@@ -44,19 +44,19 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 'Material Description <textarea id="editProfileMaterial" name="material" class="form-control">'+userInfo.material+'</textarea>'+
 '</div>'+
 '<div class="form-group">'+
-'PAN no <input id="editProfilePan" name="panNumber" type="text" value="'+userInfo.panNumber+'" class="form-control" required >'+
+'PAN no <input id="editProfilePan" name="panNumber" type="text" value="'+userInfo.panNumber+'" class="form-control" readonly>'+
 '</div>'+
 '<div class="form-group">'+
-'VAT no <input id="editProfileVat" name="vatNumber" type="text" value="'+userInfo.vatNumber+'" class="form-control" required >'+
+'VAT no <input id="editProfileVat" name="vatNumber" type="text" value="'+userInfo.vatNumber+'" class="form-control" readonly>'+
 '</div>'+
 '</div>'+
 '<div class="col-sm-3 col-md-6 col-lg-4" id="ContactInfoSection">'+
-'<h3>Contact Info</h3>'+
+'<h4>Contact Info</h4>'+
 '<div class="form-group">'+
 'Username <input id="editProfileName" type="text" name="name" value="'+userInfo.name+'" class="form-control" required >'+
 '</div>'+
 '<div class="form-group">'+
-'Email <input id="editProfileEmail" name="email" value="'+userInfo.email+'" type="email" class="form-control" required >'+
+'Email <input id="editProfileEmail" name="email" value="'+userInfo.email+'" type="email" class="form-control" readonly>'+
 '</div>'+
 '<div class="form-group">'+
 'Phone <input id="editProfilePhone" name="phone" type="text" value="'+userInfo.phone+'" class="form-control">'+
@@ -66,7 +66,7 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 '</div>'+
 '</div>'+
 '<div class="col-sm-3 col-md-6 col-lg-4" id="addressInfoSection">'+
-'<h3>Address</h3>'+
+'<h4>Address</h4>'+
 '<div class="form-group">'+
 'Address <textarea id="editProfileAddress" name="address" class="form-control" required>'+userInfo.address+'</textarea>'+
 '</div>'+
@@ -128,21 +128,14 @@ $.aaacplApp.profilePage.executeScript = function(){
         });
 
 
-     $("#editProfilePan").on('invalid', function (e) {
-        var regExPanNumber = new RegExp("[A-Z]{5}[0-9]{4}[A-Z]{1}");
-        e.target.setCustomValidity("");
-        if (!regExPanNumber.test(e.target.value)) {
-             e.target.setCustomValidity('Please provide a valid PAN Number');
-        }
-     });
+      $("#editProfilePinCode").on('invalid', function (e) {
+         var regExPanNumber = /^\d{6}$/;
+         e.target.setCustomValidity("");
+         if (!regExPanNumber.test(e.target.value)) {
+              e.target.setCustomValidity('Please provide a valid Pin code ');
+         }
+      });
 
-     $("#editProfileVat").on('invalid', function (e) {
-        var regExVatNumber = /^[0-9]{9}$/;
-        e.target.setCustomValidity("");
-        if (!regExVatNumber.test(e.target.value)) {
-             e.target.setCustomValidity('Please provide a valid VAT Number');
-        }
-     });
 
      $("#newConfirmPassword").on('invalid', function (e) {
         var newPassword = $("#newPassword").val();
