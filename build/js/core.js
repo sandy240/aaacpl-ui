@@ -148,20 +148,16 @@ $.aaacplApp = {
 		//Add all possible routes
 		_this.addRoutes();
 
-		// load required data
-	//	_this.getDeptList();
-	//	_this.getUserList();
-
         // load auction data if exists
 		var deptCookie = _this.readCookie('deptId');
 		if(deptCookie && deptCookie != ''){
-	//	    _this.getAuctionList(deptCookie);
+	           _this.getAuctionList(deptCookie);
 		}
 
 		 // load auction data if exists
         var auctionCookie = _this.readCookie('auctionId');
         if(auctionCookie && auctionCookie != ''){
-    //        _this.getLotList(auctionCookie);
+               _this.getLotList(auctionCookie);
         }
 
 		_this.wrapperElem = $('#main-viewport');
@@ -218,6 +214,7 @@ $.aaacplApp = {
 		//MANAGE - DEPARTMENTS
 		_this.route('/manage/dept', 'manage_dept', function () {	
 			var manageDeptContents = _this.manageDept.getLayout();
+			_this.getDeptList();
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageDeptContents , "Add / Modify Departments"));
 		}, function(){
 			_this.manageDept.executeScript();
@@ -226,6 +223,7 @@ $.aaacplApp = {
 		//MANAGE - DEPARTMENTS
         _this.route('/users', 'userList', function () {
             var usersListContents = _this.usersListPage.getLayout();
+            _this.getUserList();
             return _this.wrapInCommonLayout(_this.pageContent.getLayout("USERS", usersListContents , "View / Add/  Edit Users "));
         }, function(){
             _this.usersListPage.executeScript();
