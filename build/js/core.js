@@ -95,7 +95,7 @@ $.aaacplApp = {
 			
 			//PRE-REQUIREMENT - USER INFO
 			// ajax call on page load which will return the user Info on passing sessionId and userId
-			if(_this.dataStorage.userInfo.typeId == 0) {
+			if(routeObj.templateId != "login" && routeObj.templateId !="register" && routeObj.templateId !="forgot" && _this.dataStorage.userInfo.typeId == 0) {
 				_this.ajaxCall("GET", 'user/userInfo/'+_this.getLoggedInUserId(), function success(response){
 					_this.dataStorage.userInfo = response;
 					_this.renderPage(routeObj,_this.wrapperElem);
@@ -149,19 +149,19 @@ $.aaacplApp = {
 		_this.addRoutes();
 
 		// load required data
-		_this.getDeptList();
-		_this.getUserList();
+	//	_this.getDeptList();
+	//	_this.getUserList();
 
         // load auction data if exists
 		var deptCookie = _this.readCookie('deptId');
 		if(deptCookie && deptCookie != ''){
-		    _this.getAuctionList(deptCookie);
+	//	    _this.getAuctionList(deptCookie);
 		}
 
 		 // load auction data if exists
         var auctionCookie = _this.readCookie('auctionId');
         if(auctionCookie && auctionCookie != ''){
-            _this.getLotList(auctionCookie);
+    //        _this.getLotList(auctionCookie);
         }
 
 		_this.wrapperElem = $('#main-viewport');
@@ -193,7 +193,7 @@ $.aaacplApp = {
 		var sId = _this.readCookie(_this.userAuthKey);
 		//Redirection to login if authentication fails i.e session does not exists
 		if(sId.length > 0){
-			return sId.split('::')[1];
+			return sId.split('@')[1];
 		}
 		return 0;
 	},
@@ -425,7 +425,7 @@ $.aaacplApp = {
 			   contentType : isFileUpload ? false : "application/json",
 			   processData : isFileUpload ? false : true,
 			   cache : isFileUpload ? false : true,
-			   beforeSend: function(xhr){xhr.setRequestHeader('X-Temp-Header', 'temp-value');},
+			   beforeSend: function(xhr){xhr.setRequestHeader('sessionId', _this.readCookie(_this.userAuthKey));},
 			   success: function(response){
 				   if(typeof successCallback != 'undefined')
 					successCallback(response);

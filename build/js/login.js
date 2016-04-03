@@ -72,7 +72,7 @@ $.aaacplApp.loginPage.executeScript = function(){
 					 * param2 - the success message from which is the authSessionId $.aaacplApp.userAuthKey
 					 * param3 - cookie expire time in hours
 					 */
-					 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response.successMessage + '::' + response.userId,24); //cookie creation
+					 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response.successMessage,24); //cookie creation
 					 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
 				 } else {
 					 $('#login-failure').show();
