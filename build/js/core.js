@@ -95,7 +95,7 @@ $.aaacplApp = {
 			
 			//PRE-REQUIREMENT - USER INFO
 			// ajax call on page load which will return the user Info on passing sessionId and userId
-			if(routeObj.templateId != "login" && routeObj.templateId !="register" && routeObj.templateId !="forgot" && _this.dataStorage.userInfo.typeId == 0) {
+			if(_this.isUserLoggedIn() && _this.dataStorage.userInfo.typeId == 0) {
 				_this.ajaxCall("GET", 'user/userInfo/'+_this.getLoggedInUserId(), function success(response){
 					_this.dataStorage.userInfo = response;
 					_this.renderPage(routeObj,_this.wrapperElem);
@@ -114,6 +114,14 @@ $.aaacplApp = {
 		if(_this.dataStorage.userInfo.typeId != 1 && routeobj.templateId=="home"){
 			_this.redirectTo("auction");
 		}
+		
+		if(_this.dataStorage.deptList.length == 0 && _this.isUserLoggedIn()){
+			_this.getDeptList();
+		}
+		if(_this.dataStorage.userList.length == 0 && _this.isUserLoggedIn()){
+			_this.getUserList();
+		}
+		
 		
 		if(routeobj.presenter){
 			// Render route template :
@@ -137,6 +145,13 @@ $.aaacplApp = {
 			document.body.appendChild(scrpt);
 		});
 		
+	},
+	isUserLoggedIn : function(){
+		var _this = this;
+		if(_this.readCookie(_this.userAuthKey).length > 0){
+			return true;
+		}
+		return false;
 	},
 	init : function(){
 		$.support.cors = true;
@@ -214,7 +229,7 @@ $.aaacplApp = {
 		//MANAGE - DEPARTMENTS
 		_this.route('/manage/dept', 'manage_dept', function () {	
 			var manageDeptContents = _this.manageDept.getLayout();
-			_this.getDeptList();
+			
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout("MANAGE", manageDeptContents , "Add / Modify Departments"));
 		}, function(){
 			_this.manageDept.executeScript();
@@ -223,7 +238,6 @@ $.aaacplApp = {
 		//MANAGE - DEPARTMENTS
         _this.route('/users', 'userList', function () {
             var usersListContents = _this.usersListPage.getLayout();
-            _this.getUserList();
             return _this.wrapInCommonLayout(_this.pageContent.getLayout("USERS", usersListContents , "View / Add/  Edit Users "));
         }, function(){
             _this.usersListPage.executeScript();
