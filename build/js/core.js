@@ -121,6 +121,18 @@ $.aaacplApp = {
 		if(_this.dataStorage.userList.length == 0 && _this.isUserLoggedIn()){
 			_this.getUserList();
 		}
+
+        // load auction data if exists
+		var deptCookie = _this.readCookie('deptId');
+        if(deptCookie && deptCookie != '' && _this.isUserLoggedIn()){
+            _this.getAuctionList(deptCookie);
+        }
+
+         // load lot data if exists
+        var auctionCookie = _this.readCookie('auctionId');
+        if(auctionCookie && auctionCookie != '' && _this.isUserLoggedIn()){
+               _this.getLotList(auctionCookie);
+        }
 		
 		
 		if(routeobj.presenter){
@@ -164,7 +176,7 @@ $.aaacplApp = {
 		_this.addRoutes();
 
         // load auction data if exists
-		var deptCookie = _this.readCookie('deptId');
+		/*var deptCookie = _this.readCookie('deptId');
 		if(deptCookie && deptCookie != ''){
 	           _this.getAuctionList(deptCookie);
 		}
@@ -173,7 +185,7 @@ $.aaacplApp = {
         var auctionCookie = _this.readCookie('auctionId');
         if(auctionCookie && auctionCookie != ''){
                _this.getLotList(auctionCookie);
-        }
+        }*/
 
 		_this.wrapperElem = $('#main-viewport');
 
