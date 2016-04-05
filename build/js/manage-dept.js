@@ -87,6 +87,8 @@ $.aaacplApp.manageDept.executeScript = function(){
     		$(".overlay").show();
     		$.aaacplApp.ajaxCall("POST", "files/upload?fn=logo", function success(response){
     			$("#deptLogoPath").val(response.filePath);
+    			$('#form-info').hide();
+    			$('#deptUploadLogoFile').hide();
     			$(".overlay").hide();
     		}, function error(msg){
     		    $(".overlay").hide();
@@ -99,6 +101,7 @@ $.aaacplApp.manageDept.executeScript = function(){
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     $('#deptLogoSrc').attr('src', e.target.result);
+                    $('#deptUploadLogoFile').show();
                     $('#form-info').show();
                 }
                 reader.readAsDataURL(this.files[0]);
@@ -164,8 +167,8 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 			   ' <input type="text" class="form-control" id="dept'+value.id+'InputName" name="name" value="'+value.name+'" required>'+
 			 '</div>'+
               '<div class="form-group">'+
-              '<label for="dept'+value.id+'status">Status</label>'+
-                '<select class="form-control" name="status">'+
+              '<label>Status</label>'+
+                '<select class="form-control" name="status" id ="dept'+value.id+'status">'+
                 '<option value="A">Active</option>'+
                 '<option value="I">Inactive</option>'+
                 '</select>'+
@@ -193,6 +196,10 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		'</div>';
 
 		 $("#dept-rows-cont").append(deptRow);
+
+		 if(value.status && value.status == "I"){
+		 $('#dept'+value.id+'status').val('I');
+		 }
 
 		 $("#href"+value.id).on('click', function() {
             $.aaacplApp.getAuctionList(value.id);

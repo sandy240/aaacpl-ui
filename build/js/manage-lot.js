@@ -238,7 +238,7 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                 '</div><!-- /.form group -->' +
                 '<div class="form-group">' +
                 '<label>Status</label>' +
-                '<select class="form-control" name="status">' +
+                '<select class="form-control" name="status" id="lot' + value.id + 'status">' +
                 '<option value="A">Active</option>' +
                 '<option value="I">Inactive</option>' +
                 '</select>' +
@@ -257,6 +257,10 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                 '</div>';
 
             $("#lot-rows-cont").append(lotRow);
+
+             if(value.status && value.status == "I"){
+             $('#lot' + value.id + 'status').val('I');
+             }
 
             var lotName;
             var lotList = $.aaacplApp.dataStorage.lotList;

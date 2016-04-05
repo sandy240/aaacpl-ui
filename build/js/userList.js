@@ -68,7 +68,7 @@ $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
             '<!-- status -->' +
             '<div class="form-group">' +
             '<label>Status</label>' +
-            '<select class="form-control" name="status" required>' +
+            '<select class="form-control" name="status" required id="userList' + value.id + 'status">' +
             '<option value="A">Active</option>' +
             '<option value="I">Inactive</option>' +
             '</select>' +
@@ -145,9 +145,15 @@ $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
 
         $("#tab_1").append(userRow);
 
+        if(value.isVerified){
+        $("#userList" + value.id + "status").attr('disabled','disabled');
+        }
+
         $("#resetUserList" + value.id).click(function() {
             $("#userListForm" + value.id)[0].reset();
         });
+
+
 
         $("#userList" + value.id + "pan").on('invalid', function (e) {
             var regExPanNumber = new RegExp("[A-Z]{5}[0-9]{4}[A-Z]{1}");
@@ -229,7 +235,7 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
             '<!-- status -->' +
             '<div class="form-group">' +
             '<label>Status</label>' +
-            '<select class="form-control" name="status" required>' +
+            '<select class="form-control" name="status" required id="userList' + value.id + 'status">' +
             '<option value="I">Inactive</option>' +
             '<option value="A">Active</option>' +
             '</select>' +
@@ -309,6 +315,10 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
         $("#resetUserList" + value.id).click(function() {
             $("#userListForm" + value.id)[0].reset();
         });
+
+        if(value.isVerified){
+        $("#userList" + value.id + "status").attr('disabled','disabled');
+        }
 
         $("#userList" + value.id + "pan").on('invalid', function (e) {
             var regExPanNumber = new RegExp("[A-Z]{5}[0-9]{4}[A-Z]{1}");

@@ -186,8 +186,6 @@ $.aaacplApp.manageAuction.executeScript = function(){
 	
 };
 
-
-
 $.aaacplApp.manageAuction.loadAuctionRows = function(){
 	if($.aaacplApp.queryParams('deptid') != ""){
 		$(".overlay").show();
@@ -235,7 +233,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                          '<!-- status -->'+
                                                                      '<div class="form-group">'+
                                                                      '<label>Status</label>'+
-                                                                       '<select class="form-control" name="status">'+
+                                                                       '<select class="form-control" name="status" id="auction'+value.status+'status">'+
                                                                        '<option value="A">Active</option>'+
                                                                        '<option value="I">Inactive</option>'+
                                                                        '</select>'+
@@ -265,6 +263,10 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                  			'</div>';
 			 
 			 $("#auction-rows-cont").append(auctionRow);
+
+			 if(value.status && value.status == "I"){
+             $('#auction'+value.status+'status').val('I');
+             }
 
              var fileName = "no file chosen";
              if(typeof(value.catalog) !== 'undefined' && value.catalog !== null){
