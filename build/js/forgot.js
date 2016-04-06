@@ -7,7 +7,7 @@ $.aaacplApp.forgotPage.getLayout = function (){
 	  '<!--forgot password section-->'+
 	  '<div id="forgotPassword-success" style="display:none;">'+
 		'	<div class="alert alert-success">'+
-		'	<strong>Password reset successfully !</strong>'+
+		'	<strong>Success ! Password is sent</strong>'+
 		'	</div>'+
 		'	<p>Your new password has been sent to your e-mail address. <a href="#/login">Login Now</a></p>'+
 	  '</div>'+

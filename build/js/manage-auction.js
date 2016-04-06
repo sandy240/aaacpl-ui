@@ -18,7 +18,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
 	'<div class="box box-solid manage">'+
              '<div class="box-header">'+
                '<h3 class="box-title">Auctions</h3>'+
-               '<div><a href="javascript:history.back()" class="btn btn-box-tool"><span id="departmentIdField"></span></a></div>'+
+               '<div><a href="javascript:history.back()" class="btn btn-box-tool"><i class="fa fa-arrow-left fa-lg"></i><span id="departmentIdField" style="margin-left: 6px;"></span></a></div>'+
 			   '<div class="box-tools pull-right">'+
 			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-auction-form">Add New Auction</button>'+
 			   '</div>'+
@@ -244,11 +244,11 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                                      '<div><input type="hidden" id="auction'+value.auctionId+'Catalog" name="catalog" value="'+value.catalog+'">'+
                                                                                      '<input type="file" class="hidden" id="auction'+value.auctionId+'auctionInputFile">'+
                                                                                      '<label class="form-control btn btn-default" for="auction'+value.auctionId+'auctionInputFile" style="width: 10%;">Select a file</label><span id="auction'+value.id+'InputFileText" style="padding:8px;">no file chosen</span>'+
+                                                                                     '<button type="button" style="display:none;" class="btn btn-primary" id="auction'+value.auctionId+'auctionUploadCatalogFile">Upload</button>'+
                                                                                      '</div>'+
                                                                                      '</div>'+
                                                                        			 '<div class="form-group" id="auction'+value.auctionId+'catalogFileInfo">'+
                                                                        			   /*$.aaacplApp.uploadPath = "http://eauction.aaacpl.com/tmp/"*/
-                                                                       			   '<button type="button" style="display:none;" class="btn btn-primary" id="auction'+value.auctionId+'auctionUploadCatalogFile">Upload</button>'+
                                                                        			   '</div>'+
                                                                        '<div id="form-info'+value.auctionId+'" class="alert alert-info" style="display:none;">'+
                                                                          '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+

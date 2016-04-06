@@ -145,8 +145,8 @@ $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
 
         $("#tab_1").append(userRow);
 
-        if(value.isVerified){
-        $("#userList" + value.id + "status").attr('disabled','disabled');
+        if(!value.isVerified){
+        $("#userList" + value.id + "status").attr('readonly','true');
         }
 
         $("#resetUserList" + value.id).click(function() {
@@ -316,8 +316,8 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
             $("#userListForm" + value.id)[0].reset();
         });
 
-        if(value.isVerified){
-        $("#userList" + value.id + "status").attr('disabled','disabled');
+        if(!value.isVerified){
+        $("#userList" + value.id + "status").attr('readonly','true');
         }
 
         $("#userList" + value.id + "pan").on('invalid', function (e) {
