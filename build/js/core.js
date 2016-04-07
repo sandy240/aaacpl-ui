@@ -110,9 +110,9 @@ $.aaacplApp = {
 	renderPage : function(routeobj, container){
 		
 		var _this = this;
-		
 		if(_this.dataStorage.userInfo.typeId != 1 && routeobj.templateId=="home"){
 			_this.redirectTo("auction");
+			return;
 		}
 		
 		if(_this.dataStorage.deptList.length == 0 && _this.isUserLoggedIn()){
@@ -379,9 +379,13 @@ $.aaacplApp = {
 		}
 	},
 
-	redirectTo : function(sectionTo) {
+	redirectTo : function(sectionTo, params) {
 		var section = sectionTo , _this = this;
-		window.location.href = _this.template[section];
+		var paramStr = ""
+		if(typeof params != 'undefined'){
+			paramStr = "?" + params;
+		}
+		window.location.href = _this.template[section] + paramStr;
 	},
 
 	sortArrayUniqueValues : function sortArrayUniqueValues(arr) {
@@ -451,6 +455,11 @@ $.aaacplApp = {
 			   cache : isFileUpload ? false : true,
 			   beforeSend: function(xhr){xhr.setRequestHeader('sessionId', _this.readCookie(_this.userAuthKey));},
 			   success: function(response){
+				   if(response.failureMessage && response.failureMessage.indexOf("Unauthorized")>=0){
+					   _this.resetUser();
+					   _this.redirectTo("login","invalidSession=1");
+					   return;
+				   }
 				   if(typeof successCallback != 'undefined')
 					successCallback(response);
 				},
@@ -470,6 +479,11 @@ $.aaacplApp = {
 			userId : _this.getLoggedInUserId()
 		}));
 		
+		_this.resetUser();
+		_this.redirectTo("login");
+	},
+	resetUser : function(){
+		var _this = this;
 		_this.deleteCookie(_this.userAuthKey);
 		
 		//RESET USER INFO
@@ -491,7 +505,6 @@ $.aaacplApp = {
 			"address": "",
 			"country": ""
 		}
-		_this.redirectTo("login");
 	},
 
 	getUserList: function(){

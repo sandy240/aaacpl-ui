@@ -18,7 +18,7 @@ $.aaacplApp.manageLot.getLayout = function() {
         '<div class="box box-solid manage">' +
         '<div class="box-header">' +
         '<h3 class="box-title">Lots</h3>' +
-        '<div><a href="javascript:history.back()" class="btn btn-box-tool"><i class="fa fa-arrow-left fa-lg"></i><span id="auctionIdField" style="margin-left: 6px;></span></a></div>' +
+        '<div><a href="javascript:history.back()" class="btn btn-box-tool"><i class="fa fa-arrow-left fa-lg"></i><span id="auctionIdField" style="margin-left: 6px;"></span></a></div>'+
         '<div class="box-tools pull-right">' +
         '<button class="btn bg-orange" data-toggle="modal" data-target="#add-lot-form">Add New Lot</button>' +
         '</div>' +
