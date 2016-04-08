@@ -202,6 +202,9 @@ a:focus {
 .manage .box-header .fa-minus::before {
   content: "\f044";
 }
+.live-lot {
+  margin-bottom: 20px;
+}
 .live-lot > .box-header > .box-title {
   font-size: 22px;
 }
@@ -223,11 +226,30 @@ a:focus {
 .live-lot .info-box-number {
   font-size: 28px;
 }
+.live-lot .fa-inr {
+  font-size: 65%;
+}
+.live-lot .timing {
+  font-size: 20px;
+}
+.live-lot .clocktimer .countdown {
+  font-size: 45px;
+}
 .navbar button.sidebar-toggle {
   border: 0;
 }
 .alert a.close {
   text-decoration: none;
+}
+.headertitle {
+  font-size: 20px;
+  color: #fff;
+  line-height: 45px;
+}
+@media print {
+  .main-sidebar {
+    width: 0px !important;
+  }
 }
 /*
  * Component: Main Header
@@ -1615,7 +1637,7 @@ a:focus {
 }
 .box.box-solid > .box-header .btn:hover,
 .box.box-solid > .box-header a:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0);
 }
 .box.box-solid.box-default {
   border: 1px solid #d2d6de;
