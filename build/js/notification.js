@@ -130,7 +130,7 @@ $.aaacplApp.notificationPage.executeScript = function(){
                 $(".overlay").show();
                 $.aaacplApp.ajaxCall("POST", 'email/bulkEmail', function success(response) {
                         $(".overlay").hide();
-                        if (response.successMessage) {
+                        if (response.successMessage && response.successMessage !="") {
                             $('#notificationForm-success').show();
                         } else {
                             $('#notificationForm-failure').show();

@@ -86,12 +86,17 @@ $.aaacplApp.manageDept.executeScript = function(){
     		var formData = new FormData();
     		formData.append('file', file);
     		$.aaacplApp.ajaxCall("POST", "files/upload?fn=logo", function success(response){
-    			$("#deptLogoPath").val(response.filePath);
-    			$('#form-info').hide();
-    			$('#deptUploadLogoFile').hide();
-    			$(".overlay").hide();
+    		    if(response.successMessage && response.successMessage != ""){
+                    $("#deptLogoPath").val(response.filePath);
+                    $('#form-info').hide();
+                    $('#deptUploadLogoFile').hide();
+                    $(".overlay").hide();
+    		    }else{
+    		    alert("Unable to upload file");
+    		    }
     		}, function error(msg){
     		    $(".overlay").hide();
+    		    alert("Unable to upload file");
     		}, formData, true, false);
     		}
     	});
@@ -128,7 +133,7 @@ $.aaacplApp.manageDept.executeScript = function(){
 		$(".overlay").show();
 		$.aaacplApp.ajaxCall("POST","department/create",function success(response){
 			$(".overlay").hide();
-			if(response.successMessage){
+			if(response.successMessage && response.successMessage !=""){
 				$('#add-dept-form').modal('hide');
 				 $('#form-success').show();
                  $('#form-success .message-text').html('Department has been created.');
@@ -230,11 +235,17 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		formData.append('file', file);
 		$(".overlay").show();
 		$.aaacplApp.ajaxCall("POST", "files/upload?fn=logo_" + value.id, function success(response){
-			$("#dept"+value.id+"LogoPath").val(response.filePath);
-			$(".overlay").hide();
-			$('#dept'+value.id+'UploadLogoFile').hide();
-			$("#form-info"+value.id).hide();
+		    if(response.successMessage && response.successMessage != ""){
+                $("#dept"+value.id+"LogoPath").val(response.filePath);
+                $(".overlay").hide();
+                $('#dept'+value.id+'UploadLogoFile').hide();
+                $("#form-info"+value.id).hide();
+		    }
+		    else{
+		        alert("Unable to upload file");
+		    }
 		}, function error(msg){
+		    alert("Unable to upload file");
 		    $(".overlay").hide();
 		}, formData,true);
 	});

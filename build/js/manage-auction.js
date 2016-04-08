@@ -107,10 +107,16 @@ $.aaacplApp.manageAuction.executeScript = function(){
             var formData = new FormData();
             formData.append('file', file);
             $.aaacplApp.ajaxCall("POST", "files/upload?fn=logo", function success(response){
+                if(response.successMessage && response.successMessage !=""){
                 $("#auctionCatalogPath").val(response.filePath);
                  $('#form-info').hide();
                  $("#auctionUploadCatalogFile").hide();
+                }
+                else{
+                    alert("Unable to upload file");
+                }
             }, function error(msg){
+                alert("Unable to upload file");
             }, formData,true);
             }
         });
@@ -162,7 +168,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
             $.aaacplApp.ajaxCall("POST", 'auction/create', function success(response){
 				$(".overlay").hide();
 				$("#add-auction-form").modal('hide');
-				if(response.successMessage){
+				if(response.successMessage && response.successMessage !=""){
 					 $('#form-success').show();
                      $('#form-success .message-text').html('Auction has been created.');
 					auctionPost.auctionId = response.successMessage;
@@ -286,10 +292,15 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                          var formData = new FormData();
                          formData.append('file', file);
                          $.aaacplApp.ajaxCall("POST", "files/upload?fn=logo_" + value.auctionId, function success(response){
-                             $("#auction"+value.auctionId+"Catalog").val(response.filePath);
-                              $('#auction'+value.auctionId+'auctionUploadCatalogFile').hide();
-                              $('#form-info'+value.auctionId).hide();
+                         if(response.successMessage && response.successMessage != ""){
+                               $("#auction"+value.auctionId+"Catalog").val(response.filePath);
+                               $('#auction'+value.auctionId+'auctionUploadCatalogFile').hide();
+                               $('#form-info'+value.auctionId).hide();
+                         }else{
+                         alert("Unable to upload file");
+                         }
                          }, function error(msg){
+                         alert("Unable to upload file");
                          }, formData,true);
                          }
                      });
@@ -340,7 +351,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              					$(".overlay").show();
              					$.aaacplApp.ajaxCall("PUT", 'auction/update', function success(response){
              						$(".overlay").hide();
-             						if(response.successMessage){
+             						if(response.successMessage && response.successMessage !=""){
 										$("#ar-"+id+" [data-widget]").click();
              							 $('#form-success').show();
                                          $('#form-success .message-text').html('Auction has been updated.');

@@ -128,7 +128,7 @@ $.aaacplApp.manageLot.executeScript = function() {
         $.aaacplApp.ajaxCall("POST", 'lots/create', function success(response) {
                 $(".overlay").hide();
                 $("#add-lot-form").modal('hide');
-                if (response.successMessage) {
+                if (response.successMessage && response.successMessage !="") {
                     $('#form-success').show();
                     $('#form-success .message-text').html('Lot created.');
                     lotsPost.id = response.successMessage;
@@ -333,7 +333,7 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                 $(".overlay").show();
                 $.aaacplApp.ajaxCall("POST", 'participator/create', function success(response) {
                         $(".overlay").hide();
-                        if (response.successMessage) {
+                        if (response.successMessage && response.successMessage !="") {
                             $('#manageParticipator-form' + value.id).modal('hide');
                             $('#form-success').show();
                             $('#form-success .message-text').html('Participators added');
