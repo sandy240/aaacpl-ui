@@ -135,8 +135,14 @@ $.aaacplApp.registerPage.executeScript = function(){
 							 $(".overlay").show();
 			$.aaacplApp.ajaxCall("POST", 'user/register', function success(response){
 				$(".overlay").hide();
+				if (response.successMessage && response.successMessage != "") {
 				$('#register-success').show();
 				$('#register-form').hide();
+				}else
+				{
+				$('#register-failure').show();
+                $('#register-failure .message-text').html('Unable to register. Kindly provide correct details');
+				}
 			}, function error(msg){
 				$('#register-failure').show();
 				$('#register-failure .message-text').html('Unable to register. Kindly provide correct details');

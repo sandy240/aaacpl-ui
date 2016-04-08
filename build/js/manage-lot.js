@@ -367,7 +367,7 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                 $(".overlay").show();
                 $.aaacplApp.ajaxCall("PUT", 'lots/update', function success(response) {
                         $(".overlay").hide();
-                        if (response.successMessage) {
+                        if (response.successMessage && response.successMessage != "") {
                             $("#lr-" + lotID + " [data-widget]").click();
                             $('#form-success').show();
                             $('#form-success .message-text').html('Lot updated.');
