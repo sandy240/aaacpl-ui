@@ -73,7 +73,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
                            '<input type="hidden" id="auctionCatalogPath" name="catalog" value=""/>'+
                            '<div class="row">'+
                            '<div class="col-md-6"><input type="file" class="form-control" id="auctionInputFile"></div>'+
-                           '<div class="col-sm-6"><button type="button" class="btn btn-primary" id="auctionUploadCatalogFile">Upload</button></div>'+
+                           '<div class="col-sm-6"><button type="button" class="btn btn-primary" style="display:none;" id="auctionUploadCatalogFile">Upload</button></div>'+
                            '</div>'+
                            '<div class="form-group" id="catalogFileInfo"> '+
                            '</div>'+
@@ -110,6 +110,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
             $.aaacplApp.ajaxCall("POST", "files/upload?fn=logo", function success(response){
                 $("#auctionCatalogPath").val(response.filePath);
                  $('#form-info').hide();
+                 $("#auctionUploadCatalogFile").hide();
             }, function error(msg){
             }, formData,true);
             }
@@ -124,6 +125,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
                         fileInfo += "<div><strong>Size:</strong> " + parseInt(file.size / 1024, 10) + " kb</div>";
                         fileInfo += "<div><strong>Type:</strong> " + file.type + "</div>";
                         $('#form-info').show();
+                        $("#auctionUploadCatalogFile").show();
                     }
                     document.getElementById("catalogFileInfo").innerHTML = fileInfo;
             });

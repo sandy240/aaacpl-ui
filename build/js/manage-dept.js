@@ -52,7 +52,7 @@ $.aaacplApp.manageDept.getLayout = function (){
 			   '<input type="hidden" id="deptLogoPath" name="logoPath" value=""/>'+
                 '<div class="row">'+
                ' <div class="col-md-6"><input type="file" class="form-control" id="deptInputFile"></div>'+
-               ' <div class="col-sm-6"><button type="button" class="btn btn-primary" id="deptUploadLogoFile">Upload</button></div>'+
+               ' <div class="col-sm-6"><button type="button" class="btn btn-primary" style="display:none;" id="deptUploadLogoFile">Upload</button></div>'+
                '</div>'+
                '<img class="help-block uploaded" id="deptLogoSrc" src="#" alt="preview logo here" style="max-height: 150px;">'+
                '<div id="form-info" class="alert alert-info" style="display:none;">'+
@@ -110,6 +110,7 @@ $.aaacplApp.manageDept.executeScript = function(){
 
     $(":reset").click(function(){
          $('#deptLogoSrc').attr('src', "#");
+         $('#deptUploadLogoFile').hide();
          $('#form-info').hide();
     });
 
