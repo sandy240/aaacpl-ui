@@ -9,70 +9,70 @@ $.aaacplApp.manageDept.getLayout = function (){
                '<strong>Success !</strong> <span class="message-text"></span>'+
                '</div>'+
                '</div>'+
-			   '<div id="form-failure" style="display:none;">'+
-              '<div class="alert alert-danger">'+
-              '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-              '<strong>Error !</strong> <span class="message-text"></span>'+
-              '</div>'+
-              '</div>'+
-			  '<div id="departments" class="box box-solid manage">'+
-             '<div class="box-header">'+
-               '<h3 class="box-title">Departments</h3>'+
-			   '<div class="box-tools pull-right">'+
-			   '<button class="btn bg-orange" data-toggle="modal" data-target="#add-dept-form">Add New Department</button>'+
-			   '</div>'+
-            '</div>'+
-            '<div class="box-body" id="dept-rows-cont">'+
-			'</div><!-- /.box-body -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
-         '</div>'+
-		 
-		 //Modal for adding new department
-		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-dept-form" aria-labelledby="model-heading">'+
-          '<div class="modal-dialog" role="document">'+
-           ' <div class="modal-content">'+
-              '<div class="modal-header">'+
-               ' <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
-               '   <span aria-hidden="true">×</span></button>'+
-               ' <h4 class="modal-title" id="model-heading">New Department</h4>'+
-                '<div id="deptForm-failure" style="display:none;">'+
-                 '<div class="alert alert-danger">'+
-                 '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-                 '<strong>Error !</strong> <span class="message-text"></span>'+
-                 '</div>'+
-                 '</div>'+
-              '</div>'+
-			  '<form class="form" role="form">'+
-              '<div class="modal-body">'+
-			 '<div class="form-group">'+
-			  ' <label for="deptInputName">Department Name</label>'+
-			   ' <input type="text" class="form-control" name="name" id="deptInputName" required>'+
-			 '</div>'+
-			 '<div class="form-group">'+
-			 ' <label for="deptInputLogoFile">Department Logo</label>'+
-			   '<input type="hidden" id="deptLogoPath" name="logoPath" value=""/>'+
-                '<div class="row">'+
-               ' <div class="col-md-6"><input type="file" class="form-control" id="deptInputFile"></div>'+
-               ' <div class="col-sm-6"><button type="button" class="btn btn-primary" style="display:none;" id="deptUploadLogoFile">Upload</button></div>'+
+               '<div id="form-failure" style="display:none;">'+
+               '<div class="alert alert-danger">'+
+               '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
+               '<strong>Error !</strong> <span class="message-text"></span>'+
                '</div>'+
+               '</div>'+
+               '<div id="departments" class="box box-solid manage">'+
+               '<div class="box-header">'+
+               '<h3 class="box-title">Departments</h3>'+
+               '<div class="box-tools pull-right">'+
+               '<button class="btn bg-orange" data-toggle="modal" data-target="#add-dept-form">Add New Department</button>'+
+               '</div>'+
+               '</div>'+
+               '<div class="box-body" id="dept-rows-cont">'+
+               '</div><!-- /.box-body -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
+               '</div>'+
+               		 //Modal for adding new department
+               '<div class="modal fade" tabindex="-1" role="dialog" id="add-dept-form" aria-labelledby="model-heading">'+
+               '<div class="modal-dialog" role="document">'+
+               '<div class="modal-content">'+
+               '<div class="modal-header">'+
+               '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+               '<span aria-hidden="true">×</span></button>'+
+               '<h4 class="modal-title" id="model-heading">New Department</h4>'+
+               '<div id="deptForm-failure" style="display:none;">'+
+               '<div class="alert alert-danger">'+
+               '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
+               '<strong>Error !</strong> <span class="message-text"></span>'+
+               '</div>'+
+               '</div>'+
+               '</div>'+
+               '<form class="form" role="form">'+
+               '<div class="modal-body">'+
+               '<div class="form-group">'+
+               ' <label for="deptInputName">Department Name</label>'+
+               ' <input type="text" class="form-control" name="name" id="deptInputName" required>'+
+               '</div>'+
+               '<div class="form-group"> <label>Department Logo</label>'+
+               '<div><input type="hidden" id="deptLogoPath" name="logoPath" value=""><input type="file" class="hidden" id="deptInputFile" accept="image/*">'+
+               '<label class="form-control btn btn-default" for="deptInputFile" style="width: 15%;">Select a file</label>'+
+               '<span id="deptInputFileText" style="padding:8px;">no file chosen</span>'+
+               '</div>'+
+               '</div>'+
+               '<div class="form-group">'+
+               '<button type="button" class="btn btn-primary" style="display:none;" id="deptUploadLogoFile">Upload</button>'+
                '<img class="help-block uploaded" id="deptLogoSrc" src="#" alt="preview logo here" style="max-height: 150px;">'+
+               '</div>'+
                '<div id="form-info" class="alert alert-info" style="display:none;">'+
-               		'<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
-               		  '<strong>Info !</strong> Click upload button before creating department for uploading logo.'+
-               		'</div>'+
-			 '</div>'+
-              '</div>'+
-              '<div class="modal-footer">'+
-              '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-              '  <button type="submit" class="btn bg-orange">Create</button>'+
-              '  <button type="reset" class="btn">Reset</button>'+
-              '</div>'+
-			  '</form>'+
-            '</div>'+
-            '<!-- /.modal-content -->'+
-          '</div>'+
-          '<!-- /.modal-dialog -->'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
-        '</div>';
-		
+               '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
+               '<strong>Info !</strong> Click upload button before creating department for uploading logo.'+
+               '</div>'+
+               '</div>'+
+               '<div class="modal-footer">'+
+               '  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
+               '  <button type="submit" class="btn bg-orange">Create</button>'+
+               '  <button type="reset" class="btn">Reset</button>'+
+               '</div>'+
+               '</form>'+
+               '</div>'+
+               '<!-- /.modal-content -->'+
+               '</div>'+
+               '<!-- /.modal-dialog -->'+
+               '<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
+               '</div>';
 	return tmpl;
 };
 
@@ -80,11 +80,11 @@ $.aaacplApp.manageDept.executeScript = function(){
 	var _this = this;
 
 	$("#deptUploadLogoFile").on('click',function(e){
+	        $(".overlay").show();
     		var file = $('#deptInputFile').get(0).files[0];
     		if (file) {
     		var formData = new FormData();
     		formData.append('file', file);
-    		$(".overlay").show();
     		$.aaacplApp.ajaxCall("POST", "files/upload?fn=logo", function success(response){
     			$("#deptLogoPath").val(response.filePath);
     			$('#form-info').hide();
@@ -105,6 +105,7 @@ $.aaacplApp.manageDept.executeScript = function(){
                     $('#form-info').show();
                 }
                 reader.readAsDataURL(this.files[0]);
+                 $('#deptInputFileText').html(this.files[0].name);
               }
         });
 

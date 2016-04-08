@@ -38,7 +38,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
                         ' <h4 class="modal-title" id="model-heading">New Auction</h4>'+
                        '</div>'+
                        '<div id="createAuctionFormSection">'+
-         			  '<form id="createAuctionForm" class="form" role="form">'+
+         			  '<form class="form" role="form">'+
                        '<div class="modal-body">'+
          			 '<div class="form-group">'+
          			  ' <label for="auctionInputName">Auction Name</label>'+
@@ -68,19 +68,18 @@ $.aaacplApp.manageAuction.getLayout = function (){
                              '</select>'+
                            '</div>'+
               '<!-- auction Catalog -->'+
-                           '<div class="form-group">'+
-                           '<label>Catalog</label>'+
-                           '<input type="hidden" id="auctionCatalogPath" name="catalog" value=""/>'+
-                           '<div class="row">'+
-                           '<div class="col-md-6"><input type="file" class="form-control" id="auctionInputFile"></div>'+
-                           '<div class="col-sm-6"><button type="button" class="btn btn-primary" style="display:none;" id="auctionUploadCatalogFile">Upload</button></div>'+
-                           '</div>'+
+              '<div class="form-group"> <label>Catalogue</label>'+
+               '<div><input type="hidden" id="auctionCatalogPath" name="catalog" value="">'+
+               '<input type="file" class="hidden" id="auctionInputFile">'+
+               '<label class="form-control btn btn-default" for="auctionInputFile" style="width: 15%;">Select a file</label><span id="auctionInputFileText" style="padding:8px;">no file chosen</span>'+
+               '<button type="button" style="display:none;" class="btn btn-primary" id="auctionUploadCatalogFile">Upload</button>'+
+               '</div>'+
+               '</div>'+
                            '<div class="form-group" id="catalogFileInfo"> '+
                            '</div>'+
                            '<div id="form-info" class="alert alert-info" style="display:none;">'+
                            '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
                            '<strong>Info !</strong> Click upload button before creating auction for uploading catalog'+
-                           '</div>'+
                            '</div>'+
                            '</div>'+
                            '<!-- /.modal-body -->'+
@@ -126,6 +125,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
                         fileInfo += "<div><strong>Type:</strong> " + file.type + "</div>";
                         $('#form-info').show();
                         $("#auctionUploadCatalogFile").show();
+                        $('#auctionInputFileText').html(this.files[0].name);
                     }
                     document.getElementById("catalogFileInfo").innerHTML = fileInfo;
             });
@@ -139,7 +139,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
         });
 		$('#departmentIdField').html("DEPARTMENT : "+deptName);
 
-		var createAuctionForm = $('#createAuctionForm');
+		var createAuctionForm = $('#add-auction-form form');
 		
 		$('#add-auction-form').on('shown.bs.modal', function () {
 		  createAuctionForm[0].reset();
@@ -245,7 +245,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                        '<div class="form-group"> <label>Catalogue</label>'+
                                                                                      '<div><input type="hidden" id="auction'+value.auctionId+'Catalog" name="catalog" value="'+value.catalog+'">'+
                                                                                      '<input type="file" class="hidden" id="auction'+value.auctionId+'auctionInputFile">'+
-                                                                                     '<label class="form-control btn btn-default" for="auction'+value.auctionId+'auctionInputFile" style="width: 10%;">Select a file</label><span id="auction'+value.id+'InputFileText" style="padding:8px;">no file chosen</span>'+
+                                                                                     '<label class="form-control btn btn-default" for="auction'+value.auctionId+'auctionInputFile" style="width: 10%;">Select a file</label><span id="auction'+value.auctionId+'InputFileText" style="padding:8px;">no file chosen</span>'+
                                                                                      '<button type="button" style="display:none;" class="btn btn-primary" id="auction'+value.auctionId+'auctionUploadCatalogFile">Upload</button>'+
                                                                                      '</div>'+
                                                                                      '</div>'+
@@ -270,10 +270,14 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              $('#auction'+value.status+'status').val('I');
              }
 
+             if(value.auctionTypeId && value.auctionTypeId == 2){
+              $('#auction'+value.auctionId+'Type').val(2);
+             }
+
              var fileName = "no file chosen";
              if(typeof(value.catalog) !== 'undefined' && value.catalog !== null){
 			 fileName = value.catalog.split('/')[1];
-			 $('#auction'+value.id+'InputFileText').html(fileName);
+			 $('#auction'+value.auctionId+'InputFileText').html(fileName);
 			 }
 
 			 $("#auction"+value.auctionId+"auctionUploadCatalogFile").on('click',function(e){
