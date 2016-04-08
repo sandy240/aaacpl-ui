@@ -30,7 +30,7 @@ $.aaacplApp.auctionListPage.executeScript = function(){
 		if(auctionListData.length > 0){
 			$('#live-auctions .box-body').html('');
 		} else {
-			$('#upcoming-auctions .box-body').html('No live auction(s).');
+			$('#live-auctions .box-body').html('No live auction(s).');
 		}
 		$.each(auctionListData, function(key,value){
 			var deptInfo = $.aaacplApp.getDeptInfoById(value.deptId);

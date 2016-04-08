@@ -44,8 +44,18 @@ $.aaacplApp.loginPage.getLayout = function (){
 	return tmpl;
 };
 $.aaacplApp.loginPage.executeScript = function(){
+	
+	var param1 = $.aaacplApp.queryParams("invalidSession");
+	//console.info(param1);
+	if(param1 == "1"){
+		$('#login-failure').show();	
+		$('#login-failure .message-text').html("Invalid session! Please login again.");
+	} else {
+		$('#login-failure').hide();
+	}
+	
 	// be default hiding the error alert messages
-	  $('#login-failure').hide();
+	  
 	  var loginForm = $('#login');
 	  loginForm[0].reset();
 	  

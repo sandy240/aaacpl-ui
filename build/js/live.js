@@ -6,7 +6,6 @@ $.aaacplApp.livePage.tickCntr = 0;
 	$.aaacplApp.livePage.currentLotId = 0;
 	$.aaacplApp.livePage.timeEndedLotId = -1;
 	$.aaacplApp.livePage.currentLotIndex = 0;
-	$.aaacplApp.livePage.currentBidHistory = [];
 	$.aaacplApp.livePage.userStatusList = [];
 $.aaacplApp.livePage.getLayout = function (){
 	
@@ -214,26 +213,17 @@ $.aaacplApp.livePage.updateLot = function(){
 		$.aaacplApp.ajaxCall("POST", 'lots/status',function success(response){
 			$("#lots-cont > .overlay").hide();
 			var lotElem = $("#lot" + _this.currentLotId);
-			$("#lot" + _this.currentLotId + " .hbid").html(response.highestBid);
 			var lotData = _this.getLotData(_this.currentLotId);
 			
-			if(response.higestBidUser == $.aaacplApp.getLoggedInUserId()){
-				lotElem.find('.bidarea .info-box').removeClass('bg-red').addClass('bg-green');
-				lotElem.find('.bidarea .info-box-icon .fa').removeClass('fa-thumbs-o-down').addClass('fa-thumbs-o-up');
-			} else {
-				lotElem.find('.bidarea .info-box').removeClass('bg-green').addClass('bg-red');
-				lotElem.find('.bidarea .info-box-icon .fa').removeClass('fa-thumbs-o-up').addClass('fa-thumbs-o-down');
-			}
-			
-			if(response.hasHigestBidChanged && $.aaacplApp.dataStorage.userInfo.typeId == 4){
-				lotElem.find('.bidarea .info-box').removeClass('bg-red').addClass('bg-green');
-				_this.renderBidHistory();
-			}
+			_this.updateColorSignal(response, _this.currentLotId, lotElem);
 			
 			//Fix if current server time is not available
 			if(response.currentServerTime == ""){
 				response.currentServerTime = _this.formatDateTime(new Date())
 			}
+			
+			//Update higgest bid
+			$("#lot" + _this.currentLotId + " .hbid").html(response.highestBid);
 			
 			//Table of content of lots at the START OF AUCTION
 			if(_this.lotsData.length > 0){
@@ -259,30 +249,18 @@ $.aaacplApp.livePage.updateLot = function(){
 			
 			//AFTER TIMEOUT OF CURRENT LOTS
 			if(_this.timeEndedLotId==_this.currentLotId){
-				var lotElem = $("#lot" + _this.currentLotId );
-				var statusbidMsg = '';
-				if (_this.currentBidHistory.length > 0) {
-					if (lotElem.find('.bidarea .info-box').hasClass('bg-green')) {
-						statusbidMsg = "You are highest bidder! <small>(Subject To Confirmation)</small>";
-					}
-					if($.aaacplApp.dataStorage.userInfo.typeId == 4){
-						_this.renderBidHistory();
-					}
-				} else {
-					statusbidMsg = 'No Bidder(s)';
-				}
 				
-				lotElem.find('.bidarea .input-group').html(statusbidMsg);
+				_this.updateFinalState(response, _this.currentLotId, lotElem);
+				_this.reupdateLotContent(_this.currentLotId, lotElem);
+				
 				_this.currentLotIndex++;
 				if(_this.currentLotIndex < _this.lotsData.length){
 					_this.currentLotId = _this.lotsData[_this.currentLotIndex].id;
 				} else {
 					_this.currentLotId = -1;
 				}
-				_this.currentBidHistory = [];
 				_this.timeEndedLotId = -1;
 			}
-			
 			
 			if(window.location.href.indexOf($.aaacplApp.template["live"]) >= 0)
 			setTimeout(_this.updateLot,800);
@@ -290,14 +268,71 @@ $.aaacplApp.livePage.updateLot = function(){
 		},request);
 	}
 };
-$.aaacplApp.livePage.renderBidHistory = function(){
+
+$.aaacplApp.livePage.updateColorSignal = function(response, _lotID, lotElem){
+	var _this = this;
+	if($.aaacplApp.dataStorage.userInfo.typeId == 4){
+		if(parseInt(response.highestBid) > 0){
+			lotElem.find('.bidarea .info-box').removeClass('bg-red').addClass('bg-green');
+			lotElem.find('.bidarea .info-box-icon .fa').removeClass('fa-thumbs-o-down').addClass('fa-thumbs-o-up');
+		}
+		if(response.highestBid != lotElem.find(".hbid").html()){
+			_this.renderBidHistory(_lotID);
+		}
+	} else {
+		if(response.higestBidUser == $.aaacplApp.getLoggedInUserId()){
+			lotElem.find('.bidarea .info-box').removeClass('bg-red').addClass('bg-green');
+			lotElem.find('.bidarea .info-box-icon .fa').removeClass('fa-thumbs-o-down').addClass('fa-thumbs-o-up');
+		} else {
+			lotElem.find('.bidarea .info-box').removeClass('bg-green').addClass('bg-red');
+			lotElem.find('.bidarea .info-box-icon .fa').removeClass('fa-thumbs-o-up').addClass('fa-thumbs-o-down');
+		}
+	}
+}
+
+$.aaacplApp.livePage.updateFinalState = function(response, _lotId, lotElem){
+	
+	var _this = this;
+	var statusbidMsg = '';
+	if(parseInt(response.highestBid) > parseInt(lotElem.find(".hbid").html())){
+		if (lotElem.find('.bidarea .info-box').hasClass('bg-green')) {
+			statusbidMsg = "You are highest bidder! <small>(Subject To Confirmation)</small>";
+		}
+		if($.aaacplApp.dataStorage.userInfo.typeId == 4){
+			_this.renderBidHistory(_lotId);
+		}
+	} else {
+		statusbidMsg = 'No Bidder(s)';
+	}
+	
+	lotElem.find('.bidarea .input-group').html(statusbidMsg);
+	
+	if($.aaacplApp.dataStorage.userInfo.typeId == 4){
+		_this.renderBidHistory(_lotId);
+	}
+	
+	
+};
+
+$.aaacplApp.livePage.reupdateLotContent = function(_lotId, lotElem){
+	var _this = this;
+	setTimeout(function(){
+		var request = JSON.stringify({lotid: _lotId, currentBidMax : lotElem.find(".hbid").html()});
+		$.aaacplApp.ajaxCall("POST", 'lots/status',function success(response){
+			_this.updateColorSignal(response, _lotId, lotElem);
+			_this.updateFinalState(response, _lotId, lotElem);
+		}, function error(msg){
+		},request);
+	},1000);
+};
+
+$.aaacplApp.livePage.renderBidHistory = function(forLotID){
 	var _this = this;
 	
-	$.aaacplApp.ajaxCall("GET", 'lots/bidHistory/' + _this.currentLotId,function success(response){
-		_this.currentBidHistory = response;
+	$.aaacplApp.ajaxCall("GET", 'lots/bidHistory/' + forLotID,function success(response){
 		var bidarr = response;	
 		if(bidarr.length > 0 && $.aaacplApp.dataStorage.userInfo.typeId == "4"){
-			var bidHistorySec = $("#lot" + _this.currentLotId + " .box-footer");
+			var bidHistorySec = $("#lot" + forLotID + " .box-footer");
 			var bidHistoryBody = bidHistorySec.find('.box-body')
 			bidHistorySec.show();
 			bidHistoryBody.html('');
@@ -362,7 +397,7 @@ $.aaacplApp.livePage.executeScript = function(){
 				var logoPath = $.aaacplApp.uploadPath + deptInfo.logoPath;
 				var imgLogo = '<div class="media-left">'+
 							' <a href="#">'+
-							'  <img class="media-object" src="'+logoPath+'" alt="Dept Logo">'+
+							'  <img class="media-object" src="'+logoPath+'"  height="40" alt="Dept Logo">'+
 							'</a>'+
 							'</div>';
 					$("#auc-info").prepend(imgLogo);
