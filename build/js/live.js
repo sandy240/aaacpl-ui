@@ -294,7 +294,7 @@ $.aaacplApp.livePage.updateFinalState = function(response, _lotId, lotElem){
 	
 	var _this = this;
 	var statusbidMsg = '';
-	if(parseInt(response.highestBid) > parseInt(lotElem.find(".hbid").html())){
+	if(parseInt(response.highestBid) > 0){
 		if (lotElem.find('.bidarea .info-box').hasClass('bg-green')) {
 			statusbidMsg = "You are highest bidder! <small>(Subject To Confirmation)</small>";
 		}
@@ -316,14 +316,16 @@ $.aaacplApp.livePage.updateFinalState = function(response, _lotId, lotElem){
 
 $.aaacplApp.livePage.reupdateLotContent = function(_lotId, lotElem){
 	var _this = this;
+	lotElem.find(".overlay").show();
 	setTimeout(function(){
 		var request = JSON.stringify({lotid: _lotId, currentBidMax : lotElem.find(".hbid").html()});
 		$.aaacplApp.ajaxCall("POST", 'lots/status',function success(response){
+			lotElem.find(".overlay").hide();
 			_this.updateColorSignal(response, _lotId, lotElem);
 			_this.updateFinalState(response, _lotId, lotElem);
 		}, function error(msg){
 		},request);
-	},1000);
+	},2000);
 };
 
 $.aaacplApp.livePage.renderBidHistory = function(forLotID){
@@ -601,9 +603,13 @@ $.aaacplApp.livePage.updateClock = function (id, srvnow, starttime, endtime) {
 			$("#lot" + _this.currentLotId + " .box-tools").show();
 		   $("#lot" + _this.currentLotId).show();
 		}
-		if(!$(".ended").is(":visible") || !$("#lots-toc").is(":visible")){
+		if(!$("#lot" + _this.currentLotId).is(":visible")){
 			$("#lot" + _this.currentLotId).show();
 		}
+		if($("#lots-toc").is(":visible")){
+			$("#lot" + _this.currentLotId).hide();
+		}
+		
 		
 		if (time < 300) {
 			clock.css('color', 'red');

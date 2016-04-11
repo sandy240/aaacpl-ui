@@ -106,8 +106,9 @@ $.aaacplApp.manageAuction.executeScript = function(){
             if(file){
             var formData = new FormData();
             formData.append('file', file);
-            $.aaacplApp.ajaxCall("POST", "files/upload?fn=logo", function success(response){
-                if(response.successMessage && response.successMessage !=""){
+			var curDate = new Date();
+            $.aaacplApp.ajaxCall("POST", "files/upload?fn=auction_catalog_" + curDate.getTime(), function success(response){
+                if(response.filePath && response.filePath !=""){
                 $("#auctionCatalogPath").val(response.filePath);
                  $('#form-info').hide();
                  $("#auctionUploadCatalogFile").hide();
@@ -291,8 +292,10 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                          if(file){
                          var formData = new FormData();
                          formData.append('file', file);
-                         $.aaacplApp.ajaxCall("POST", "files/upload?fn=logo_" + value.auctionId, function success(response){
-                         if(response.successMessage && response.successMessage != ""){
+						 var curDate = new Date();
+						 var catalogFolder = value.catalog.split("/").length > 0 ? value.catalog.split("/")[0] :  ("auction_catalog_" + curDate.getTime());
+                         $.aaacplApp.ajaxCall("POST", "files/upload?fn=" + catalogFolder, function success(response){
+                         if(response.filePath && response.filePath != ""){
                                $("#auction"+value.auctionId+"Catalog").val(response.filePath);
                                $('#auction'+value.auctionId+'auctionUploadCatalogFile').hide();
                                $('#form-info'+value.auctionId).hide();
