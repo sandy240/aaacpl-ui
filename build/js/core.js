@@ -220,6 +220,15 @@ $.aaacplApp = {
 		}
 		return 0;
 	},
+	getLoggedInSessionId : function() {
+		var _this = this;
+		var sId = _this.readCookie(_this.userAuthKey);
+		//Redirection to login if authentication fails i.e session does not exists
+		if(sId.length > 0){
+			return sId.split('@')[0];
+		}
+		return 0;
+	},
 	addRoutes : function(){
 		var _this = this;
 		//ROUTER URLs binding

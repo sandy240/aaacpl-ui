@@ -68,12 +68,12 @@ $.aaacplApp.reportPage.getLayout = function (){
 $.aaacplApp.reportPage.downloadHistory = function(){
 	var auctionId = $("#auctionIdLotReport").val();
 	$('#lotWiseReportForm-success').show();
-	window.open($.aaacplApp.apiSrvPath+'reports/bidHistory/'+auctionId);
+	window.open($.aaacplApp.apiSrvPath+'reports/bidHistory/'+auctionId + '/' + $.aaacplApp.getLoggedInUserId() + '/' + $.aaacplApp.getLoggedInSessionId());
 }
 $.aaacplApp.reportPage.downloadSheet = function(){
 	var auctionId = $("#auctionIdLotReport").val();
 	$('#lotWiseReportForm-success').show();
-	window.open($.aaacplApp.apiSrvPath+'reports/bidSheet/'+auctionId);
+	window.open($.aaacplApp.apiSrvPath+'reports/bidSheet/'+auctionId + '/' + $.aaacplApp.getLoggedInUserId() + '/' + $.aaacplApp.getLoggedInSessionId());
 }
 $.aaacplApp.reportPage.renderBidHistory = function(lotId, lotName){
 	var _this = this;
@@ -84,7 +84,7 @@ $.aaacplApp.reportPage.renderBidHistory = function(lotId, lotName){
 		var bidarr = response;	
 		$("#lotwise-reports-dialog .overlay").hide();
 		var bidTable = $('#lotwise-reports-dialog table');
-		bidTable.html();
+		bidTable.html('');
 		if(bidarr.length > 0){
 			
 			var headerTmpl = '<tr>'+
