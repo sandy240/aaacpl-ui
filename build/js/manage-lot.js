@@ -86,7 +86,7 @@ $.aaacplApp.manageLot.getLayout = function() {
 
     return tmpl;
 };
-$.aaacplApp.manageLot.participatorMasterList = [];
+
 $.aaacplApp.manageLot.executeScript = function() {
     var _this = this;
     var auctionName;
@@ -98,13 +98,7 @@ $.aaacplApp.manageLot.executeScript = function() {
     });
     $('#auctionIdField').html("AUCTION : " + auctionName);
 
-
-    $.aaacplApp.dataStorage.userList.forEach(function(item) {
-        var userDetails = {};
-        userDetails["id"] = item.id;
-        userDetails["text"] = item.companyName;
-        _this.participatorMasterList.push(userDetails);
-    });
+    $.aaacplApp.getParticipatorMasterList();
 
     var createLotsForm = $('#createLotsForm');
 
@@ -291,19 +285,17 @@ $.aaacplApp.manageLot.loadLotRows = function() {
 
 
             $('#manageParticipator-form' + value.id + ' .selectParticipator').select2({
-                data: _this.participatorMasterList || [],
+                data: $.aaacplApp.dataStorage.participatorMasterList || [],
                 initSelection: function(element, callback) {
                     var selectedData = [];
                     var linkedUserIds = value.linkedUserIds || [];
 
                     $.each(linkedUserIds, function(key, item) {
-                    var existingParticipatorsId;
-                        $.each(_this.participatorMasterList, function(key, value) {
+                        $.each($.aaacplApp.dataStorage.participatorMasterList, function(key, value) {
                             if (value.id == item) {
-                                existingParticipatorsId = value;
+                                selectedData.push(value);  //Push values to data array
                             }
                         });
-                        selectedData.push(existingParticipatorsId); //Push values to data array
                     });
                     callback(selectedData); // existing values
                 }

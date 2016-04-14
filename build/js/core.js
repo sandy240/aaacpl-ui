@@ -563,11 +563,14 @@ $.aaacplApp = {
 
     getParticipatorMasterList: function(){
             var _this = this;
+            _this.dataStorage.participatorMasterList = [];
             $.aaacplApp.dataStorage.userList.forEach(function(item) {
-                    var userDetails = {};
-                    userDetails["id"] = item.email;
-                    userDetails["text"] = item.name;
-                    _this.dataStorage.participatorMasterList.push(userDetails);
+                if(item.status == 'A'){
+                var userDetails = {};
+                userDetails["id"] = item.email;
+                userDetails["text"] = item.companyName;
+                _this.dataStorage.participatorMasterList.push(userDetails);
+                }
                 });
     }
 };

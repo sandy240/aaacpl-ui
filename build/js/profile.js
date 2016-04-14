@@ -38,7 +38,7 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 '<input name="id" value="'+userInfo.id+'" type="hidden" class="form-control">'+
 '</div>'+
 '<div class="form-group">'+
-'Company name<input id="editProfileCompanyName" name="companyName" value="'+userInfo.companyName+'" type="text" class="form-control">'+
+'Company name<input id="editProfileCompanyName" name="companyName" value="'+userInfo.companyName+'" type="text" class="form-control" readonly>'+
 '</div>'+
 '<div class="form-group">'+
 'Material Description <textarea id="editProfileMaterial" name="material" class="form-control">'+userInfo.material+'</textarea>'+
@@ -53,7 +53,7 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 '<div class="col-sm-3 col-md-6 col-lg-4" id="ContactInfoSection">'+
 '<h4>Contact Info</h4>'+
 '<div class="form-group">'+
-'Username <input id="editProfileName" type="text" name="name" value="'+userInfo.name+'" class="form-control" required >'+
+'Username <input id="editProfileName" type="text" name="name" value="'+userInfo.name+'" class="form-control" readonly>'+
 '</div>'+
 '<div class="form-group">'+
 'Email <input id="editProfileEmail" name="email" value="'+userInfo.email+'" type="email" class="form-control" readonly>'+
