@@ -57,11 +57,13 @@ $.aaacplApp = {
 		"profile": '#/profile',
 		"history": '#/history',
 		"auction": '#/auction',
+		"tender": '#/tender',
 		"userList": '#/users',
 		"manage-dept": '#/manage/dept',
 		"manage-auction": '#/manage/auctions',		
 		"manage-lot": '#/manage/lots',		
-		"live": '#/live'	
+		"live": '#/live',	
+		"live-tender": '#/live/tender'	
 	},
 
 	//Viewport element where content will be displayed
@@ -147,6 +149,8 @@ $.aaacplApp = {
 		if(routeobj.templateId!="login"  || routeobj.templateId!="register")
 		_this.commonLayoutReady();
 		
+		$(document).ajaxStart(function() { Pace.restart(); });
+		
 		$(document).ready(function(){
 			//TEMPORARY PATCH WORK TO RELOAD ADMINLTE MODULES
 			$('script[src$="app.min.js"]').remove();
@@ -175,17 +179,6 @@ $.aaacplApp = {
 		//Add all possible routes
 		_this.addRoutes();
 
-        // load auction data if exists
-		/*var deptCookie = _this.readCookie('deptId');
-		if(deptCookie && deptCookie != ''){
-	           _this.getAuctionList(deptCookie);
-		}
-
-		 // load auction data if exists
-        var auctionCookie = _this.readCookie('auctionId');
-        if(auctionCookie && auctionCookie != ''){
-               _this.getLotList(auctionCookie);
-        }*/
 
 		_this.wrapperElem = $('#main-viewport');
 
@@ -288,16 +281,36 @@ $.aaacplApp = {
 			_this.livePage.executeScript();
 		});
 		
-		//AUCTION
+		//LIVE
+		_this.route('/live/tender', 'live-tender', function () {	
+			var tenderLivePageContents = _this.livePageTender.getLayout();
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("LIVE", tenderLivePageContents , "Tender"));
+		}, function(){
+			_this.livePageTender.executeScript();
+		});
+		
+		//AUCTION LIST
 		_this.route('/auction', 'auction', function () {	
 			var auctionListContents = _this.auctionListPage.getLayout();
 			var title = "AUCTIONS";
-			if(_this.dataStorage.userInfo.typeId == "4"){
+			if(_this.dataStorage.userInfo.typeId != "3"){
 				title = "OBSERVATION"
 			}
 			return _this.wrapInCommonLayout(_this.pageContent.getLayout(title, auctionListContents , "Live and Upcoming Auctions"));
 		}, function(){
 			_this.auctionListPage.executeScript();
+		});
+		
+		//TENDER LIST
+		_this.route('/tender', 'tender', function () {	
+			var tenderListContents = _this.tenderListPage.getLayout();
+			var title = "TENDER";
+			if(_this.dataStorage.userInfo.typeId != "3"){
+				title = "OBSERVATION"
+			}
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout(title, tenderListContents , "Live and Upcoming Tenders"));
+		}, function(){
+			_this.tenderListPage.executeScript();
 		});
 		
 		
@@ -567,7 +580,8 @@ $.aaacplApp = {
             $.aaacplApp.dataStorage.userList.forEach(function(item) {
                 if(item.status == 'A'){
                 var userDetails = {};
-                userDetails["id"] = item.email;
+                userDetails["id"] = item.id;
+                userDetails["email"] = item.email;
                 userDetails["text"] = item.companyName;
                 _this.dataStorage.participatorMasterList.push(userDetails);
                 }
@@ -579,10 +593,12 @@ $.aaacplApp.pageSidebar = {};
 $.aaacplApp.pageContent = {};
 $.aaacplApp.dashboardPage = {};
 $.aaacplApp.auctionListPage = {};
+$.aaacplApp.tenderListPage = {};
 $.aaacplApp.manageDept = {};
 $.aaacplApp.manageAuction = {};
 $.aaacplApp.manageLot = {};
 $.aaacplApp.livePage = {};
+$.aaacplApp.livePageTender = {};
 $.aaacplApp.profilePage = {};
 $.aaacplApp.pageFooter = {};
 $.aaacplApp.loginPage = {};

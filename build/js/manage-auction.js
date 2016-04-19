@@ -54,6 +54,19 @@ $.aaacplApp.manageAuction.getLayout = function (){
                              '  <input type="text" class="form-control pull-right" id="auctionDateRange" required>'+
                              '</div><!-- /.input group -->'+
                            '</div><!-- /.form group -->'+
+						   
+						    '<!-- Tender Date and time range -->'+
+							   '<div class="form-group">'+
+								' <label>Tender Settings(Start and end date)</label>'+
+								' <div class="input-group">'+'<input type="checkbox" id="tenderEnable"> Show as tender'+'</div>'+
+								' <div class="input-group" id="tenderdategroup" style="display:none">'+
+								 '  <div class="input-group-addon">'+
+								 '    <i class="fa fa-clock-o"></i>'+
+								 '  </div>'+
+								 '  <input type="text" class="form-control pull-right" id="tenderDateRange" >'+
+								 '</div><!-- /.input group -->'+
+							   '</div><!-- /.form group -->'+
+						   
                       '<!-- Description -->'+
                            '<div class="form-group">'+
                            '<label>Description</label>'+
@@ -136,6 +149,15 @@ $.aaacplApp.manageAuction.executeScript = function(){
                     }
                     document.getElementById("catalogFileInfo").innerHTML = fileInfo;
             });
+			
+			$("#tenderEnable").change(function(e) {
+					if(this.checked) {
+						$("#tenderdategroup").show();
+					} else {
+						$("#tenderdategroup").hide();
+						$("#tenderDateRange").val('');
+					}
+				});
 
         var deptName;
         var deptList = $.aaacplApp.dataStorage.deptList;
@@ -150,12 +172,14 @@ $.aaacplApp.manageAuction.executeScript = function(){
 		
 		$('#add-auction-form').on('shown.bs.modal', function () {
 		  createAuctionForm[0].reset();
+		  createAuctionForm.find("#tenderdategroup").hide();
 		  document.getElementById("catalogFileInfo").innerHTML = "";
 		});
         // on submit function of form is called to perform client side validation
 		createAuctionForm.submit(function(event){
 			event.preventDefault(); // Prevent the form from submitting via the browser
 			var dateRangeValue = $('#auctionDateRange').val(); // getting the entire dateRange value
+			var tenderDateRangeValue = $('#tenderDateRange').val(); // getting the entire dateRange value
             var formData = createAuctionForm.serializeArray(); // JSON data of values entered in form
             var auctionPost = {};
                  $.each(formData, function (key, item) {
@@ -164,6 +188,9 @@ $.aaacplApp.manageAuction.executeScript = function(){
                  auctionPost["deptId"] = $.aaacplApp.queryParams('deptid');
                  auctionPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
                  auctionPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
+				 auctionPost["tenderStartDate"] = typeof tenderDateRangeValue === "string" ? tenderDateRangeValue.substr(0, 19) : "" ;
+				 auctionPost["tenderEndDate"] =  typeof tenderDateRangeValue === "string" ? tenderDateRangeValue.substr(21, 20) : "" ;
+				 auctionPost["isAuctionTender"] = $('#tenderEnable').is(':checked') ? 1 : 0;
                  auctionPost["createdBy"] = $.aaacplApp.getLoggedInUserId();
 				 $(".overlay").show();
             $.aaacplApp.ajaxCall("POST", 'auction/create', function success(response){
@@ -191,6 +218,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
 
 	
 	$('#auctionDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
+	$('#tenderDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
 	_this.loadAuctionRows();
 	
 };
@@ -226,6 +254,21 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                      '  <input type="text" class="form-control pull-right" id="auction'+value.auctionId+'DateRange" value="'+value.startDate.substr(0, 19)+' - '+value.endDate.substr(0, 19)+'" >'+
                                                      '</div><!-- /.input group -->'+
                                                    '</div><!-- /.form group -->'+
+												   
+												   
+												   '<!-- Tender Date and time range -->'+
+												   '<div class="form-group">'+
+													' <label>Tender Settings(Start and end date)</label>'+
+													' <div class="input-group">'+'<input type="checkbox" id="tenderEnable'+value.auctionId + '" '+ (value.isTender==1 ? 'checked' : '') +'> Show as tender'+'</div>'+
+													' <div class="input-group" style="display:none" id="tenderdategroup'+value.auctionId+'">'+
+													 '  <div class="input-group-addon">'+
+													 '    <i class="fa fa-clock-o"></i>'+
+													 '  </div>'+
+													 '  <input type="text" class="form-control pull-right" id="tender'+value.auctionId+'DateRange" value="'+value.tenderStartDate.substr(0, 19)+' - '+value.tenderEndDate.substr(0, 19)+'">'+
+													 '</div><!-- /.input group -->'+
+												   '</div><!-- /.form group -->'+
+												   
+												   
                                                          '<!-- Description -->'+
                                                                      '<div class="form-group">'+
                                                                      '<label>Description</label>'+
@@ -248,7 +291,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                        '</select>'+
                                                                      '</div>'+
                                                         '<!-- auction Catalog -->'+
-                                                                       /*$.aaacplApp.uploadPath = "http://eauction.aaacpl.com/tmp/"*/
+                                                                       
                                                                        '<div class="form-group"> <label>Catalogue</label>'+
                                                                                      '<div><input type="hidden" id="auction'+value.auctionId+'Catalog" name="catalog" value="'+value.catalog+'">'+
                                                                                      '<input type="file" class="hidden" id="auction'+value.auctionId+'auctionInputFile">'+
@@ -257,7 +300,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                                      '</div>'+
                                                                                      '</div>'+
                                                                        			 '<div class="form-group" id="auction'+value.auctionId+'catalogFileInfo">'+
-                                                                       			   /*$.aaacplApp.uploadPath = "http://eauction.aaacpl.com/tmp/"*/
+                                                                       			   
                                                                        			   '</div>'+
                                                                        '<div id="form-info'+value.auctionId+'" class="alert alert-info" style="display:none;">'+
                                                                          '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
@@ -286,7 +329,19 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 			 fileName = value.catalog.split('/')[1];
 			 $('#auction'+value.auctionId+'InputFileText').html(fileName);
 			 }
-
+		
+			if(value.isTender == 1) {
+				$("#tenderdategroup" + value.auctionId).show();
+			}
+			$("#tenderEnable" + value.auctionId).change(function(e) {
+				var id = e.target.id.replace("tenderEnable","");
+					if(this.checked) {
+						$("#tenderdategroup" + id).show();
+					} else {
+						$("#tenderdategroup" + id).hide();
+						$("#tender"+ id +"DateRange").val('');
+					}
+				});
 			 $("#auction"+value.auctionId+"auctionUploadCatalogFile").on('click',function(e){
                          var file = $('#auction'+value.auctionId+'auctionInputFile').get(0).files[0];
                          if(file){
@@ -335,12 +390,14 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                         document.getElementById("auction"+value.auctionId+"catalogFileInfo").innerHTML = "";
              		 });
 			 $('#auction'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
+			 $('#tender'+value.auctionId+'DateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
 
 
              $('#editAuctionForm' + value.auctionId).submit(function(event){
              					var id = event.target.id.replace('editAuctionForm','');
              					event.preventDefault(); // Prevent the form from submitting via the browser
              					var dateRangeValue = $('#auction'+id+'DateRange').val(); // getting the entire dateRange value
+             					var tenderDateRangeValue = $('#tender'+id+'DateRange').val(); // getting the entire dateRange value
              					var formData = $('#editAuctionForm' + id).serializeArray(); // JSON data of values entered in form
              					var auctionPost = {};
              						 $.each(formData, function (key, item) {
@@ -349,6 +406,9 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              						 auctionPost["id"] = id;
              						 auctionPost["startDate"] = typeof dateRangeValue === "string" ? dateRangeValue.substr(0, 19) : "" ;
              						 auctionPost["endDate"] =  typeof dateRangeValue === "string" ? dateRangeValue.substr(21, 20) : "" ;
+									 auctionPost["tenderStartDate"] = typeof tenderDateRangeValue === "string" ? tenderDateRangeValue.substr(0, 19) : "" ;
+             						 auctionPost["tenderEndDate"] =  typeof tenderDateRangeValue === "string" ? tenderDateRangeValue.substr(21, 20) : "" ;
+									 auctionPost["isAuctionTender"] = $('#tenderEnable'+id).is(':checked') ? 1 : 0;
              						 auctionPost["updatedBy"] = $.aaacplApp.getLoggedInUserId();
              						 auctionPost["deptId"] = $.aaacplApp.queryParams('deptid');
              					$(".overlay").show();

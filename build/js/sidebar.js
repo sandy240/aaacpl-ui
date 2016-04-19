@@ -47,7 +47,7 @@ $.aaacplApp.pageSidebar.getPrctMenuItems = function (){
 	var tml = '<ul class="sidebar-menu">' +
 			'<!-- li><a href="#/"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li -->' +
 			'<li><a href="#/auction"><i class="fa fa-gavel"></i><span>AUCTIONS</span></a></li>' +
-			'<li><a href="#/tender"><i class="fa fa-wpforms"></i><span>TENDERS</span></a></li>' +
+			'<li><a href="#/tender"><i class="fa fa-file-text-o"></i><span>TENDERS</span></a></li>' +
 			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
 			'<!-- li><a href="#"><i class="fa fa-history"></i><span>HISTORY</span></a></li -->' +
           '</ul>';
@@ -57,7 +57,7 @@ $.aaacplApp.pageSidebar.getClientMenuItems = function (){
 	var tml =  '<ul class="sidebar-menu">' +
 			'<!-- li><a href="#/"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li -->' +
 			'<li><a href="#/auction"><i class="fa fa-gavel"></i><span>AUCTIONS</span></a></li>' +
-			'<li><a href="#/tender"><i class="fa fa-wpforms"></i><span>TENDERS</span></a></li>' +
+			'<li><a href="#/tender"><i class="fa fa-file-text-o"></i><span>TENDERS</span></a></li>' +
 			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
 			'<!-- li><a href="#"><i class="fa fa-history"></i><span>HISTORY</span></a></li -->' +
             
@@ -68,7 +68,7 @@ $.aaacplApp.pageSidebar.getAdminMenuItems = function (){
 	var tml =  '<ul class="sidebar-menu">' +
 			'<li><a href="#/"><i class="fa fa-dashboard"></i><span>DASHBOARD</span></a></li>' +
 			'<li><a href="#/auction"><i class="fa fa-gavel"></i><span>AUCTIONS</span></a></li>' +
-			'<li><a href="#/tender"><i class="fa fa-wpforms"></i><span>TENDERS</span></a></li>' +
+			'<li><a href="#/tender"><i class="fa fa-file-text-o"></i><span>TENDERS</span></a></li>' +
             '<li><a href="#/manage/dept"><i class="fa fa-cog"></i><span>MANAGE</span></a></li>' +
 			'<li><a href="#/reports"><i class="fa fa-pie-chart"></i><span>REPORTS</span></a></li>' +
 			'<li><a href="#/users"><i class="fa fa-users"></i><span>USERS</span></a></li>' +

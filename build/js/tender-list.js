@@ -1,19 +1,19 @@
-$.aaacplApp.auctionListPage.getLayout = function (){
+$.aaacplApp.tenderListPage.getLayout = function (){
 	
 	/***
-	** LIST OF AUCTIONS - this page is viewed by both participator and observer 
+	** LIST OF TENDERS - this page is viewed by both participator and observer 
 	**/
-	var tmpl = '<div class="box box-solid" id="live-auctions">'+
+	var tmpl = '<div class="box box-solid" id="live-tenders">'+
 	'<div class="box-header with-border">'+
-	'<h3 class="box-title">Live Auctions</h3>'+
+	'<h3 class="box-title">Live Tenders</h3>'+
 	'</div>'+
 	'<div class="box-body">'+
 	'Loading... please wait...' +
 	'</div>'+
 	'</div>'+
-	'<div class="box box-solid" id="upcoming-auctions">'+
+	'<div class="box box-solid" id="upcoming-tenders">'+
 	'<div class="box-header with-border">'+
-	'<h3 class="box-title">Upcoming Auctions</h3>'+
+	'<h3 class="box-title">Upcoming Tenders</h3>'+
 	'</div>'+
 	'<div class="box-body">'+
 	'Loading... please wait...'+
@@ -23,14 +23,14 @@ $.aaacplApp.auctionListPage.getLayout = function (){
 	return tmpl;
 };
 
-$.aaacplApp.auctionListPage.executeScript = function(){
+$.aaacplApp.tenderListPage.executeScript = function(){
 	
-	$.aaacplApp.ajaxCall("GET",'auction/live/0',function success(response){
+	$.aaacplApp.ajaxCall("GET",'auction/live/1',function success(response){
 		var auctionListData = response.auctionResponseList;
 		if(auctionListData.length > 0){
-			$('#live-auctions .box-body').html('');
+			$('#live-tenders .box-body').html('');
 		} else {
-			$('#live-auctions .box-body').html('No live auction(s).');
+			$('#live-tenders .box-body').html('No live tender(s).');
 		}
 		$.each(auctionListData, function(key,value){
 			var deptInfo = $.aaacplApp.getDeptInfoById(value.deptId);
@@ -65,23 +65,23 @@ $.aaacplApp.auctionListPage.executeScript = function(){
             '<div class="icon">'+
 			'<i class="fa fa-'+ (value.auctionTypeId==1 ? 'arrow-up' : 'arrow-down') + '"></i>'+
             '</div>'+
-            '<a href="#/live?auctionid='+value.auctionId+'" class="small-box-footer">'+
-             ' Go to auction <i class="fa fa-arrow-circle-right"></i>'+
+            '<a href="#/live/tender?tenderid='+value.auctionId+'" class="small-box-footer">'+
+             ' Go to tender <i class="fa fa-arrow-circle-right"></i>'+
             '</a>'+
           '</div>';
-			$('#live-auctions .box-body').append(tmpl);
+			$('#live-tenders .box-body').append(tmpl);
 		});
 		
 	},function error(msg){
 		
 	});
 	
-	$.aaacplApp.ajaxCall("GET",'auction/upcoming/0',function success(response){
+	$.aaacplApp.ajaxCall("GET",'auction/upcoming/1',function success(response){
 		var auctionListData = response.auctionResponseList;
 		if(auctionListData.length > 0){
-			$('#upcoming-auctions .box-body').html('');
+			$('#upcoming-tenders .box-body').html('');
 		} else {
-			$('#upcoming-auctions .box-body').html('No upcoming auction(s).');
+			$('#upcoming-tenders .box-body').html('No upcoming tender(s).');
 		}
 		$.each(auctionListData, function(key,value){
 			var tmpl = '<div class="small-box bg-aqua">'+
@@ -92,7 +92,7 @@ $.aaacplApp.auctionListPage.executeScript = function(){
             '<div class="icon">'+
             '</div>'+
           '</div>';
-			$('#upcoming-auctions .box-body').append(tmpl);
+			$('#upcoming-tenders .box-body').append(tmpl);
 		});
 		
 	},function error(msg){

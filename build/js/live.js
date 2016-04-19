@@ -14,7 +14,7 @@ $.aaacplApp.livePage.getLayout = function (){
 	**/
 	
 	var tmpl = 
-	'<div class="modal fade" tabindex="-1" role="dialog" id="message-dialog" aria-labelledby="model-heading">'+
+				'<div class="modal fade" tabindex="-1" role="dialog" id="message-dialog" aria-labelledby="model-heading">'+
                    '<div class="modal-dialog">'+
                     ' <div class="modal-content">'+
                        '<div class="modal-header">'+
@@ -32,12 +32,12 @@ $.aaacplApp.livePage.getLayout = function (){
                    '</div>'+
                    '<!-- /.modal-dialog -->'+
                  '</div>'+
-				 '<div class="media" id="auc-info">'+
+			 '<div class="media" id="auc-info">'+
 				  '<div class="media-body">'+
 					  '<h3 class="media-heading" id="auction-name"></h3>'+
 					  '<h4 id="dept-name"> <span></span></h4>'+
 				  '</div>'+
-				'</div>'+
+			'</div>'+
 	
 				 
 			//Lots consolidated list 
@@ -113,10 +113,10 @@ $.aaacplApp.livePage.getLots = function(lotDetail){
               '      <button type="button" class="btn bg-orange btn-flat bidbtn">Bid Now</button>'+
               '   </span>'+
               '</div>';
-	if($.aaacplApp.dataStorage.userInfo.typeId == "4"){
+	if($.aaacplApp.dataStorage.userInfo.typeId != 3){
 			bidInputtmpl = "";
 	}
-	var printButtons = ($.aaacplApp.dataStorage.userInfo.typeId == 4) ? '<button type="button" class="btn btn-flat bg-orange btnPrintHistory"><i class="fa fa-print"></i> Print</button> <button type="button" id="userLogged'+lotDetail.id+'" class="btn btn-flat bg-orange user-loggedin"><i class="fa fa-group"></i> Bidders</a>' : '';
+	var printButtons = ($.aaacplApp.dataStorage.userInfo.typeId != 3) ? '<button type="button" class="btn btn-flat bg-orange btnPrintHistory"><i class="fa fa-print"></i> Print</button> <button type="button" id="userLogged'+lotDetail.id+'" class="btn btn-flat bg-orange user-loggedin"><i class="fa fa-group"></i> Bidders</a>' : '';
 	var tmpl = '<div class="box box-default live-lot" id="lot'+lotDetail.id+'" style="display:none">'+
              '<div class="box-header with-border">'+
 			 '<p class="lead nextInfo">COMING UP NEXT</p>'+
@@ -271,7 +271,7 @@ $.aaacplApp.livePage.updateLot = function(){
 
 $.aaacplApp.livePage.updateColorSignal = function(response, _lotID, lotElem){
 	var _this = this;
-	if($.aaacplApp.dataStorage.userInfo.typeId == 4){
+	if($.aaacplApp.dataStorage.userInfo.typeId != 3){
 		if(parseInt(response.highestBid) > 0){
 			lotElem.find('.bidarea .info-box').removeClass('bg-red').addClass('bg-green');
 			lotElem.find('.bidarea .info-box-icon .fa').removeClass('fa-thumbs-o-down').addClass('fa-thumbs-o-up');
@@ -298,7 +298,7 @@ $.aaacplApp.livePage.updateFinalState = function(response, _lotId, lotElem){
 		if (lotElem.find('.bidarea .info-box').hasClass('bg-green')) {
 			statusbidMsg = "You are highest bidder! <small>(Subject To Confirmation)</small>";
 		}
-		if($.aaacplApp.dataStorage.userInfo.typeId == 4){
+		if($.aaacplApp.dataStorage.userInfo.typeId != 3){
 			_this.renderBidHistory(_lotId);
 		}
 	} else {
@@ -307,7 +307,7 @@ $.aaacplApp.livePage.updateFinalState = function(response, _lotId, lotElem){
 	
 	lotElem.find('.bidarea .input-group').html(statusbidMsg);
 	
-	if($.aaacplApp.dataStorage.userInfo.typeId == 4){
+	if($.aaacplApp.dataStorage.userInfo.typeId != 3){
 		_this.renderBidHistory(_lotId);
 	}
 	
@@ -333,7 +333,7 @@ $.aaacplApp.livePage.renderBidHistory = function(forLotID){
 	
 	$.aaacplApp.ajaxCall("GET", 'lots/bidHistory/' + forLotID,function success(response){
 		var bidarr = response;	
-		if(bidarr.length > 0 && $.aaacplApp.dataStorage.userInfo.typeId == "4"){
+		if(bidarr.length > 0 && $.aaacplApp.dataStorage.userInfo.typeId != 3){
 			var bidHistorySec = $("#lot" + forLotID + " .box-footer");
 			var bidHistoryBody = bidHistorySec.find('.box-body')
 			bidHistorySec.show();
@@ -383,7 +383,7 @@ $.aaacplApp.livePage.executeScript = function(){
 		type: 'GET'
 		});
 		
-		if($.aaacplApp.dataStorage.userInfo.typeId == "4"){
+		if($.aaacplApp.dataStorage.userInfo.typeId != 3){
 			$(".bidarea .input-group").hide();
 		}
 		
@@ -424,7 +424,7 @@ $.aaacplApp.livePage.loadLots = function(){
 	var _this = this;
 	//$('.overlay').show();
 	$("#lots-cont > .overlay").show();
-	$.aaacplApp.ajaxCall("GET","lots/byAccess/auction/"+$.aaacplApp.queryParams('auctionid')+"/user/"+$.aaacplApp.getLoggedInUserId(), function success(response){
+	$.aaacplApp.ajaxCall("GET","lots/byAccess/auction/"+$.aaacplApp.queryParams('auctionid')+"/user/"+$.aaacplApp.getLoggedInUserId()+"/0", function success(response){
 			
 			_this.lotsData = response.lotsResponseList;
 			

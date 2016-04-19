@@ -51,7 +51,7 @@ $.aaacplApp.manageLot.getLayout = function() {
         '</div>' +
         '<!-- Difference Factor-->' +
         '<div class="form-group">' +
-        '<label>Difference Factor</label>' +
+        '<label>Increment</label>' +
         '<input type="text" class="form-control" id="lotdifferenceFactor" name="differenceFactor" required>' +
         '</div>' +
         '<!-- Date and time range -->' +
@@ -217,7 +217,7 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                 '</div>' +
                 '<!-- Difference Factor-->' +
                 '<div class="form-group">' +
-                '<label>Difference Factor</label>' +
+                '<label>Increment</label>' +
                 '<input type="text" class="form-control" id="lotdifferenceFactor" value="' + value.differenceFactor + '" name="differenceFactor" required>' +
                 '</div>' +
                 '<!-- Date and time range -->' +

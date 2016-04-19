@@ -119,12 +119,6 @@ $.aaacplApp.registerPage.executeScript = function(){
 
 		registerForm[0].reset();
 		
-        $('input').iCheck({
-          checkboxClass: 'icheckbox_square-orange',
-          radioClass: 'iradio_square-orange',
-          increaseArea: '20%' // optional
-        });
-
 		// ajax call only when client side validation is completed
 		function registerFormAjaxCall(registerForm){
 			var formData = registerForm.serializeArray(); // JSON data of values entered in form

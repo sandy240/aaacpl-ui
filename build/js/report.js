@@ -13,7 +13,7 @@ $.aaacplApp.reportPage.getLayout = function (){
                 '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
                 '</div>'+
                 '</div>'+
-                '<h4>NORMAL AUCTION DEPARTMENT WISE REPORT</h4>'+
+                '<h4>AUCTION / TENDER -  DEPARTMENT WISE REPORT</h4>'+
                 '</div>'+
                 '<form id="lotWiseReportForm" class="form" role="form">'+
                 '<div class="box-body" id="reports-cont">'+
@@ -24,7 +24,7 @@ $.aaacplApp.reportPage.getLayout = function (){
                 '</select>'+
                 '</div>'+
                 '<div class="form-group">'+
-                '<label>SELECT AUCTION</label>'+
+                '<label>SELECT AUCTION / TENDER</label>'+
                 '<select id="auctionIdLotReport" class="form-control" name="auction" required>'+
                 '<option value="">Select</option>'+
                 '</select>'+
@@ -32,9 +32,10 @@ $.aaacplApp.reportPage.getLayout = function (){
                 '</div><!-- /.box-body -->'+
                 '<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
                 '<div class="box-footer">'+
+				'<div><input type="checkbox" value="" id="tenderEnable"/> Show tender report</div>'+
                 ' <button type="button" class="btn bg-orange" id="btnSheet"><i class="fa fa-download"></i> Bid Sheet</button>'+
 				' <button type="button" class="btn bg-orange"  id="btnHistory"><i class="fa fa-download"></i> Bid History</button>'+
-					'&nbsp;&nbsp;<span id="lotwise-control" style="display:none">'+
+					'&nbsp;&nbsp;&nbsp;<span id="lotwise-control" style="display:none">'+
 						'<select></select>'+
 						'<button type="button" class="btn bg-orange" id="btnLotwise"><i class="fa fa-list-ol"></i> Lotwise Bid</button>'+
 					'</span>'+
@@ -68,12 +69,20 @@ $.aaacplApp.reportPage.getLayout = function (){
 $.aaacplApp.reportPage.downloadHistory = function(){
 	var auctionId = $("#auctionIdLotReport").val();
 	$('#lotWiseReportForm-success').show();
-	window.open($.aaacplApp.apiSrvPath+'reports/bidHistory/'+auctionId + '/' + $.aaacplApp.getLoggedInUserId() + '/' + $.aaacplApp.getLoggedInSessionId());
+	var isTender = 0;
+	if($("#tenderEnable").is(":checked")){
+		isTender = 1;
+	}
+	window.open($.aaacplApp.apiSrvPath+'reports/bidHistory/'+auctionId + '/' + $.aaacplApp.getLoggedInUserId() + '/' + $.aaacplApp.getLoggedInSessionId() + '/' + isTender );
 }
 $.aaacplApp.reportPage.downloadSheet = function(){
 	var auctionId = $("#auctionIdLotReport").val();
 	$('#lotWiseReportForm-success').show();
-	window.open($.aaacplApp.apiSrvPath+'reports/bidSheet/'+auctionId + '/' + $.aaacplApp.getLoggedInUserId() + '/' + $.aaacplApp.getLoggedInSessionId());
+	var isTender = 0;
+	if($("#tenderEnable").is(":checked")){
+		isTender = 1;
+	}
+	window.open($.aaacplApp.apiSrvPath+'reports/bidSheet/'+auctionId + '/' + $.aaacplApp.getLoggedInUserId() + '/' + $.aaacplApp.getLoggedInSessionId()+ '/' + isTender);
 }
 $.aaacplApp.reportPage.renderBidHistory = function(lotId, lotName){
 	var _this = this;

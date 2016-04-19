@@ -77,19 +77,23 @@ $.aaacplApp.notificationPage.executeScript = function(){
         });
 
 		$.aaacplApp.getParticipatorMasterList();
-
+		
+		var allAddress = $.map($.aaacplApp.dataStorage.participatorMasterList || [], function (obj) {
+		  obj.id = obj.email; 
+		  return obj;
+		});
 		$('#notificationForm .selectParticipator').select2({
-            data: $.aaacplApp.dataStorage.participatorMasterList || [],
+            data: allAddress,
         });
 
         var selectedParticipator = [];
         var emailList = $.aaacplApp.dataStorage.participatorMasterList || [];
         $.each(emailList, function(key, item) {
-          selectedParticipator.push(item.text);
+          selectedParticipator.push(item.id);
         });
 
         $("#participatorList").select2().on("change",function(e){
-          selectedParticipator = $(this).select2().val() || [];
+			selectedParticipator = $(this).select2().val() || [];
         });
 
         /* $("#uploadAttachmentFile").on('click',function(e){
