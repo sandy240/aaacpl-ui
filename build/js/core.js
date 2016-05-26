@@ -159,6 +159,8 @@ $.aaacplApp = {
 			scrpt.src = "dist/js/app.min.js";
 			scrpt.async = false;
 			document.body.appendChild(scrpt);
+			
+			$.notify.defaults( {globalPosition:"top center"} );
 		});
 		
 	},

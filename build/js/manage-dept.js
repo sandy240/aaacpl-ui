@@ -3,18 +3,7 @@ $.aaacplApp.manageDept.getLayout = function (){
 	/***
 	** COMPLETE DEPARTMENT PAGE LAYOUT 
 	**/
-	var tmpl = '<div id="form-success" style="display:none;">'+
-               '<div class="alert alert-success">'+
-               '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-               '<strong>Success !</strong> <span class="message-text"></span>'+
-               '</div>'+
-               '</div>'+
-               '<div id="form-failure" style="display:none;">'+
-               '<div class="alert alert-danger">'+
-               '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-               '<strong>Error !</strong> <span class="message-text"></span>'+
-               '</div>'+
-               '</div>'+
+	var tmpl = 
                '<div id="departments" class="box box-solid manage">'+
                '<div class="box-header">'+
                '<h3 class="box-title">Departments</h3>'+
@@ -33,12 +22,6 @@ $.aaacplApp.manageDept.getLayout = function (){
                '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
                '<span aria-hidden="true">×</span></button>'+
                '<h4 class="modal-title" id="model-heading">New Department</h4>'+
-               '<div id="deptForm-failure" style="display:none;">'+
-               '<div class="alert alert-danger">'+
-               '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-               '<strong>Error !</strong> <span class="message-text"></span>'+
-               '</div>'+
-               '</div>'+
                '</div>'+
                '<form class="form" role="form">'+
                '<div class="modal-body">'+
@@ -55,10 +38,6 @@ $.aaacplApp.manageDept.getLayout = function (){
                '<div class="form-group">'+
                '<button type="button" class="btn btn-primary" style="display:none;" id="deptUploadLogoFile">Upload</button>'+
                '<img class="help-block uploaded" id="deptLogoSrc" src="#" alt="preview logo here" style="max-height: 150px;">'+
-               '</div>'+
-               '<div id="form-info" class="alert alert-info" style="display:none;">'+
-               '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
-               '<strong>Info !</strong> Click upload button before creating department for uploading logo.'+
                '</div>'+
                '</div>'+
                '<div class="modal-footer">'+
@@ -89,15 +68,14 @@ $.aaacplApp.manageDept.executeScript = function(){
     		$.aaacplApp.ajaxCall("POST", "files/upload?fn=dept_logo_" + curDate.getTime(), function success(response){
     		    if(response.filePath && response.filePath != ""){
                     $("#deptLogoPath").val(response.filePath);
-                    $('#form-info').hide();
                     $('#deptUploadLogoFile').hide();
                     $(".overlay").hide();
     		    }else{
-    		    alert("Unable to upload file");
+    		    $.notify("Unable to upload file","error");
     		    }
     		}, function error(msg){
     		    $(".overlay").hide();
-    		    alert("Unable to upload file");
+    		    $.notify("Unable to upload file","error");
     		}, formData, true, false);
     		}
     	});
@@ -108,7 +86,7 @@ $.aaacplApp.manageDept.executeScript = function(){
                 reader.onload = function (e) {
                     $('#deptLogoSrc').attr('src', e.target.result);
                     $('#deptUploadLogoFile').show();
-                    $('#form-info').show();
+					$.notify(" Click upload button to upload file on server.","info");
                 }
                 reader.readAsDataURL(this.files[0]);
                  $('#deptInputFileText').html(this.files[0].name);
@@ -118,7 +96,6 @@ $.aaacplApp.manageDept.executeScript = function(){
     $(":reset").click(function(){
          $('#deptLogoSrc').attr('src', "#");
          $('#deptUploadLogoFile').hide();
-         $('#form-info').hide();
     });
 
 	_this.loadDeptRows();
@@ -136,19 +113,16 @@ $.aaacplApp.manageDept.executeScript = function(){
 			$(".overlay").hide();
 			if(response.successMessage && response.successMessage !=""){
 				$('#add-dept-form').modal('hide');
-				 $('#form-success').show();
-                 $('#form-success .message-text').html('Department has been created.');
+                 $.notify('Department has been created.',"success");
 				payload.id = response.successMessage;
 				$.aaacplApp.dataStorage.deptList.push(payload);
 				_this.loadDeptRows();
 			}else {
-                $('#deptForm-failure').show();
-                $('#deptForm-failure .message-text').html('Unable to create department. Please try again later.');
+				$.notify('Unable to create department. Please try again later.',"error");
             }
 		}, function error(msg){
 			$(".overlay").hide();
-			$('#deptForm-failure').show();
-			$('#deptForm-failure .message-text').html('Unable to create department. Please try again later.');
+			$.notify('Unable to create department. Please try again later.',"error")
 		}, JSON.stringify(payload), undefined, false);
 	});
 	
@@ -191,10 +165,6 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 			   '<img class="help-block uploaded img-thumbnail" id="dept'+value.id+'LogoSrc" src="#" alt="No logo uploaded" style="max-height: 150px;">'+
 			   '<button type="button" style="display:none;" class="btn btn-primary" id="dept'+value.id+'UploadLogoFile">Upload</button>'+
 			   '</div>'+
-			   '<div id="form-info'+value.id+'" class="alert alert-info" style="display:none;">'+
-                '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
-                  '<strong>Info !</strong> Click upload button before creating department for uploading logo.'+
-                '</div>'+
 			 '</div>'+
 			'<div class="box-footer">'+
 				'<button type="submit" class="btn bg-orange">UPDATE</button>'+
@@ -227,7 +197,6 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		 $(":reset").click(function(){
                   $('#dept'+value.id+'LogoSrc').attr('src', logoPath);
                   $('#dept'+value.id+'UploadLogoFile').hide();
-                  $("#form-info"+value.id).hide();
              });
 
 	$("#dept"+value.id+"UploadLogoFile").on('click',function(e){
@@ -242,13 +211,12 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
                 $("#dept"+value.id+"LogoPath").val(response.filePath);
                 $(".overlay").hide();
                 $('#dept'+value.id+'UploadLogoFile').hide();
-                $("#form-info"+value.id).hide();
 		    }
 		    else{
-		        alert("Unable to upload file");
+		        $.notify("Unable to upload file","error");
 		    }
 		}, function error(msg){
-		    alert("Unable to upload file");
+		    $.notify("Unable to upload file","error");
 		    $(".overlay").hide();
 		}, formData,true);
 	});
@@ -260,7 +228,7 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
                 reader.onload = function (e) {
                     $('#dept'+value.id+'LogoSrc').attr('src', e.target.result);
                     $('#dept'+value.id+'UploadLogoFile').show();
-                    $("#form-info"+value.id).show();
+					$.notify("Click upload button before creating department for uploading logo.","info");
                 }
                 reader.readAsDataURL(this.files[0]);
                 $('#dept'+value.id+'InputFileText').html(this.files[0].name);
@@ -281,18 +249,15 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
                 $(".overlay").hide();
                 if(response.successMessage && response.successMessage != ""){
 					$("#dr-"+deptID+" [data-widget]").click();
-                     $('#form-success').show();
-                     $('#form-success .message-text').html('Department has been updated');
+					 $.notify('Department has been updated',"success");
                     $.aaacplApp.getDeptList();
                     $("#box-title"+value.id).text(deptPost.name);
                 } else {
-                    $('#form-failure').show();
-                    $('#form-failure .message-text').html('Unable to update department. Please try again.');
+					 $.notify('Unable to update department. Please try again.',"error");
                 }
             }, function error(msg){
                 $(".overlay").hide();
-                $('#form-failure').show();
-                $('#form-failure .message-text').html('Unable to update department. Please try again later.');
+				$.notify('Unable to update department. Please try again later.',"error");
             },
             //POST PAYLOAD
             JSON.stringify(deptPost), undefined, false);

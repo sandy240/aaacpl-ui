@@ -2,18 +2,7 @@ $.aaacplApp.profilePage.getLayout = function (userInfo){
 	/**
      * COMPLETE Profile Page
     **/
-	var tmpl = '<div id="form-success" style="display:none;">'+
-                              '<div class="alert alert-success">'+
-                              '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-                              '<strong>Success !</strong> <span class="message-text"></span>'+
-                              '</div>'+
-                              '</div>'+
-               			   '<div id="form-failure" style="display:none;">'+
-                             '<div class="alert alert-danger">'+
-                             '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-                             '<strong>Error !</strong> <span class="message-text"></span>'+
-                             '</div>'+
-                             '</div>'+
+	var tmpl =
 '<div class="box box-solid manage">'+
 '<div class="box-header">'+
 '<div class="nav-tabs-custom">'+
@@ -166,16 +155,13 @@ $.aaacplApp.profilePage.executeScript = function(){
         $.aaacplApp.ajaxCall("POST", 'user/update', function success(response){
             $(".overlay").hide();
             if(response.successMessage && response.successMessage !=""){
-                 $('#form-success').show();
-                 $('#form-success .message-text').html('Profile has been updated.');
+				 $.notify("Profile has been updated.", "success");
             } else {
-                 $('#form-failure').show();
-                 $('#form-failure .message-text').html('Unable to update profile. Try again later');
+				  $.notify("Unable to update profile. Try again later", "error");
             }
         }, function error(msg){
             $(".overlay").hide();
-            $('#form-failure').show();
-            $('#form-failure .message-text').html('Unable to update profile. Try again later');
+            $.notify("Unable to update profile. Try again later", "error");
         },
         //POST PAYLOAD
         JSON.stringify(editUserPost));
@@ -192,16 +178,13 @@ $.aaacplApp.profilePage.executeScript = function(){
         $.aaacplApp.ajaxCall("POST", 'user/changePassword', function success(response){
             $(".overlay").hide();
            if(response.successMessage && response.successMessage !=""){
-                  $('#form-success').show();
-                  $('#form-success .message-text').html('Password has been changed');
+				  $.notify("Password has been changed", "success");
              } else {
-                  $('#form-failure').show();
-                  $('#form-failure .message-text').html('Unable to change password. Try again later');
+				  $.notify("Unable to change password. Try again later", "error");
              }
          }, function error(msg){
              $(".overlay").hide();
-             $('#form-failure').show();
-             $('#form-failure .message-text').html('Unable to change password. Try again later');
+             $.notify("Unable to change password. Try again later", "error");
          },
         //POST PAYLOAD
         JSON.stringify(changePasswordObj));

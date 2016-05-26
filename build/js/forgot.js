@@ -5,18 +5,8 @@ $.aaacplApp.forgotPage.getLayout = function (){
       '</div><!-- /.login-logo -->'+
       '<div class="login-box-body box">'+
 	  '<!--forgot password section-->'+
-	  '<div id="forgotPassword-success" style="display:none;">'+
-		'	<div class="alert alert-success">'+
-		'	<strong>Success ! Password is sent</strong>'+
-		'	</div>'+
-		'	<p>Your new password has been sent to your e-mail address. <a href="#/login">Login Now</a></p>'+
-	  '</div>'+
 	  '<div id="forgotPassword-details">'+
 	   ' <p class="login-box-msg">FORGOT PASSOWORD?</p>'+
-		'<div class="alert alert-danger" id="forgot-failure" style="display:none;">'+
-		'<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>'+
-		 ' <strong><span class="message-text">Invalid username</span></strong>'+
-		'</div>'+
 		 '  <form action="" method="post" id="forgotPassword">'+
 		  ' <div class="form-group has-feedback">'+
 			'	<input type="email" class="form-control" id="forgotPasswordField" placeholder="Enter email address" required>'+
@@ -40,12 +30,6 @@ $.aaacplApp.forgotPage.executeScript = function(){
 
 	  forgotPasswordForm[0].reset();
 
-        $('input').iCheck({
-          checkboxClass: 'icheckbox_square-orange',
-          radioClass: 'iradio_square-orange',
-          increaseArea: '20%' // optional
-       });
-
 		function forgotPasswordFormFormAjaxCall(){
 		    var forgotPasswordField = $("#forgotPasswordField")[0].value;
 		// ajax call only when client side validation is completed
@@ -53,16 +37,16 @@ $.aaacplApp.forgotPage.executeScript = function(){
 			// ajax call on page load which will return the user types which will be shown in the drop down list.
                     	 $.aaacplApp.ajaxCall("GET", 'user/forgot/'+forgotPasswordField, function success(data){
                     	 if(data.successMessage && data.successMessage != ""){
-                    	  $(".overlay").hide();
-                          $('#forgotPassword-success').show();
-                          $('#forgotPassword-details').hide();
-                    	 }else{
-                    	  $(".overlay").hide();
-                          $('#forgot-failure').show();
-                    	 }
+							  $(".overlay").hide();
+							  $('#forgotPassword-details').hide();
+							  $.notify("Password has been sent to your registered email address!",  "success");
+							 }else{
+								  $(".overlay").hide();
+								  $.notify("Invalid username", "error");
+							 }
                     	 }, function error(msg){
-                    	 $(".overlay").hide();
-                         $('#forgot-failure').show();
+							$(".overlay").hide();
+							$.notify("Invalid username", "error");
                     	 });
 
 		}

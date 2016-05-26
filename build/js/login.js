@@ -9,10 +9,6 @@ $.aaacplApp.loginPage.getLayout = function (){
 	  '<!--login section-->'+
 	  '<div id="login-details">'+
        ' <p class="login-box-msg">LOGIN TO GET  STARTED</p>'+
-		'<div class="alert alert-danger" id="login-failure">'+
-		'<span class="close" data-dismiss="alert" aria-label="close">&#215;</span>'+
-		'  <strong><span class="message-text">Invalid username or password </span></strong>'+
-		'</div>'+
         '<form action="" method="post" id="login">'+
         '  <div class="form-group has-feedback">'+
         '    <input name="email" type="email" class="form-control" placeholder="Email" required>'+
@@ -48,11 +44,8 @@ $.aaacplApp.loginPage.executeScript = function(){
 	var param1 = $.aaacplApp.queryParams("invalidSession");
 	//console.info(param1);
 	if(param1 == "1"){
-		$('#login-failure').show();	
-		$('#login-failure .message-text').html("Invalid session! Please login again.");
-	} else {
-		$('#login-failure').hide();
-	}
+		$.notify("Invalid session! Please login again.", "error");
+	} 
 	
 	// be default hiding the error alert messages
 	  
@@ -80,11 +73,11 @@ $.aaacplApp.loginPage.executeScript = function(){
 					 $.aaacplApp.writeCookie($.aaacplApp.userAuthKey,response.successMessage,24); //cookie creation
 					 $.aaacplApp.redirectTo('home');  //REDIRECT TO DASHBORAD
 				 } else {
-					 $('#login-failure').show();
 					 if(response.failureMessage && response.failureMessage != "") {
-						$('#login-failure .message-text').html(response.failureMessage);
+						 $.notify(response.failureMessage, "error");
+						
 					 } else {
-						$('#login-failure .message-text').html("Invalid Login Details!");
+						 $.notify("Invalid Login Details!", "error");
 					 }
 				 }
 			 }, 

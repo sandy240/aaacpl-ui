@@ -3,18 +3,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
 	/***
 	** COMPLETE AUCTION PAGE LAYOUT 
 	**/
-	var tmpl = '<div id="form-success" style="display:none;">'+
-               '<div class="alert alert-success">'+
-               '<strong>Success !</strong> <span class="message-text"></span>' +
-               '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-               '</div>'+
-               '</div>'+
-			   '<div id="form-failure" style="display:none;">'+
-              '<div class="alert alert-danger">'+
-              '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-              '<strong>Error !</strong> <span class="message-text"></span>'+
-              '</div>'+
-              '</div>'+
+	var tmpl = 
 	'<div class="box box-solid manage">'+
              '<div class="box-header">'+
                '<h3 class="box-title">Auctions</h3>'+
@@ -90,10 +79,6 @@ $.aaacplApp.manageAuction.getLayout = function (){
                '</div>'+
                            '<div class="form-group" id="catalogFileInfo"> '+
                            '</div>'+
-                           '<div id="form-info" class="alert alert-info" style="display:none;">'+
-                           '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
-                           '<strong>Info !</strong> Click upload button before creating auction for uploading catalog'+
-                           '</div>'+
                            '</div>'+
                            '<!-- /.modal-body -->'+
                        '<div class="modal-footer">'+
@@ -123,14 +108,14 @@ $.aaacplApp.manageAuction.executeScript = function(){
             $.aaacplApp.ajaxCall("POST", "files/upload?fn=auction_catalog_" + curDate.getTime(), function success(response){
                 if(response.filePath && response.filePath !=""){
                 $("#auctionCatalogPath").val(response.filePath);
-                 $('#form-info').hide();
                  $("#auctionUploadCatalogFile").hide();
                 }
                 else{
-                    alert("Unable to upload file");
+                    $.notify("Unable to upload file","error");
+					
                 }
             }, function error(msg){
-                alert("Unable to upload file");
+                $.notify("Unable to upload file","error");
             }, formData,true);
             }
         });
@@ -143,7 +128,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
                         fileInfo = "<div><strong>Name:</strong> " + file.name + "</div>";
                         fileInfo += "<div><strong>Size:</strong> " + parseInt(file.size / 1024, 10) + " kb</div>";
                         fileInfo += "<div><strong>Type:</strong> " + file.type + "</div>";
-                        $('#form-info').show();
+						$.notify("Click upload button before creating auction for uploading catalog","info");
                         $("#auctionUploadCatalogFile").show();
                         $('#auctionInputFileText').html(this.files[0].name);
                     }
@@ -197,20 +182,17 @@ $.aaacplApp.manageAuction.executeScript = function(){
 				$(".overlay").hide();
 				$("#add-auction-form").modal('hide');
 				if(response.successMessage && response.successMessage !=""){
-					 $('#form-success').show();
-                     $('#form-success .message-text').html('Auction has been created.');
+					 $.notify("Auction has been created.", "success");
 					auctionPost.auctionId = response.successMessage;
 					$.aaacplApp.dataStorage.auctionList.push(auctionPost);
 					_this.loadAuctionRows();
 				} else {
-					$('#form-failure').show();
-					$('#form-failure .message-text').html('Unable to create auction. Please try again.');
+					$.notify("Unable to create auction. Please try again.", "error");
 				}
             }, function error(msg){
 				$(".overlay").hide();
 				$("#add-auction-form").modal('hide');
-                $('#form-failure').show();
-				$('#form-failure .message-text').html('Unable to create auction. Please try again later.');
+				$.notify("Unable to create auction. Please try again.", "error");
             },
             //POST PAYLOAD
             JSON.stringify(auctionPost));
@@ -230,6 +212,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 			$("#auction-rows-cont").html('');
 		    $(".overlay").hide();
 			$.each(auctionList, function(key , value){
+				var tenderDateValue = value.tenderStartDate != "" ?  value.tenderStartDate.substr(0, 19)+' - '+value.tenderEndDate.substr(0, 19) : "";
 				var auctionRow = '<div class="box box-default box-solid collapsed-box auction-row" id="ar-'+value.auctionId+'">'+
                                  				' <div class="box-header with-border">'+
                                  				'  <h3 id="box-title'+value.auctionId+'" class="box-title">'+value.name+'</h3>'+
@@ -264,7 +247,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 													 '  <div class="input-group-addon">'+
 													 '    <i class="fa fa-clock-o"></i>'+
 													 '  </div>'+
-													 '  <input type="text" class="form-control pull-right" id="tender'+value.auctionId+'DateRange" value="'+value.tenderStartDate.substr(0, 19)+' - '+value.tenderEndDate.substr(0, 19)+'">'+
+													 '  <input type="text" class="form-control pull-right" id="tender'+value.auctionId+'DateRange" value="'+tenderDateValue+'">'+
 													 '</div><!-- /.input group -->'+
 												   '</div><!-- /.form group -->'+
 												   
@@ -302,10 +285,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                        			 '<div class="form-group" id="auction'+value.auctionId+'catalogFileInfo">'+
                                                                        			   
                                                                        			   '</div>'+
-                                                                       '<div id="form-info'+value.auctionId+'" class="alert alert-info" style="display:none;">'+
-                                                                         '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>'+
-                                                                           '<strong>Info !</strong> Click upload button to upload file on server.'+
-                                                                         '</div>'+
+                                                                       
                                                                      '</div>'+
                                  				'<div class="box-footer">'+
                                  					'  <button type="submit" class="btn bg-orange">UPDATE</button>'+
@@ -353,12 +333,12 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                          if(response.filePath && response.filePath != ""){
                                $("#auction"+value.auctionId+"Catalog").val(response.filePath);
                                $('#auction'+value.auctionId+'auctionUploadCatalogFile').hide();
-                               $('#form-info'+value.auctionId).hide();
+							   $.notify(" Click upload button to upload file on server.","info");
                          }else{
-                         alert("Unable to upload file");
+						 $.notify("Unable to upload file","error");
                          }
                          }, function error(msg){
-                         alert("Unable to upload file");
+                         $.notify("Unable to upload file","error");
                          }, formData,true);
                          }
                      });
@@ -372,7 +352,7 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                      fileInfo += "<div><strong>Size:</strong> " + parseInt(file.size / 1024, 10) + " kb</div>";
                                      fileInfo += "<div><strong>Type:</strong> " + file.type + "</div>";
                                      $('#auction'+value.auctionId+'auctionUploadCatalogFile').show();
-                                     $('#form-info').show();
+									 $.notify("Click upload button before creating auction for uploading catalog","info");
                                      $('#auction'+value.id+'InputFileText').html(this.files[0].name);
                                  }
                                  document.getElementById("auction"+value.auctionId+"catalogFileInfo").innerHTML = fileInfo;
@@ -385,7 +365,6 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 			 $("#resetEditAuction").click(function(){
              		    $("#editAuctionForm"+value.auctionId)[0].reset();
              		    $('#auction'+value.auctionId+'auctionUploadCatalogFile').hide();
-                        $('#form-info').hide();
                         $('#auction'+value.id+'InputFileText').html(fileName);
                         document.getElementById("auction"+value.auctionId+"catalogFileInfo").innerHTML = "";
              		 });
@@ -416,18 +395,15 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
              						$(".overlay").hide();
              						if(response.successMessage && response.successMessage !=""){
 										$("#ar-"+id+" [data-widget]").click();
-             							 $('#form-success').show();
-                                         $('#form-success .message-text').html('Auction has been updated.');
+										 $.notify("Auction has been updated.", "success");
              							$.aaacplApp.getAuctionList($.aaacplApp.queryParams('deptid'));
              							$("#box-title"+value.auctionId).text(auctionPost.name);
              						} else {
-             							$('#form-failure').show();
-             							$('#form-failure .message-text').html('Unable to update auction. Please try again.');
+										$.notify("Unable to update auction. Please try again.", "error");
              						}
              					}, function error(msg){
              						$(".overlay").hide();
-             						$('#form-failure').show();
-             						$('#form-failure .message-text').html('Unable to update auction. Please try again later.');
+									$.notify("Unable to update auction. Please try again.", "error");
              					},
              					//POST PAYLOAD
              					JSON.stringify(auctionPost));

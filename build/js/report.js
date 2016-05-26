@@ -7,12 +7,6 @@ $.aaacplApp.reportPage.getLayout = function (){
 	var tmpl =
                 '<div class="box box-solid">'+
                 '<div class="box-header">'+
-                '<div id="lotWiseReportForm-success" style="display:none;">'+
-                '<div class="alert alert-success">'+
-                '<strong>Report generated successfully! </strong>'+
-                '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-                '</div>'+
-                '</div>'+
                 '<h4>AUCTION / TENDER -  DEPARTMENT WISE REPORT</h4>'+
                 '</div>'+
                 '<form id="lotWiseReportForm" class="form" role="form">'+
@@ -68,7 +62,7 @@ $.aaacplApp.reportPage.getLayout = function (){
 
 $.aaacplApp.reportPage.downloadHistory = function(){
 	var auctionId = $("#auctionIdLotReport").val();
-	$('#lotWiseReportForm-success').show();
+	$.notify("Reports generated successfully","success");
 	var isTender = 0;
 	if($("#tenderEnable").is(":checked")){
 		isTender = 1;
@@ -77,7 +71,7 @@ $.aaacplApp.reportPage.downloadHistory = function(){
 }
 $.aaacplApp.reportPage.downloadSheet = function(){
 	var auctionId = $("#auctionIdLotReport").val();
-	$('#lotWiseReportForm-success').show();
+	$.notify("Reports generated successfully","success");
 	var isTender = 0;
 	if($("#tenderEnable").is(":checked")){
 		isTender = 1;

@@ -13,10 +13,6 @@ $.aaacplApp.registerPage.getLayout = function (){
 		'</div>'+
 		'<div id="register-form">'+
         '<p class="login-box-msg">GET REGISTERED FOR THE MEMBERSHIP</p>'+
-		'<div class="alert alert-danger" id="register-failure">'+
-		'<span class="close" data-dismiss="alert" aria-label="close">&#215;</span>'+
-		'  <strong>Error !</strong> <span class="message-text"></span>'+
-		'</div>'+
         '<form method="post" action="" id="registerForm">'+
         '  <div id="account-type" class="form-group has-feedback">'+
 		'	  <select id="select" class="form-control" name="typeId" required>'+
@@ -114,7 +110,6 @@ $.aaacplApp.registerPage.executeScript = function(){
 
 	// be default hiding the success and error alert messages
 		$('#register-success').hide();
-		$('#register-failure').hide();
 		var registerForm = $('#registerForm');
 
 		registerForm[0].reset();
@@ -134,12 +129,10 @@ $.aaacplApp.registerPage.executeScript = function(){
 				$('#register-form').hide();
 				}else
 				{
-				$('#register-failure').show();
-                $('#register-failure .message-text').html('Unable to register. Kindly provide correct details');
+				$.notify("Unable to register. Kindly provide correct details", "error");
 				}
 			}, function error(msg){
-				$('#register-failure').show();
-				$('#register-failure .message-text').html('Unable to register. Kindly provide correct details');
+				$.notify("Unable to register. Kindly provide correct details", "error");
 			},
 			//POST PAYLOAD
             JSON.stringify(registerPost));

@@ -6,18 +6,6 @@ $.aaacplApp.notificationPage.getLayout = function (){
 	var tmpl =
                 '<div class="box box-solid">'+
                 '<div class="box-header">'+
-                '<div id="notificationForm-success" style="display:none;">'+
-                '<div class="alert alert-success">'+
-                '<strong>Mail sent successfully! </strong>'+
-                '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>'+
-                '</div>'+
-                '</div>'+
-                '<div id="notificationForm-failure" style="display:none;">' +
-                '<div class="alert alert-danger">' +
-                '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>' +
-                '<strong>Error !</strong> <span class="message-text"></span>' +
-                '</div>' +
-                '</div>' +
                 '<h4>Send Mail</h4>'+
                 '</div>'+
                 '<form id="notificationForm" class="form" role="form">'+
@@ -135,15 +123,13 @@ $.aaacplApp.notificationPage.executeScript = function(){
                 $.aaacplApp.ajaxCall("POST", 'email/bulkEmail', function success(response) {
                         $(".overlay").hide();
                         if (response.successMessage && response.successMessage !="") {
-                            $('#notificationForm-success').show();
+							$.notify("Mail sent successfully!", "success");
                         } else {
-                            $('#notificationForm-failure').show();
-                            $('#notificationForm-failure .message-text').html('Unable to send mail. Please try again later.');
+								$.notify("Unable to send mail. Please try again later.", "error");
                         }
                     }, function error(msg) {
                         $(".overlay").hide();
-                        $('#notificationForm-failure').show();
-                        $('#notificationForm-failure .message-text').html('Unable to send mail. Please try again later.');
+							$.notify("Unable to send mail. Please try again later.", "error");
                     },
                     //POST PAYLOAD
                     JSON.stringify(mailContent));

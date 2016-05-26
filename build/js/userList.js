@@ -4,18 +4,7 @@ $.aaacplApp.usersListPage.getLayout = function() {
      ** LIST of active users. Can add/edit users
      **/
 
-    var tmpl = '<div id="form-success" style="display:none;">' +
-        '<div class="alert alert-success">' +
-        '<strong>User has been added/updated successfully! </strong>' +
-        '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>' +
-        '</div>' +
-        '</div>' +
-        '<div id="form-failure" style="display:none;">' +
-        '<div class="alert alert-danger">' +
-        '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>' +
-        '<strong>Error !</strong> <span class="message-text"></span>' +
-        '</div>' +
-        '</div>' +
+    var tmpl = 
         '<div class="box box-solid manage">' +
         '<div class="box-header">' +
         '<div class="nav-tabs-custom">'+
@@ -194,17 +183,15 @@ $.aaacplApp.usersListPage.loadActiveUsersRows = function(userInfoList) {
             $.aaacplApp.ajaxCall("POST", 'user/update', function success(response){
             	$(".overlay").hide();
             	if(response.successMessage && response.successMessage !=""){
-            		$('#form-success').show();
+					$.notify("User has been added/updated successfully! ","success");
             		$.aaacplApp.getUserList();
             		$.aaacplApp.usersListPage.executeScript();
             	} else {
-            		$('#form-failure').show();
-            		$('#form-failure .message-text').html('Unable to update user. Please try again.');
+					$.notify('Unable to update user. Please try again.',"error");
             	}
             }, function error(msg){
             	$(".overlay").hide();
-            	$('#form-failure').show();
-            	$('#form-failure .message-text').html('Unable to update user. Please try again later.');
+				$.notify('Unable to update user. Please try again.',"error");
             },
             //POST PAYLOAD
             JSON.stringify(editUserPost));
@@ -358,17 +345,15 @@ $.aaacplApp.usersListPage.loadInactiveUsersRows = function(userInfoList) {
             $.aaacplApp.ajaxCall("POST", 'user/update', function success(response){
             	$(".overlay").hide();
             	if(response.successMessage && response.successMessage !=""){
-            		$('#form-success').show();
+            		$.notify("User has been added/updated successfully! ","success");
             		$.aaacplApp.getUserList();
             		$.aaacplApp.usersListPage.executeScript();
             	} else {
-            		$('#form-failure').show();
-            		$('#form-failure .message-text').html('Unable to update user. Please try again.');
+					$.notify('Unable to update user. Please try again.',"error");
             	}
             }, function error(msg){
             	$(".overlay").hide();
-            	$('#form-failure').show();
-            	$('#form-failure .message-text').html('Unable to update user. Please try again later.');
+            	$.notify('Unable to update user. Please try again.',"error");
             },
             //POST PAYLOAD
             JSON.stringify(editUserPost));

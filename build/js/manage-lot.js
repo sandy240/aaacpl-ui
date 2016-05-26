@@ -3,18 +3,7 @@ $.aaacplApp.manageLot.getLayout = function() {
     /***
      ** COMPLETE LOT PAGE LAYOUT
      **/
-    var tmpl = '<div id="form-success" style="display:none;">' +
-        '<div class="alert alert-success">' +
-        '<strong>Success !</strong> <span class="message-text"></span>' +
-        '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>' +
-        '</div>' +
-        '</div>' +
-        '<div id="form-failure" style="display:none;">' +
-        '<div class="alert alert-danger">' +
-        '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>' +
-        '<strong>Error !</strong> <span class="message-text"></span>' +
-        '</div>' +
-        '</div>' +
+    var tmpl = 
         '<div class="box box-solid manage">' +
         '<div class="box-header">' +
         '<h3 class="box-title">Lots</h3>' +
@@ -123,20 +112,17 @@ $.aaacplApp.manageLot.executeScript = function() {
                 $(".overlay").hide();
                 $("#add-lot-form").modal('hide');
                 if (response.successMessage && response.successMessage !="") {
-                    $('#form-success').show();
-                    $('#form-success .message-text').html('Lot created.');
+					$.notify("Lot created successfully", "success");
                     lotsPost.id = response.successMessage;
                     $.aaacplApp.dataStorage.lotList.push(lotsPost);
                     _this.loadLotRows();
                 } else {
-                    $('#form-failure').show();
-                    $('#form-failure .message-text').html('Unable to create lot. Please try again.');
+					$.notify("Unable to create lot. Please try again.", "error");
                 }
             }, function error(msg) {
                 $(".overlay").hide();
                 $("#add-lot-form").modal('hide');
-                $('#form-failure').show();
-                $('#form-failure .message-text').html('Unable to create lot. Please try again later.');
+				$.notify("Unable to create lot. Please try again.", "error");
             },
             //POST PAYLOAD
             JSON.stringify(lotsPost));
@@ -169,12 +155,6 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                 '   <span aria-hidden="true">×</span></button>' +
                 ' <h4 class="modal-title" id="model-heading">Add participators</h4>' +
                 '<div><span class="btn-box-tool" id="lotIdField' + value.id + '"></span></div>' +
-                '<div id="participatorForm-failure" style="display:none;">' +
-                '<div class="alert alert-danger">' +
-                '<span class="close" data-dismiss="alert" aria-label="close">&times;</span>' +
-                '<strong>Error !</strong> <span class="message-text"></span>' +
-                '</div>' +
-                '</div>' +
                 '</div>' +
                 '<form class="participatorForm" role="form" id="participatorForm' + value.id + '">' +
                 '<div class="modal-body">' +
@@ -327,16 +307,13 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                         $(".overlay").hide();
                         if (response.successMessage && response.successMessage !="") {
                             $('#manageParticipator-form' + value.id).modal('hide');
-                            $('#form-success').show();
-                            $('#form-success .message-text').html('Participators added');
+							$.notify("Participators added successfully", "success");
                         } else {
-                            $('#participatorForm-failure').show().show();
-                            $('#participatorForm-failure .message-text').html('Unable to add participator. Please try again later.');
+							$.notify("Unable to add participator. Please try again later.", "error");
                         }
                     }, function error(msg) {
                         $(".overlay").hide();
-                        $('#participatorForm-failure').show();
-                        $('#participatorForm-failure .message-text').html('Unable to add participator. Please try again later.');
+						$.notify("Unable to add participator. Please try again later.", "error");
                     },
                     //POST PAYLOAD
                     JSON.stringify(participatorList));
@@ -361,18 +338,15 @@ $.aaacplApp.manageLot.loadLotRows = function() {
                         $(".overlay").hide();
                         if (response.successMessage && response.successMessage != "") {
                             $("#lr-" + lotID + " [data-widget]").click();
-                            $('#form-success').show();
-                            $('#form-success .message-text').html('Lot updated.');
+							$.notify("Lot updated successfully", "success");
                             $.aaacplApp.getLotList($.aaacplApp.queryParams('auctionid'));
                             $("#box-title"+value.id).text(lotsPost.name);
                         } else {
-                            $('#form-failure').show();
-                            $('#form-failure .message-text').html('Unable to update lot. Please try again.');
+							$.notify("Unable to update lot. Please try again.", "error");
                         }
                     }, function error(msg) {
                         $(".overlay").hide();
-                        $('#form-failure').show();
-                        $('#form-failure .message-text').html('Unable to update lot. Please try again later.');
+						$.notify("Unable to update lot. Please try again.", "error");
                     },
                     //POST PAYLOAD
                     JSON.stringify(lotsPost));
