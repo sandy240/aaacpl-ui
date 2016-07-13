@@ -58,7 +58,7 @@ $.aaacplApp.tenderListPage.executeScript = function(){
 					  '<h4 class="media-heading"><strong>'+value.name+'</strong>  &nbsp; '+catalogLink+'</h4>'+
 					  '<h6>By '+deptInfo.name+'</h6>'+
 					  '<p>Details: '+value.description +
-					  '<br>Timings: '+value.startDate +' - ' + value.endDate + '</p>'+
+					  '<br>Timings: '+value.tenderStartDate +' - ' + value.tenderEndDate + '</p>'+
 				  '</div>'+
 				'</div>'+
             '</div>'+

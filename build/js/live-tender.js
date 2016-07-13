@@ -4,6 +4,7 @@
 	$.aaacplApp.livePageTender.ipAddress = '';
 	$.aaacplApp.livePageTender.userStatusList = [];
 	$.aaacplApp.livePageTender.timerinterval = undefined;
+	$.aaacplApp.livePageTender.tenderIsOn = false;
 $.aaacplApp.livePageTender.getLayout = function (){
 	
 	/***
@@ -19,7 +20,7 @@ $.aaacplApp.livePageTender.getLayout = function (){
 					  '<span class="text-aqua" id="timings"></span>'+
 					  '<div class="pull-right"><button type="button" class="btn btn-flat bg-orange btnPrintHistory"><i class="fa fa-print"></i> Print</button></div>'+
 				  '</div>'+
-				  '<p class="lead" id="timecounter" style="display:none">TIME REMAINING: <span class="countdown">00:00:00</span></p>'+
+				  '<p class="lead" id="timecounter" style="display:none">TIME REMAINING: <strong><span class="countdown">00:00:00</span></strong></p>'+
 			'</div>'+
 			  
 			  
@@ -98,18 +99,21 @@ $.aaacplApp.livePageTender.getLots = function(lotDetail){
 
 $.aaacplApp.livePageTender.updateLot = function(){
 	var _this = $.aaacplApp.livePageTender;
-	for(var i=0;i<_this.lotsData.length;i++){
-		_this.renderBidHistory(_this.lotsData[i].id);
+	if(_this.tenderIsOn){
+		for(var i=0;i<_this.lotsData.length;i++){
+			_this.renderBidHistory(_this.lotsData[i].id);
+		}
 	}
-	if(window.location.href.indexOf($.aaacplApp.template["live-tender"]) >= 0 && $.aaacplApp.dataStorage.userInfo.typeId != 3 && typeof _this.timerinterval != "undefined")
-	setTimeout(_this.updateLot,15000);
+	
+	if(window.location.href.indexOf($.aaacplApp.template["live-tender"]) >= 0 && $.aaacplApp.dataStorage.userInfo.typeId != 3)
+	setTimeout(_this.updateLot,5000);
 };
 
 
 $.aaacplApp.livePageTender.renderBidHistory = function(forLotID){
 	var _this = this;
 	
-	$.aaacplApp.ajaxCall("GET", 'lots/bidHistory/' + forLotID,function success(response){
+	$.aaacplApp.ajaxCall("GET", 'lots/bidHistory/' + forLotID  + '/1',function success(response){
 		var bidarr = response;	
 		if(bidarr.length > 0 && $.aaacplApp.dataStorage.userInfo.typeId != 3){
 			var bidHistorySec = $("#lot" + forLotID + " .box-footer");
@@ -214,6 +218,8 @@ $.aaacplApp.livePageTender.updateClock = function (srvnow) {
 		}
 		var time = t.total / 1000;		
 		if (t.total <= 0) {
+			
+			_this.tenderIsOn = false;
 			clock.html("00:00:00");
 			if($.aaacplApp.dataStorage.userInfo.typeId == 3){
 				$("#live-tender-lots").html('Tender has ended');
@@ -221,10 +227,12 @@ $.aaacplApp.livePageTender.updateClock = function (srvnow) {
 			clearInterval(_this.timerinterval);
 			_this.timerinterval = undefined;
 		} else if (t.total < (eTime - sTime)) {
+			_this.tenderIsOn = true;
 			$("#timecounter").show();
 			$("#live-tender-lots").show();
 			$("#premessage").hide();
 		} else if($("#premessage").length == 0){
+			_this.tenderIsOn = false;
 			$("#lots-cont").prepend("<div id='premessage'>Tender not started yet.</div>");
 		}
 		
@@ -279,7 +287,7 @@ $.aaacplApp.livePageTender.loadLots = function(){
 					var lotElem = $("#lot" + lotid);
 					var bidInput = parseInt(lotElem.find(".bidinput").val());
 					lotElem.find(".overlay").show();
-					$.aaacplApp.ajaxCall("POST", "tender/bid", function success(response){
+					$.aaacplApp.ajaxCall("POST", "lots/bid/1", function success(response){
 						lotElem.find('.overlay').hide();
 						//$(e.target).remove();
 						$("#bidinput" + lotid).parent().html('<b>Your Bid</b> &nbsp;&nbsp; <span class="label label-success"><i class="fa fa-inr"></i> '+bidInput+'</span>');

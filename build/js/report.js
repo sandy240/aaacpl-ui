@@ -10,7 +10,7 @@ $.aaacplApp.reportPage.getLayout = function (){
                 '<h4>AUCTION / TENDER -  DEPARTMENT WISE REPORT</h4>'+
                 '</div>'+
                 '<form id="lotWiseReportForm" class="form" role="form">'+
-                '<div class="box-body" id="reports-cont">'+
+                '<div class="box-body" id="reports-cont" >'+
                 '<div class="form-group">'+
                 '<label>SELECT DEPARTMENT</label>'+
                 '<select id="deptIdLotReport" class="form-control" name="dept" required>'+
@@ -82,8 +82,12 @@ $.aaacplApp.reportPage.renderBidHistory = function(lotId, lotName){
 	var _this = this;
 	$("#lotwise-reports-dialog .overlay").show();
 	$("#lotwise-reports-dialog #model-heading").html("Bidhistory for lot : " + lotName);
+	var isTender = 0;
+	if($("#tenderEnable").is(":checked")){
+		isTender = 1;
+	}
 	
-	$.aaacplApp.ajaxCall("GET", 'lots/bidHistory/' + lotId,function success(response){
+	$.aaacplApp.ajaxCall("GET", 'lots/bidHistory/' + lotId + '/' + isTender,function success(response){
 		var bidarr = response;	
 		$("#lotwise-reports-dialog .overlay").hide();
 		var bidTable = $('#lotwise-reports-dialog table');
@@ -141,10 +145,16 @@ $.aaacplApp.reportPage.executeScript = function(){
 		
 
         $.each(deptList, function (key, item) {
-            $('#deptIdLotReport').append($('<option>', {
-                value: item.id,
-                text : item.name
-            }));
+			var skip = false;
+			if($.aaacplApp.dataStorage.userInfo.typeId == 4){
+				skip = (item.id != $.aaacplApp.dataStorage.userInfo.departmentId);
+			}
+			if(!skip){
+				$('#deptIdLotReport').append($('<option>', {
+					value: item.id,
+					text : item.name
+				}));
+			}
         });
 
         $('#deptIdLotReport').change(function(){

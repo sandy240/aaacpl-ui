@@ -278,7 +278,7 @@ $.aaacplApp = {
 		//LIVE
 		_this.route('/live', 'live', function () {	
 			var livePageContents = _this.livePage.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("LIVE", livePageContents , "Auction"));
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("LIVE AUCTION", livePageContents , "Bidding"));
 		}, function(){
 			_this.livePage.executeScript();
 		});
@@ -286,7 +286,7 @@ $.aaacplApp = {
 		//LIVE
 		_this.route('/live/tender', 'live-tender', function () {	
 			var tenderLivePageContents = _this.livePageTender.getLayout();
-			return _this.wrapInCommonLayout(_this.pageContent.getLayout("LIVE", tenderLivePageContents , "Tender"));
+			return _this.wrapInCommonLayout(_this.pageContent.getLayout("LIVE TENDER", tenderLivePageContents , "Bidding"));
 		}, function(){
 			_this.livePageTender.executeScript();
 		});

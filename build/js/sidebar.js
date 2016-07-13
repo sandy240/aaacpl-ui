@@ -59,6 +59,7 @@ $.aaacplApp.pageSidebar.getClientMenuItems = function (){
 			'<li><a href="#/auction"><i class="fa fa-gavel"></i><span>AUCTIONS</span></a></li>' +
 			'<li><a href="#/tender"><i class="fa fa-file-text-o"></i><span>TENDERS</span></a></li>' +
 			'<li><a href="#/profile"><i class="fa fa-user"></i><span>PROFILE</span></a></li>' +
+			($.aaacplApp.dataStorage.userInfo.departmentId > 0 ? '<li><a href="#/reports"><i class="fa fa-pie-chart"></i><span>REPORTS</span></a></li>' : '' )+
 			'<!-- li><a href="#"><i class="fa fa-history"></i><span>HISTORY</span></a></li -->' +
             
           '</ul>';

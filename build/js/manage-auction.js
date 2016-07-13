@@ -18,7 +18,7 @@ $.aaacplApp.manageAuction.getLayout = function (){
          ' </div>'+
 		 
 		 //Modal for adding new auctions
-         		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-auction-form" aria-labelledby="model-heading">'+
+         		 '<div class="modal fade" tabindex="-1" role="dialog" id="add-auction-form" aria-labelledby="model-heading" data-backdrop="static" data-keyboard="false">'+
                    '<div class="modal-dialog" role="document">'+
                     ' <div class="modal-content box">'+
                        '<div class="modal-header">'+
@@ -91,7 +91,8 @@ $.aaacplApp.manageAuction.getLayout = function (){
                    '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
                    '</div>'+
                    '<!-- /.modal-content -->'+
-                 '</div>';
+                 '</div>'+
+				 '</div>';
 		
 	return tmpl;
 };
@@ -137,10 +138,12 @@ $.aaacplApp.manageAuction.executeScript = function(){
 			
 			$("#tenderEnable").change(function(e) {
 					if(this.checked) {
+						$("#tenderDateRange").prop('required', true);
 						$("#tenderdategroup").show();
 					} else {
 						$("#tenderdategroup").hide();
 						$("#tenderDateRange").val('');
+						$("#tenderDateRange").prop('required', false);
 					}
 				});
 
@@ -162,6 +165,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
 		});
         // on submit function of form is called to perform client side validation
 		createAuctionForm.submit(function(event){
+			
 			event.preventDefault(); // Prevent the form from submitting via the browser
 			var dateRangeValue = $('#auctionDateRange').val(); // getting the entire dateRange value
 			var tenderDateRangeValue = $('#tenderDateRange').val(); // getting the entire dateRange value
@@ -177,7 +181,7 @@ $.aaacplApp.manageAuction.executeScript = function(){
 				 auctionPost["tenderEndDate"] =  typeof tenderDateRangeValue === "string" ? tenderDateRangeValue.substr(21, 20) : "" ;
 				 auctionPost["isAuctionTender"] = $('#tenderEnable').is(':checked') ? 1 : 0;
                  auctionPost["createdBy"] = $.aaacplApp.getLoggedInUserId();
-				 $(".overlay").show();
+		    $(".overlay").show();
             $.aaacplApp.ajaxCall("POST", 'auction/create', function success(response){
 				$(".overlay").hide();
 				$("#add-auction-form").modal('hide');
@@ -201,6 +205,9 @@ $.aaacplApp.manageAuction.executeScript = function(){
 	
 	$('#auctionDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
 	$('#tenderDateRange').daterangepicker({timePicker: true, timePickerIncrement: 1, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss'});
+	$.aaacplApp.ajaxCall("GET", 'auction/types',function success(response){
+		console.info(response);
+	});
 	_this.loadAuctionRows();
 	
 };
@@ -316,10 +323,12 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 			$("#tenderEnable" + value.auctionId).change(function(e) {
 				var id = e.target.id.replace("tenderEnable","");
 					if(this.checked) {
+						$("#tender" + id + "DateRange").prop('required', true);
 						$("#tenderdategroup" + id).show();
 					} else {
 						$("#tenderdategroup" + id).hide();
 						$("#tender"+ id +"DateRange").val('');
+						$("#tender" + id + "DateRange").prop('required', false);
 					}
 				});
 			 $("#auction"+value.auctionId+"auctionUploadCatalogFile").on('click',function(e){
