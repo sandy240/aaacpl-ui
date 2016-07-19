@@ -95,8 +95,8 @@ $.aaacplApp.manageAuction.getLayout = function (){
                        '  <button type="reset" class="btn">Reset</button>'+
                        '</div>'+
          			  '</form>'+
-         			  '</div>'+
-                   '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
+         			  '</div>'+'<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
+                   '</div>'+
                    '</div>'+
                    '<!-- /.modal-content -->'+
                  '</div>'+
@@ -114,7 +114,9 @@ $.aaacplApp.manageAuction.executeScript = function(){
             var formData = new FormData();
             formData.append('file', file);
 			var curDate = new Date();
+			$(".overlay").show();
             $.aaacplApp.ajaxCall("POST", "files/upload?fn=auction_catalog_" + curDate.getTime(), function success(response){
+				$(".overlay").hide();
                 if(response.filePath && response.filePath !=""){
                 $("#auctionCatalogPath").val(response.filePath);
                  $("#auctionUploadCatalogFile").hide();
@@ -385,7 +387,9 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                          formData.append('file', file);
 						 var curDate = new Date();
 						 var catalogFolder = value.catalog.split("/").length > 0 ? value.catalog.split("/")[0] :  ("auction_catalog_" + curDate.getTime());
+						 $(".overlay").show();
                          $.aaacplApp.ajaxCall("POST", "files/upload?fn=" + catalogFolder, function success(response){
+							 $(".overlay").hide();
                          if(response.filePath && response.filePath != ""){
                                $("#auction"+value.auctionId+"Catalog").val(response.filePath);
                                $('#auction'+value.auctionId+'auctionUploadCatalogFile').hide();

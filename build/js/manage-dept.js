@@ -17,7 +17,7 @@ $.aaacplApp.manageDept.getLayout = function (){
                		 //Modal for adding new department
                '<div class="modal fade" tabindex="-1" role="dialog" id="add-dept-form" aria-labelledby="model-heading" data-backdrop="static" data-keyboard="false">'+
                '<div class="modal-dialog" role="document">'+
-               '<div class="modal-content">'+
+               '<div class="box modal-content">'+
                '<div class="modal-header">'+
                '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
                '<span aria-hidden="true">×</span></button>'+
@@ -46,11 +46,12 @@ $.aaacplApp.manageDept.getLayout = function (){
                '  <button type="reset" class="btn">Reset</button>'+
                '</div>'+
                '</form>'+
+			   '<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
                '</div>'+
                '<!-- /.modal-content -->'+
                '</div>'+
                '<!-- /.modal-dialog -->'+
-               '<div class="overlay" style="display:none"><i class="fa fa-refresh fa-spin"></i></div>'+
+               
                '</div>';
 	return tmpl;
 };
@@ -65,11 +66,12 @@ $.aaacplApp.manageDept.executeScript = function(){
     		var formData = new FormData();
     		formData.append('file', file);
 			var curDate = new Date();
+			$(".overlay").show();
     		$.aaacplApp.ajaxCall("POST", "files/upload?fn=dept_logo_" + curDate.getTime(), function success(response){
+				$(".overlay").hide();
     		    if(response.filePath && response.filePath != ""){
                     $("#deptLogoPath").val(response.filePath);
                     $('#deptUploadLogoFile').hide();
-                    $(".overlay").hide();
     		    }else{
     		    $.notify("Unable to upload file","error");
     		    }
@@ -108,9 +110,9 @@ $.aaacplApp.manageDept.executeScript = function(){
 		$.each(formData, function (key, item) {
 			payload[item.name] = item.value;
 		});
-		$(".overlay").show();
+		$("#add-dept-form .overlay").show();
 		$.aaacplApp.ajaxCall("POST","department/create",function success(response){
-			$(".overlay").hide();
+			$("#add-dept-form .overlay").hide();
 			if(response.successMessage && response.successMessage !=""){
 				$('#add-dept-form').modal('hide');
                  $.notify('Department has been created.',"success");
@@ -161,7 +163,6 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
               '</div>'+
               '</div>'+
 			 '<div class="form-group">'+
-			   /*$.aaacplApp.uploadPath = "http://eauction.aaacpl.com/tmp/"*/
 			   '<img class="help-block uploaded img-thumbnail" id="dept'+value.id+'LogoSrc" src="#" alt="No logo uploaded" style="max-height: 150px;">'+
 			   '<button type="button" style="display:none;" class="btn btn-primary" id="dept'+value.id+'UploadLogoFile">Upload</button>'+
 			   '</div>'+
@@ -188,7 +189,7 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		 });
 
          var logoPath = "#";
-		 if(typeof(value.logoPath) !== 'undefined' && value.logoPath !== null){
+		 if(typeof(value.logoPath) !== 'undefined' && value.logoPath !== null && value.logoPath!==""){
 		    logoPath = $.aaacplApp.uploadPath + value.logoPath;
             $('#dept'+value.id+'LogoSrc').attr('src',logoPath);
             $('#dept'+value.id+'InputFileText').html(value.logoPath.split('/')[1]);
@@ -207,9 +208,9 @@ $.aaacplApp.manageDept.loadDeptRows = function (){
 		var curDate = new Date();
 		var logoFolder = value.logoPath.split("/").length > 0 ? value.logoPath.split("/")[0] :  ("dept_logo_" + curDate.getTime());
 		$.aaacplApp.ajaxCall("POST", "files/upload?fn=" + logoFolder, function success(response){
+			$(".overlay").hide();
 		    if(response.filePath && response.filePath != ""){
                 $("#dept"+value.id+"LogoPath").val(response.filePath);
-                $(".overlay").hide();
                 $('#dept'+value.id+'UploadLogoFile').hide();
 		    }
 		    else{
