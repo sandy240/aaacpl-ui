@@ -61,14 +61,22 @@ $.aaacplApp.manageAuction.getLayout = function (){
                            '<label>Description</label>'+
                            '<textarea class="form-control" id="auctionDescription" name="description" required></textarea>'+
                            '</div>'+
-           	 '<!-- auction Type -->'+
-                           '<div class="form-group">'+
+			'<div class="row">' +			   
+           	        '<!-- auction Type -->'+
+                           '<div class="col-md-6 form-group">'+
                            '<label>Auction Type</label>'+
                              '<select id="auctiontype" class="form-control" name="auctionTypeId">'+
                              '<option value="1">Forward Auction</option>'+
                              '<option value="2">Reverse Auction</option>'+
                              '</select>'+
                            '</div>'+
+						   '<!-- auction auto bid -->'+
+						    '<div class="col-md-6 form-group">'+
+                           '<label>Auto Bid Limit</label>'+
+						   ' <div class="input-group">'+'<input type="checkbox" id="autoBidEnable"> Enable Auto Bid'+'</div>'+
+								 '  <input type="text" min="1" value="0" class="form-control pull-right" name="autoBidLimit" id="autoBidLimit" style="display:none">'+
+                           '</div>'+
+			  '</div>'+
               '<!-- auction Catalog -->'+
               '<div class="form-group"> <label>Catalogue</label>'+
                '<div><input type="hidden" id="auctionCatalogPath" name="catalog" value="">'+
@@ -144,6 +152,18 @@ $.aaacplApp.manageAuction.executeScript = function(){
 						$("#tenderdategroup").hide();
 						$("#tenderDateRange").val('');
 						$("#tenderDateRange").prop('required', false);
+					}
+				});
+				$("#autoBidEnable").change(function(e) {
+					if(this.checked) {
+						$("#autoBidLimit").prop('required', true);
+						$("#tenderDateRange").prop('type', "number");
+						$("#autoBidLimit").show();
+					} else {
+						$("#autoBidLimit").hide();
+						$("#autoBidLimit").val('0');
+						$("#tenderDateRange").prop('type', "text");
+						$("#autoBidLimit").prop('required', false);
 					}
 				});
 
@@ -264,14 +284,24 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
                                                                      '<label>Description</label>'+
                                                                      '<textarea class="form-control" name="description" id="auction'+value.auctionId+'Description">'+value.description+'</textarea>'+
                                                                      '</div>'+
-                                                     	 '<!-- auction Type -->'+
-                                                                     '<div class="form-group">'+
-                                                                     '<label>Auction Type</label>'+
-                                                                       '<select id="auction'+value.auctionId+'Type" name="auctionTypeId" class="form-control">'+
-                                                                       '<option value="1">Forward Auction</option>'+
-                                                                       '<option value="2">Reverse Auction</option>'+
-                                                                       '</select>'+
-                                                                     '</div>'+
+													'<div class="row">' +			   
+															'<!-- auction Type -->'+
+																   '<div class="col-md-6 form-group">'+
+																   '<label>Auction Type</label>'+
+																	 '<select id="auction'+value.auctionId+'Type" name="auctionTypeId" class="form-control">'+
+																	 '<option value="1">Forward Auction</option>'+
+																	 '<option value="2">Reverse Auction</option>'+
+																	 '</select>'+
+																   '</div>'+
+															'<!-- auction auto bid -->'+
+																	'<div class="col-md-6 form-group">'+
+																   '<label>Auto Bid Limit</label>'+
+																   ' <div class="input-group">'+'<input type="checkbox" id="autoBidEnable'+value.auctionId+'" '+ (value.autoBidLimit>0 ? 'checked' : '') +'> Enable Auto Bid'+'</div>'+
+																		 '  <input type="text" min="1" class="form-control pull-right" name="autoBidLimit" id="autoBidLimit'+value.auctionId+'" value="'+value.autoBidLimit+'" style="display:none">'+
+																   '</div>'+
+													  '</div>'+
+																	 
+                                                   
                                                          '<!-- status -->'+
                                                                      '<div class="form-group">'+
                                                                      '<label>Status</label>'+
@@ -320,6 +350,9 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 			if(value.isTender == 1) {
 				$("#tenderdategroup" + value.auctionId).show();
 			}
+			if(value.autoBidLimit > 0) {
+				$("#autoBidLimit" + value.auctionId).show();
+			}
 			$("#tenderEnable" + value.auctionId).change(function(e) {
 				var id = e.target.id.replace("tenderEnable","");
 					if(this.checked) {
@@ -331,6 +364,20 @@ $.aaacplApp.manageAuction.loadAuctionRows = function(){
 						$("#tender" + id + "DateRange").prop('required', false);
 					}
 				});
+				$("#autoBidEnable" + value.auctionId).change(function(e) {
+					var id = e.target.id.replace("autoBidEnable","");
+					if(this.checked) {
+						$("#autoBidLimit" + id).prop('required', true);
+						$("#autoBidLimit" + id).prop('text', "number");
+						$("#autoBidLimit" + id).show();
+					} else {
+						$("#autoBidLimit" + id).hide();
+						$("#autoBidLimit"+ id ).val('0');
+						$("#autoBidLimit" + id ).prop('required', false);
+						$("#autoBidLimit" + id ).prop('text', "text");
+					}
+				});
+				
 			 $("#auction"+value.auctionId+"auctionUploadCatalogFile").on('click',function(e){
                          var file = $('#auction'+value.auctionId+'auctionInputFile').get(0).files[0];
                          if(file){
